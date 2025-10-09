@@ -413,12 +413,16 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
                       )
                       : canViewCheckIns == false
                       ? Center(
-                        child: Text(
-                          'You do not have Permission to access Check-Ins.',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(
+                            'You do not have Permission to access Check-Ins.',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       )
