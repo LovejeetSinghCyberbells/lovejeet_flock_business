@@ -117,6 +117,9 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
 
   Future<void> fetchStaffMembers() async {
     setState(() => _isLoading = true);
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userid');
+    print("UserId : $userId");
     try {
       final dio = Dio();
       final response = await dio.get(
@@ -153,6 +156,16 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
                 DateTime.tryParse(b["createdAt"] ?? '') ?? DateTime(0);
             return bDate.compareTo(aDate); // Descending order
           });
+
+          final bool checkUserIsInListOrNot = loadedStaff.any(
+            (staff) => staff['id'].toString() == userId.toString(),
+          );
+
+          if (checkUserIsInListOrNot) {
+            loadedStaff.removeWhere(
+              (staff) => staff['id'].toString() == userId.toString(),
+            );
+          }
 
           setState(() {
             staffMembers = loadedStaff;

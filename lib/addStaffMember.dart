@@ -135,7 +135,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       _venuesError = null;
     });
     // Ensure id=2 is always included
-    if (!_selectedPermissions.contains('2')) {
+    if (_selectedPermissions.contains('2') == false) {
       _selectedPermissions.add('2');
     }
 

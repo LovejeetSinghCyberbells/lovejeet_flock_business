@@ -102,27 +102,6 @@ class _TabDashboardState extends State<TabDashboard>
     }
   }
 
-  // Future<void> fetchPermissions() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final token = prefs.getString('access_token') ?? '';
-  //   final dio = Dio();
-
-  //   try {
-  //     final permissionResponse = await dio.get(
-  //       'https://api.getflock.io/api/vendor/permissions',
-  //       options: Options(
-  //         headers: {
-  //           'Authorization': 'Bearer $token',
-  //           'Accept': 'application/json',
-  //         },
-  //       ),
-  //     );
-  //     print("All Permissions : ${permissionResponse.data}");
-  //   } catch (e) {
-  //     print('Error fetching permissions');
-  //   }
-  // }
-
   bool hasPermissionToUser(String permissionName) {
     final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
 

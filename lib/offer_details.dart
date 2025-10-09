@@ -1149,6 +1149,10 @@ class _OfferDetailsState extends State<OfferDetails> {
                                     ),
                                   ),
                                 ),
+                            canEditOffer && canRemoveOffer
+                                ? SizedBox(width: 20)
+                                : Container(),
+
                             canEditOffer == false
                                 ? Container()
                                 : Expanded(
