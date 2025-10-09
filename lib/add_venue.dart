@@ -618,6 +618,8 @@ class _AddEggScreenState extends State<AddEggScreen> {
         location = result['address'] ?? "";
         lat = result['lat'] ?? 0.0;
         lng = result['lng'] ?? 0.0;
+
+        print("Location : $location");
       });
       validateLocation();
     }

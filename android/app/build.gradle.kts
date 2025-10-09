@@ -31,7 +31,7 @@ android {
 
     signingConfigs {
         create("release") {
-storeFile = file("flockbusiness-release-key.keystore")
+         storeFile = file("flockbusiness-release-key.keystore")
             storePassword = "123@Business"
             keyAlias = "flockbusiness-release-key"
             keyPassword = "123@Business"
@@ -47,6 +47,8 @@ storeFile = file("flockbusiness-release-key.keystore")
             isShrinkResources = false
         }
     }
+
+   
 }
 
 flutter {
