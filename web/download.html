@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Flock App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #FF8210;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .download-btn {
+            background: #FF8210;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+        .venue-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #FF8210;
+        }
+        .venue-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .venue-info p {
+            margin: 0;
+            color: #666;
+        }
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #FF8210;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">F</div>
+        <h1>Welcome to Flock!</h1>
+        <p id="mainMessage">Opening Flock app...</p>
+        
+        <div id="venueInfo" class="venue-info" style="display: none;">
+            <h3>Venue Check-in</h3>
+            <p id="venueDetails">Ready to check in!</p>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Opening Flock app...</p>
+        </div>
+        
+        <div id="downloadButtons" style="display: none;">
+            <a href="#" id="iosDownload" class="download-btn">Download for iOS</a>
+            <a href="#" id="androidDownload" class="download-btn">Download for Android</a>
+        </div>
+        
+        <p style="font-size: 14px; margin-top: 30px; color: #999;">
+            Already have the app? Open it and scan the QR code again.
+        </p>
+    </div>
+
+    <script>
+        // Get venue ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const venueId = urlParams.get('venue');
+        
+        if (venueId) {
+            document.getElementById('venueInfo').style.display = 'block';
+            document.getElementById('venueDetails').textContent = `Venue ID: ${venueId}`;
+        }
+        
+        // Detect platform
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+        const isAndroid = /android/i.test(userAgent);
+        
+        // Deep link URLs for the Flock app
+        const flockDeepLink = `flock://venue-checkin?venue=${venueId || ''}`;
+        const flockUniversalLink = `https://getflock.io/venue-checkin?venue=${venueId || ''}`;
+        
+        // App store URLs
+        const iosAppStoreUrl = 'https://apps.apple.com/app/flock-customer-app';
+        const androidPlayStoreUrl = 'https://play.google.com/store/apps/details?id=com.flockloyalty';
+        
+        // Function to try opening the app
+        function tryOpenApp() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('mainMessage').textContent = 'Opening Flock app...';
+            
+            let appOpened = false;
+            
+            // Try to open the app using deep link
+            if (isIOS) {
+                // For iOS, try universal link first, then custom scheme
+                window.location.href = flockUniversalLink;
+            } else if (isAndroid) {
+                // For Android, try custom scheme
+                window.location.href = flockDeepLink;
+            }
+            
+            // Set a timeout to check if the app opened
+            setTimeout(() => {
+                if (!appOpened) {
+                    // App didn't open, show download buttons
+                    showDownloadButtons();
+                }
+            }, 2000);
+            
+            // Listen for page visibility change (indicates app opened)
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    appOpened = true;
+                }
+            });
+            
+            // Listen for page blur (indicates app opened)
+            window.addEventListener('blur', () => {
+                appOpened = true;
+            });
+        }
+        
+        // Function to show download buttons
+        function showDownloadButtons() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('downloadButtons').style.display = 'block';
+            document.getElementById('mainMessage').textContent = 'You need the Flock app to check in at this venue. Download it now to start earning rewards!';
+            
+            // Set appropriate download links
+            if (isIOS) {
+                document.getElementById('iosDownload').href = iosAppStoreUrl;
+                document.getElementById('androidDownload').style.display = 'none';
+            } else if (isAndroid) {
+                document.getElementById('androidDownload').href = androidPlayStoreUrl;
+                document.getElementById('iosDownload').style.display = 'none';
+            } else {
+                document.getElementById('iosDownload').href = iosAppStoreUrl;
+                document.getElementById('androidDownload').href = androidPlayStoreUrl;
+            }
+        }
+        
+        // Start the process when page loads
+        window.onload = function() {
+            tryOpenApp();
+        };
+    </script>
+</body>
+</html> 

@@ -1,0 +1,87 @@
+
+{
+  "project_info": {
+    "project_number": "819650124616",
+    "project_id": "flock-412ed",
+    "storage_bucket": "flock-412ed.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819650124616:android:baaa82e14e5ec50454f17d",
+        "android_client_info": {
+          "package_name": "com.example.flock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7yN8OYOWDyirfXc4OkVKJ3G2pF-y7-wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819650124616:android:c864a030f0c8c41054f17d",
+        "android_client_info": {
+          "package_name": "com.flock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7yN8OYOWDyirfXc4OkVKJ3G2pF-y7-wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819650124616:android:a162a1178447545154f17d",
+        "android_client_info": {
+          "package_name": "com.flockbusiness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7yN8OYOWDyirfXc4OkVKJ3G2pF-y7-wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819650124616:android:7be0f46d70fa4f6554f17d",
+        "android_client_info": {
+          "package_name": "com.flockloyalty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7yN8OYOWDyirfXc4OkVKJ3G2pF-y7-wo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
