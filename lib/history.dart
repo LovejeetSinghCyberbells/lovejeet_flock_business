@@ -28,7 +28,65 @@ class _HistoryScreenState extends State<HistoryScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     checkAuthentication();
+    _initializePermissions();
   }
+
+  /* --------- permissions section started -----*/
+  List<Map<String, dynamic>> permissions = [];
+  bool canAddVenue = false;
+  bool canAddOffer = false;
+  bool canViewCheckIns = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  bool hasPermissionToUser(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("User has all permissions.");
+        canAddOffer = true;
+        canAddVenue = true;
+        canViewCheckIns = true;
+
+        return;
+      }
+      canAddVenue = hasPermissionToUser('Add venue');
+      canAddOffer = hasPermissionToUser('Add offer');
+      canViewCheckIns = hasPermissionToUser('List checkin-history');
+
+      if (canViewCheckIns) print("✅ User can view check-ins.");
+      if (canAddVenue) print("✅ User can add venues.");
+      if (canAddOffer) print("✅ User can add offer.");
+
+      if (!canAddVenue && !canAddOffer && !canViewCheckIns) {
+        print("❌ User has no permission to access venues.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /* --------- permissions section endede -----*/
 
   @override
   void dispose() {
@@ -358,6 +416,8 @@ class _HistoryScreenState extends State<HistoryScreen>
     final filteredOfferRedemptionData = _getFilteredData(offerRedemptionData);
 
     return CustomScaffold(
+      canAddOffer: canAddOffer,
+      canAddVenue: canAddVenue,
       currentIndex: 2, // History tab
       body: SafeArea(
         child: Column(
@@ -585,7 +645,19 @@ class _HistoryScreenState extends State<HistoryScreen>
                         controller: _tabController,
                         children: [
                           // Check-ins tab
-                          filteredCheckInData.isEmpty
+                          canViewCheckIns == false
+                              ? Center(
+                                child: Text(
+                                  'You do not have Permission to access Check-Ins.',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.bodyLarge?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
+                              )
+                              : filteredCheckInData.isEmpty
                               ? _buildEmptyState('No check-ins found')
                               : ListView.builder(
                                 padding: const EdgeInsets.symmetric(

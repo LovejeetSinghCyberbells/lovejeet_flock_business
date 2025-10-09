@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flock/qr_code_scanner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,7 +78,103 @@ class _TabDashboardState extends State<TabDashboard>
     WidgetsBinding.instance.addObserver(this);
     fetchName();
     getUserId();
+    _initializePermissions();
   }
+
+  /* --------- permissions section started -----*/
+  List<Map<String, dynamic>> permissions = [];
+  bool canAddVenue = false;
+  bool canAddOffer = false;
+  bool canViewCheckIns = false;
+  bool canViewOffers = false;
+  bool canViewVenues = false;
+  bool canViewTransactionHistory = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  // Future<void> fetchPermissions() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('access_token') ?? '';
+  //   final dio = Dio();
+
+  //   try {
+  //     final permissionResponse = await dio.get(
+  //       'https://api.getflock.io/api/vendor/permissions',
+  //       options: Options(
+  //         headers: {
+  //           'Authorization': 'Bearer $token',
+  //           'Accept': 'application/json',
+  //         },
+  //       ),
+  //     );
+  //     print("All Permissions : ${permissionResponse.data}");
+  //   } catch (e) {
+  //     print('Error fetching permissions');
+  //   }
+  // }
+
+  bool hasPermissionToUser(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("User has all permissions.");
+        canAddOffer = true;
+        canAddVenue = true;
+        canViewCheckIns = true;
+        canViewOffers = true;
+        canViewVenues = true;
+        canViewTransactionHistory = true;
+        return;
+      }
+      canAddVenue = hasPermissionToUser('Add venue');
+      canAddOffer = hasPermissionToUser('Add offer');
+      canViewCheckIns = hasPermissionToUser('List checkin-history');
+      canViewOffers = hasPermissionToUser('List offers');
+      canViewVenues = hasPermissionToUser('View venue');
+      canViewTransactionHistory = hasPermissionToUser('List transactions');
+
+      if (canAddVenue) print("✅ User can add venues.");
+      if (canAddOffer) print("✅ User can add offer.");
+      if (canViewCheckIns) print("✅ User can view check-ins.");
+      if (canViewOffers) print("✅ User can offers.");
+      if (canViewVenues) print("✅ User can view venues.");
+      if (canViewTransactionHistory)
+        print("✅ User can view transaction history.");
+
+      if (!canAddVenue &&
+          !canAddOffer &&
+          !canViewCheckIns &&
+          !canViewOffers &&
+          !canViewVenues &&
+          !canViewTransactionHistory) {
+        print("❌ User has no permission to access venues.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /* --------- permissions section endede -----*/
 
   @override
   void dispose() {
@@ -321,15 +418,15 @@ class _TabDashboardState extends State<TabDashboard>
       return;
     }
     String slug = item['slug'];
-    if (slug == "offers") {
+    if (slug == "offers" && canViewOffers) {
       Navigator.pushNamed(context, '/offers');
-    } else if (slug == "Check-Ins") {
+    } else if (slug == "Check-Ins" && canViewCheckIns) {
       Navigator.pushNamed(context, '/tab_checkin');
     } else if (slug == "feathers") {
       await totalFeatherApi();
-    } else if (slug == "venues") {
+    } else if (slug == "venues" && canViewVenues) {
       Navigator.pushNamed(context, '/tab_egg');
-    } else if (slug == "faq") {
+    } else if (slug == "faq" && canViewTransactionHistory) {
       Navigator.pushNamed(context, '/history');
     }
   }
@@ -737,6 +834,8 @@ class _TabDashboardState extends State<TabDashboard>
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     return CustomScaffold(
+      canAddOffer: canAddOffer,
+      canAddVenue: canAddVenue,
       currentIndex: 0,
       body: Stack(
         children: [

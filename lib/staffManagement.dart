@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flock/editSatffMember.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -30,7 +32,65 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
   void initState() {
     super.initState();
     _loadTokenAndFetchStaff();
+    _initializePermissions();
   }
+
+  /* --------- permissions section started -----*/
+  List<Map<String, dynamic>> permissions = [];
+  bool canAddStaffMember = false;
+  bool canEditStaffMember = false;
+  bool canRemoveStaffMember = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  bool hasPermissionToUser(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("User has all permissions.");
+        canAddStaffMember = true;
+        canEditStaffMember = true;
+        canRemoveStaffMember = true;
+
+        return;
+      }
+      canAddStaffMember = hasPermissionToUser('Add staff');
+      canEditStaffMember = hasPermissionToUser('Edit staff');
+      canRemoveStaffMember = hasPermissionToUser('Remove staff');
+
+      if (canAddStaffMember) print("✅ User can add staff.");
+      if (canEditStaffMember) print("✅ User can edit staff member.");
+      if (canRemoveStaffMember) print("✅ User can remove staff member.");
+
+      if (!canAddStaffMember && !canEditStaffMember && !canRemoveStaffMember) {
+        print("❌ User has no permission to add, edit and remove staff member.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /* --------- permissions section endede -----*/
 
   String formatDateTime(String? dateTimeStr) {
     if (dateTimeStr == null || dateTimeStr.isEmpty) {
@@ -252,41 +312,45 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16),
-                      InkWell(
-                        onTap: addMember,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(
-                                Icons.add_circle,
-                                color:
-                                    Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? AppColors.primary
-                                        : Theme.of(context).colorScheme.primary,
+                      canAddStaffMember == false
+                          ? Container()
+                          : InkWell(
+                            onTap: addMember,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Icon(
+                                    Icons.add_circle,
+                                    color:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? AppColors.primary
+                                            : Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "Add Member",
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium?.copyWith(
+                                      color:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? AppColors.primary
+                                              : Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "Add Member",
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyMedium?.copyWith(
-                                  color:
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? AppColors.primary
-                                          : Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
                       const SizedBox(height: 16),
                       if (_isLoading)
                         Container(
@@ -390,126 +454,142 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      IconButton(
-                                        icon: Image.asset(
-                                          'assets/edit.png',
-                                          width: 20,
-                                          height: 20,
-                                          color:
-                                              Theme.of(context).iconTheme.color,
-                                        ),
-                                        onPressed: () {
-                                          final id = member["id"] ?? "";
-                                          if (id.isNotEmpty) {
-                                            editMember(id);
-                                          }
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Image.asset(
-                                          'assets/closebtn.png',
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                backgroundColor:
-                                                    Theme.of(
-                                                              context,
-                                                            ).brightness ==
-                                                            Brightness.dark
-                                                        ? Design.darkCard
-                                                        : Theme.of(
-                                                          context,
-                                                        ).colorScheme.surface,
-                                                title: Text(
-                                                  'Confirm Delete',
-                                                  style: Theme.of(
+                                      canEditStaffMember == false
+                                          ? Container()
+                                          : IconButton(
+                                            icon: Image.asset(
+                                              'assets/edit.png',
+                                              width: 20,
+                                              height: 20,
+                                              color:
+                                                  Theme.of(
                                                     context,
-                                                  ).textTheme.titleLarge?.copyWith(
-                                                    color:
+                                                  ).iconTheme.color,
+                                            ),
+                                            onPressed: () {
+                                              final id = member["id"] ?? "";
+                                              if (id.isNotEmpty) {
+                                                editMember(id);
+                                              }
+                                            },
+                                          ),
+                                      canRemoveStaffMember == false
+                                          ? Container()
+                                          : IconButton(
+                                            icon: Image.asset(
+                                              'assets/closebtn.png',
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (
+                                                  BuildContext context,
+                                                ) {
+                                                  return AlertDialog(
+                                                    backgroundColor:
                                                         Theme.of(
                                                                   context,
                                                                 ).brightness ==
                                                                 Brightness.dark
-                                                            ? Colors.white
-                                                            : null,
-                                                  ),
-                                                ),
-                                                content: Text(
-                                                  'Are you sure you want to delete this member?',
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.bodyMedium?.copyWith(
-                                                    color:
-                                                        Theme.of(
-                                                                  context,
-                                                                ).brightness ==
-                                                                Brightness.dark
-                                                            ? Colors.white
-                                                                .withOpacity(
-                                                                  0.87,
-                                                                )
+                                                            ? Design.darkCard
                                                             : Theme.of(context)
                                                                 .colorScheme
-                                                                .onSurface,
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(
+                                                                .surface,
+                                                    title: Text(
+                                                      'Confirm Delete',
+                                                      style: Theme.of(
                                                         context,
-                                                      ).pop();
-                                                    },
-                                                    child: Text(
-                                                      'CANCEL',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelLarge
-                                                          ?.copyWith(
-                                                            color: Theme.of(
-                                                                  context,
-                                                                )
-                                                                .colorScheme
-                                                                .onSurface
-                                                                .withOpacity(
-                                                                  0.7,
-                                                                ),
-                                                          ),
+                                                      ).textTheme.titleLarge?.copyWith(
+                                                        color:
+                                                            Theme.of(
+                                                                      context,
+                                                                    ).brightness ==
+                                                                    Brightness
+                                                                        .dark
+                                                                ? Colors.white
+                                                                : null,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      deleteMember(index);
-                                                      Navigator.of(
+                                                    content: Text(
+                                                      'Are you sure you want to delete this member?',
+                                                      style: Theme.of(
                                                         context,
-                                                      ).pop();
-                                                    },
-                                                    child: Text(
-                                                      'OK',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelLarge
-                                                          ?.copyWith(
-                                                            color:
-                                                                Theme.of(
+                                                      ).textTheme.bodyMedium?.copyWith(
+                                                        color:
+                                                            Theme.of(
+                                                                      context,
+                                                                    ).brightness ==
+                                                                    Brightness
+                                                                        .dark
+                                                                ? Colors.white
+                                                                    .withOpacity(
+                                                                      0.87,
+                                                                    )
+                                                                : Theme.of(
                                                                       context,
                                                                     )
                                                                     .colorScheme
-                                                                    .primary,
-                                                          ),
+                                                                    .onSurface,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                        },
+                                                        child: Text(
+                                                          'CANCEL',
+                                                          style: Theme.of(
+                                                                context,
+                                                              )
+                                                              .textTheme
+                                                              .labelLarge
+                                                              ?.copyWith(
+                                                                color: Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .colorScheme
+                                                                    .onSurface
+                                                                    .withOpacity(
+                                                                      0.7,
+                                                                    ),
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          deleteMember(index);
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                        },
+                                                        child: Text(
+                                                          'OK',
+                                                          style: Theme.of(
+                                                                context,
+                                                              )
+                                                              .textTheme
+                                                              .labelLarge
+                                                              ?.copyWith(
+                                                                color:
+                                                                    Theme.of(
+                                                                          context,
+                                                                        )
+                                                                        .colorScheme
+                                                                        .primary,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
-                                          );
-                                        },
-                                      ),
+                                          ),
                                     ],
                                   ),
                                 ),

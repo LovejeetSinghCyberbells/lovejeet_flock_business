@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'package:flock/add_offer.dart';
 import 'package:flock/edit_venue.dart';
 import 'package:flock/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -126,11 +127,14 @@ class _TabEggScreenState extends State<TabEggScreen> {
   List<dynamic> allData = [];
   Timer? _timer;
   Timer? _debounce;
+
+/* --------- permissions section started -----*/
   List<Map<String, dynamic>> permissions = [];
-  bool canView = false;
-  bool canAdd = false;
-  bool canEdit = false;
-  bool canRemove = false;
+  bool canViewVenue = false;
+  bool canAddVenue = false;
+  bool canAddOffer = false;
+  bool canEditVenue = false;
+  bool canRemoveVenue = false;
 
   Future<void> fetchPermissions() async {
     final prefs = await SharedPreferences.getInstance();
@@ -156,23 +160,30 @@ class _TabEggScreenState extends State<TabEggScreen> {
     setState(() {
       if (permissions.isEmpty) {
         print("User has all permissions.");
-        canAdd = true;
-        canEdit = true;
-        canRemove = true;
-        canView = true;
+        canAddOffer = true;
+        canAddVenue = true;
+        canEditVenue = true;
+        canRemoveVenue = true;
+        canViewVenue = true;
         return;
       }
-      canView = hasPermission('View venue');
-      canAdd = hasPermission('Add venue');
-      canEdit = hasPermission('Edit venue');
-      canRemove = hasPermission('Remove venue');
+      canViewVenue = hasPermission('View venue');
+      canAddVenue = hasPermission('Add venue');
+      canAddOffer = hasPermission('Add offer');
+      canEditVenue = hasPermission('Edit venue');
+      canRemoveVenue = hasPermission('Remove venue');
 
-      if (canView) print("✅ User can view venues.");
-      if (canAdd) print("✅ User can add venues.");
-      if (canEdit) print("✅ User can edit venues.");
-      if (canRemove) print("✅ User can remove venues.");
+      if (canViewVenue) print("✅ User can view venues.");
+      if (canAddVenue) print("✅ User can add venues.");
+      if (canAddOffer) print("✅ User can add offer.");
+      if (canEditVenue) print("✅ User can edit venues.");
+      if (canRemoveVenue) print("✅ User can remove venues.");
 
-      if (!canView && !canAdd && !canEdit && !canRemove) {
+      if (!canViewVenue &&
+          !canAddVenue &&
+          !canEditVenue &&
+          !canRemoveVenue &&
+          !canAddOffer) {
         print("❌ User has no permission to access venues.");
       }
     });
@@ -182,7 +193,7 @@ class _TabEggScreenState extends State<TabEggScreen> {
     await fetchPermissions();
     checkPermission();
   }
-
+/* --------- permissions section endede -----*/
   @override
   void initState() {
     super.initState();
@@ -926,7 +937,7 @@ class _TabEggScreenState extends State<TabEggScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      canRemove == false
+                      canRemoveVenue == false
                           ? Container()
                           : Container(
                             height: 32,
@@ -989,7 +1000,7 @@ class _TabEggScreenState extends State<TabEggScreen> {
                             ),
                           ),
                       const SizedBox(width: 15),
-                      canEdit == false
+                      canEditVenue == false
                           ? Container()
                           : Container(
                             height: 32,
@@ -1061,6 +1072,8 @@ class _TabEggScreenState extends State<TabEggScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      canAddOffer: canAddOffer,
+      canAddVenue: canAddVenue,
       currentIndex: 1,
       body: SafeArea(
         child: Stack(
@@ -1187,7 +1200,7 @@ class _TabEggScreenState extends State<TabEggScreen> {
                               ),
                             ],
                           )
-                          : canView == false
+                          : canViewVenue == false
                           ? Center(
                             child: Text(
                               "You not have Permission to View Venues",

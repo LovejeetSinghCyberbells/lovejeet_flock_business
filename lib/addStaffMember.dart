@@ -98,6 +98,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           },
         ),
       );
+      print("All Permissions : ${permissionResponse.data}");
+
       if (permissionResponse.statusCode == 200) {
         setState(() {
           _permissionList = permissionResponse.data['data'] ?? [];
@@ -132,7 +134,28 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       _passwordError = null;
       _venuesError = null;
     });
+    // Ensure id=2 is always included
+    if (!_selectedPermissions.contains('2')) {
+      _selectedPermissions.add('2');
+    }
 
+    if (_selectedPermissions.contains('3') ||
+        _selectedPermissions.contains('4') ||
+        _selectedPermissions.contains('5')) {
+      _selectedPermissions.add('2');
+    }
+
+    if (_selectedPermissions.contains('7') ||
+        _selectedPermissions.contains('8') ||
+        _selectedPermissions.contains('9')) {
+      _selectedPermissions.add('6');
+    }
+
+    if (_selectedPermissions.contains('18') ||
+        _selectedPermissions.contains('19') ||
+        _selectedPermissions.contains('20')) {
+      _selectedPermissions.add('17');
+    }
     // Validate required fields
     bool hasError = false;
     if (_firstNameController.text.isEmpty) {
@@ -187,11 +210,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
     if (hasError) {
       return;
-    }
-
-    // Ensure id=2 is always included
-    if (!_selectedPermissions.contains('2')) {
-      _selectedPermissions.add('2');
     }
 
     setState(() => _isLoading = true);

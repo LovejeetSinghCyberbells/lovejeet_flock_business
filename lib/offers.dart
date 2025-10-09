@@ -22,7 +22,57 @@ class _OffersScreenState extends State<OffersScreen> {
   void initState() {
     super.initState();
     fetchOffers();
+    _initializePermissions();
   }
+
+  /* --------- permissions section started -----*/
+  List<Map<String, dynamic>> permissions = [];
+  bool canRemoveOffer = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  bool hasPermissionToUser(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("User has all permissions.");
+        canRemoveOffer = true;
+
+        return;
+      }
+      canRemoveOffer = hasPermissionToUser('Remove offer');
+
+      if (canRemoveOffer) print("✅ User can Remove offer.");
+
+      if (!canRemoveOffer) {
+        print("❌ User has no permission to remove offer.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /* --------- permissions section endede -----*/
 
   Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -371,145 +421,158 @@ class _OffersScreenState extends State<OffersScreen> {
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                      canRemoveOffer == false
+                                          ? MainAxisAlignment.center
+                                          : MainAxisAlignment.spaceEvenly,
                                   children: [
                                     // Delete button
-                                    Container(
-                                      decoration: const BoxDecoration(),
-                                      child: SizedBox(
-                                        height: 30,
-                                        width: 66,
-                                        child: cardWrapper(
-                                          borderRadius: 5,
-                                          elevation:
-                                              Theme.of(context).brightness ==
-                                                      Brightness.dark
-                                                  ? 4
-                                                  : 2,
-                                          color:
-                                              Theme.of(context).brightness ==
-                                                      Brightness.dark
-                                                  ? const Color(0xFFD32F2F)
-                                                  : const Color(0xFFE53935),
-                                          child: InkWell(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (
-                                                  BuildContext context,
-                                                ) {
-                                                  return AlertDialog(
-                                                    backgroundColor:
-                                                        Theme.of(
-                                                          context,
-                                                        ).colorScheme.surface,
-                                                    title: Text(
-                                                      'Confirm Deletion',
-                                                      style:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .titleMedium,
-                                                    ),
-                                                    content: Text(
-                                                      'Are you sure you want to delete this offer?',
-                                                      style:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium,
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(
+                                    canRemoveOffer == false
+                                        ? Container()
+                                        : Container(
+                                          decoration: const BoxDecoration(),
+                                          child: SizedBox(
+                                            height: 30,
+                                            width: 66,
+                                            child: cardWrapper(
+                                              borderRadius: 5,
+                                              elevation:
+                                                  Theme.of(
                                                             context,
-                                                          ).pop();
-                                                        },
-                                                        child: Text(
-                                                          'CANCEL',
-                                                          style: Theme.of(
-                                                                context,
-                                                              )
-                                                              .textButtonTheme
-                                                              .style
-                                                              ?.textStyle
-                                                              ?.resolve({})!
-                                                              .copyWith(
-                                                                color: Theme.of(
-                                                                      context,
-                                                                    )
-                                                                    .colorScheme
-                                                                    .onSurface
-                                                                    .withOpacity(
-                                                                      0.6,
-                                                                    ),
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(
+                                                          ).brightness ==
+                                                          Brightness.dark
+                                                      ? 4
+                                                      : 2,
+                                              color:
+                                                  Theme.of(
                                                             context,
-                                                          ).pop();
-                                                          removeOffer(offerId);
-                                                        },
-                                                        child: Text(
-                                                          'OK',
-                                                          style: Theme.of(
-                                                                context,
-                                                              )
-                                                              .textButtonTheme
-                                                              .style
-                                                              ?.textStyle
-                                                              ?.resolve({})!
-                                                              .copyWith(
-                                                                color:
-                                                                    AppColors
-                                                                        .primary,
-                                                              ),
+                                                          ).brightness ==
+                                                          Brightness.dark
+                                                      ? const Color(0xFFD32F2F)
+                                                      : const Color(0xFFE53935),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (
+                                                      BuildContext context,
+                                                    ) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .surface,
+                                                        title: Text(
+                                                          'Confirm Deletion',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium,
                                                         ),
-                                                      ),
-                                                    ],
+                                                        content: Text(
+                                                          'Are you sure you want to delete this offer?',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium,
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                context,
+                                                              ).pop();
+                                                            },
+                                                            child: Text(
+                                                              'CANCEL',
+                                                              style: Theme.of(
+                                                                    context,
+                                                                  )
+                                                                  .textButtonTheme
+                                                                  .style
+                                                                  ?.textStyle
+                                                                  ?.resolve({})!
+                                                                  .copyWith(
+                                                                    color: Theme.of(
+                                                                          context,
+                                                                        )
+                                                                        .colorScheme
+                                                                        .onSurface
+                                                                        .withOpacity(
+                                                                          0.6,
+                                                                        ),
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                context,
+                                                              ).pop();
+                                                              removeOffer(
+                                                                offerId,
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              'OK',
+                                                              style: Theme.of(
+                                                                    context,
+                                                                  )
+                                                                  .textButtonTheme
+                                                                  .style
+                                                                  ?.textStyle
+                                                                  ?.resolve({})!
+                                                                  .copyWith(
+                                                                    color:
+                                                                        AppColors
+                                                                            .primary,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
                                                   );
                                                 },
-                                              );
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 4,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 4,
+                                                      ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.delete,
+                                                        size: 14,
+                                                        color:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .onError,
+                                                      ),
+                                                      const SizedBox(width: 4),
+                                                      Text(
+                                                        'Delete',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                              fontSize: 11,
+                                                              color:
+                                                                  Theme.of(
+                                                                        context,
+                                                                      )
+                                                                      .colorScheme
+                                                                      .onError,
+                                                            ),
+                                                      ),
+                                                    ],
                                                   ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(
-                                                    Icons.delete,
-                                                    size: 14,
-                                                    color:
-                                                        Theme.of(
-                                                          context,
-                                                        ).colorScheme.onError,
-                                                  ),
-                                                  const SizedBox(width: 4),
-                                                  Text(
-                                                    'Delete',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium
-                                                        ?.copyWith(
-                                                          fontSize: 11,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .onError,
-                                                        ),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
                                     // See Details button
                                     SizedBox(
                                       height: 30,

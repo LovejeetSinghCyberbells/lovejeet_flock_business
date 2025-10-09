@@ -26,7 +26,64 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
   void initState() {
     super.initState();
     checkAuthentication();
+    _initializePermissions();
   }
+
+  /* --------- permissions section started -----*/
+  List<Map<String, dynamic>> permissions = [];
+  bool canAddVenue = false;
+  bool canAddOffer = false;
+  bool canViewCheckIns = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  bool hasPermissionToUser(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("User has all permissions.");
+        canAddOffer = true;
+        canAddVenue = true;
+        canViewCheckIns = true;
+        return;
+      }
+      canAddVenue = hasPermissionToUser('Add venue');
+      canAddOffer = hasPermissionToUser('Add offer');
+      canViewCheckIns = hasPermissionToUser('List checkin-history');
+
+      if (canAddVenue) print("✅ User can add venues.");
+      if (canAddOffer) print("✅ User can add offer.");
+      if (canViewCheckIns) print("✅ User can view check-ins.");
+
+      if (!canAddVenue && !canViewCheckIns && !canAddOffer) {
+        print("❌ User has no permission to access checkin history.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /* --------- permissions section endede -----*/
 
   Future<void> checkAuthentication() async {
     final token = await getToken();
@@ -292,6 +349,8 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      canAddOffer: canAddOffer,
+      canAddVenue: canAddVenue,
       currentIndex: 3,
       body: SafeArea(
         child: Column(
@@ -351,6 +410,17 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
                             ),
                           ),
                         ],
+                      )
+                      : canViewCheckIns == false
+                      ? Center(
+                        child: Text(
+                          'You do not have Permission to access Check-Ins.',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                       )
                       : checkInData.isEmpty
                       ? Center(

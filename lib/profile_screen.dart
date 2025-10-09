@@ -61,8 +61,101 @@ class _TabProfileState extends State<TabProfile> {
   void initState() {
     super.initState();
     detailFunc();
+    _initializePermissions();
   }
 
+  /*-------- Permissions Section start -------*/
+  List<Map<String, dynamic>> permissions = [];
+
+  bool canSeeStaff = false;
+  bool canSeeProfileSettings = false;
+  bool canChangePassword = false;
+  bool canSeeTransactionHistory = false;
+  bool canSeeOpenHrs = false;
+  bool canSeeFeedback = false;
+  bool canSeeDeleteAccount = false;
+  bool canAddVenue = false;
+  bool canAddOffer = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  bool hasPermission(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("✅ User has all permissions.");
+        canSeeStaff = true;
+        canSeeProfileSettings = true;
+        canChangePassword = true;
+        canSeeTransactionHistory = true;
+        canSeeOpenHrs = true;
+        canSeeFeedback = true;
+        canSeeDeleteAccount = true;
+
+        canAddOffer = true;
+        canAddVenue = true;
+        return;
+      }
+      canSeeStaff = hasPermission('List staff');
+      canSeeProfileSettings = hasPermission('Profile settings');
+      canChangePassword = hasPermission('Change password');
+      canSeeTransactionHistory = hasPermission('List transactions');
+      canSeeOpenHrs = hasPermission('Manage opening-hours');
+      canSeeFeedback = hasPermission('Send feedback');
+      canSeeDeleteAccount = hasPermission('Delete account');
+
+      canAddVenue = hasPermission('Add venue');
+      canAddOffer = hasPermission('Add offer');
+
+      if (canSeeStaff) print("✅ User can view staff list.");
+      if (canSeeProfileSettings) print("✅ User can access profile settings.");
+      if (canChangePassword) print("✅ User can change password.");
+      if (canSeeTransactionHistory)
+        print("✅ User can view transaction history.");
+      if (canSeeOpenHrs) print("✅ User can manage opening hours.");
+      if (canSeeFeedback) print("✅ User can send feedback.");
+      if (canSeeDeleteAccount) print("✅ User can delete account.");
+
+      if (canAddVenue) print("✅ User can add venues.");
+      if (canAddOffer) print("✅ User can add offer.");
+
+      if (!canSeeStaff &&
+          !canSeeProfileSettings &&
+          !canChangePassword &&
+          !canSeeTransactionHistory &&
+          !canSeeOpenHrs &&
+          !canSeeFeedback &&
+          !canSeeDeleteAccount &&
+          !canAddOffer &&
+          !canAddVenue) {
+        print("❌ User has no additional account-related permissions.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /*-------- Permissions Section end -------*/
   Future<void> detailFunc() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
@@ -198,6 +291,8 @@ class _TabProfileState extends State<TabProfile> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      canAddOffer: canAddOffer,
+      canAddVenue: canAddVenue,
       currentIndex: 4,
       body: Container(
         color: Design.getBackgroundColor(context),
@@ -307,70 +402,91 @@ class _TabProfileState extends State<TabProfile> {
                     const SizedBox(height: 24),
                     Column(
                       children: [
-                        _buildProfileOption(
-                          title: "Profile Settings",
-                          onTap: () async {
-                            final updatedProfile = await Navigator.pushNamed(
-                              context,
-                              '/EditProfile',
-                              arguments: {
-                                'firstName': firstName,
-                                'lastName': lastName,
-                                'email': email,
-                                'profilePic': profilePic,
+                        canSeeProfileSettings == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Profile Settings",
+                              onTap: () async {
+                                final updatedProfile =
+                                    await Navigator.pushNamed(
+                                      context,
+                                      '/EditProfile',
+                                      arguments: {
+                                        'firstName': firstName,
+                                        'lastName': lastName,
+                                        'email': email,
+                                        'profilePic': profilePic,
+                                      },
+                                    );
+                                if (updatedProfile != null &&
+                                    updatedProfile is Map<String, dynamic>) {
+                                  detailFunc();
+                                }
                               },
-                            );
-                            if (updatedProfile != null &&
-                                updatedProfile is Map<String, dynamic>) {
-                              detailFunc();
-                            }
-                          },
-                        ),
-                        _buildProfileOption(
-                          title: "Staff Management",
-                          onTap:
-                              () =>
-                                  Navigator.pushNamed(context, '/staffManage'),
-                        ),
-                        _buildProfileOption(
-                          title: "Change Password",
-                          onTap:
-                              () => Navigator.pushNamed(
-                                context,
-                                '/changePassword',
-                              ),
-                        ),
-                        _buildProfileOption(
-                          title: "Transaction History",
-                          onTap:
-                              () => Navigator.pushNamed(
-                                context,
-                                '/HistoryScreen',
-                              ),
-                        ),
-                        _buildProfileOption(
-                          title: "Open Hours",
-                          onTap:
-                              () => Navigator.pushNamed(context, '/openHours'),
-                        ),
+                            ),
+                        canSeeStaff == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Staff Management",
+                              onTap:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    '/staffManage',
+                                  ),
+                            ),
+                        canChangePassword == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Change Password",
+                              onTap:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    '/changePassword',
+                                  ),
+                            ),
+                        canSeeTransactionHistory == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Transaction History",
+                              onTap:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    '/HistoryScreen',
+                                  ),
+                            ),
+                        canSeeOpenHrs == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Open Hours",
+                              onTap:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    '/openHours',
+                                  ),
+                            ),
                         _buildProfileOption(
                           title: "How to ?",
                           onTap:
                               () => Navigator.pushNamed(context, '/tutorials'),
                         ),
-                        _buildProfileOption(
-                          title: "Feedback",
-                          onTap:
-                              () => Navigator.pushNamed(context, '/feedback'),
-                        ),
-                        _buildProfileOption(
-                          title: "Delete Account",
-                          onTap:
-                              () => Navigator.pushNamed(
-                                context,
-                                '/DeleteAccount',
-                              ),
-                        ),
+                        canSeeFeedback == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Feedback",
+                              onTap:
+                                  () =>
+                                      Navigator.pushNamed(context, '/feedback'),
+                            ),
+                        canSeeDeleteAccount == false
+                            ? Container()
+                            : _buildProfileOption(
+                              title: "Delete Account",
+                              onTap:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    '/DeleteAccount',
+                                  ),
+                            ),
                       ],
                     ),
                     const SizedBox(height: 32),

@@ -101,7 +101,61 @@ class _OfferDetailsState extends State<OfferDetails> {
     );
 
     fetchRedeemedPeople();
+    _initializePermissions();
   }
+
+  /* --------- permissions section started -----*/
+  List<Map<String, dynamic>> permissions = [];
+  bool canRemoveOffer = false;
+  bool canEditOffer = false;
+
+  Future<void> fetchPermissions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final permissionsString = prefs.getString('permissions');
+
+    if (permissionsString != null) {
+      final List<dynamic> decoded = jsonDecode(permissionsString);
+      permissions = List<Map<String, dynamic>>.from(decoded);
+
+      print('Loaded permissions: $permissions');
+    }
+  }
+
+  bool hasPermissionToUser(String permissionName) {
+    final normalized = permissionName.toLowerCase().replaceAll('_', ' ');
+
+    return permissions.any(
+      (p) => (p['name']?.toString().toLowerCase() ?? '') == normalized,
+    );
+  }
+
+  Future<void> checkPermission() async {
+    setState(() {
+      if (permissions.isEmpty) {
+        print("User has all permissions.");
+        canRemoveOffer = true;
+        canEditOffer = true;
+
+        return;
+      }
+      canRemoveOffer = hasPermissionToUser('Remove offer');
+      canEditOffer = hasPermissionToUser('Edit offer');
+
+      if (canRemoveOffer) print("✅ User can Remove offer.");
+      if (canEditOffer) print("✅ User can Edit offer.");
+
+      if (!canRemoveOffer && !canEditOffer) {
+        print("❌ User has no permission to remove and edit offer.");
+      }
+    });
+  }
+
+  Future<void> _initializePermissions() async {
+    await fetchPermissions();
+    checkPermission();
+  }
+
+  /* --------- permissions section endede -----*/
 
   @override
   void dispose() {
@@ -1065,62 +1119,71 @@ class _OfferDetailsState extends State<OfferDetails> {
                         const SizedBox(height: 24),
                         Row(
                           children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: showRemoveDialogFunc,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                            canRemoveOffer == false
+                                ? Container()
+                                : Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: showRemoveDialogFunc,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      elevation:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? 4
+                                              : 2,
+                                    ),
+                                    child: Text(
+                                      'Delete Offer',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.labelLarge?.copyWith(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onError,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
-                                  elevation:
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? 4
-                                          : 2,
                                 ),
-                                child: Text(
-                                  'Delete Offer',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelLarge?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onError,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: showToggleOfferDialog,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
+                            canEditOffer == false
+                                ? Container()
+                                : Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: showToggleOfferDialog,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          isExpired
+                                              ? Colors.green
+                                              : AppColors.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      elevation:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? 4
+                                              : 2,
+                                    ),
+                                    child: Text(
                                       isExpired
-                                          ? Colors.green
-                                          : AppColors.primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  elevation:
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? 4
-                                          : 2,
-                                ),
-                                child: Text(
-                                  isExpired ? 'Bring Offer Back' : 'End Offer',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelLarge?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontWeight: FontWeight.bold,
+                                          ? 'Bring Offer Back'
+                                          : 'End Offer',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.labelLarge?.copyWith(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
                           ],
                         ),
                       ],

@@ -60,11 +60,15 @@ class CustomScaffold extends StatelessWidget {
   static final AssetImage _bird = const AssetImage('assets/bird.png');
   final Widget body;
   final int currentIndex;
+  final bool canAddVenue;
+  final bool canAddOffer;
 
   const CustomScaffold({
     super.key,
     required this.body,
     required this.currentIndex,
+    required this.canAddVenue,
+    required this.canAddOffer,
   });
 
   BuildContext get context => context;
@@ -81,95 +85,104 @@ class CustomScaffold extends StatelessWidget {
       floatingActionButtonLocation: _CustomFABLocation(),
       floatingActionButton: GestureDetector(
         onTap: () {
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            builder: (BuildContext context) {
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.of(context).pop(),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      bottom: MediaQuery.of(context).size.height * 0.14,
-                      left: screenWidth * 0.04,
-                      right: screenWidth * 0.04,
-                      child: GestureDetector(
-                        onTap: () {}, // Prevent tap-through to dismiss
-                        child: Container(
-                          padding: EdgeInsets.all(screenWidth * 0.02),
-                          decoration: BoxDecoration(
-                            color: Design.getSurfaceColor(context),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Design.getBorderColor(context),
+          canAddOffer == false && canAddVenue == false
+              ? Container()
+              : showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.height * 0.14,
+                          left: screenWidth * 0.04,
+                          right: screenWidth * 0.04,
+                          child: GestureDetector(
+                            onTap: () {}, // Prevent tap-through to dismiss
+                            child: Container(
+                              padding: EdgeInsets.all(screenWidth * 0.02),
+                              decoration: BoxDecoration(
+                                color: Design.getSurfaceColor(context),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Design.getBorderColor(context),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.black.withOpacity(0.3)
+                                            : Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  canAddVenue == false
+                                      ? Container()
+                                      : Expanded(
+                                        child: _buildActionButton(
+                                          context: context,
+                                          icon: Icons.apartment,
+                                          label: "Add Venue",
+                                          iconColor: Design.blue,
+                                          textColor: Design.blue,
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) =>
+                                                        addVenue.AddEggScreen(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                  SizedBox(width: screenWidth * 0.03),
+                                  canAddOffer == false
+                                      ? Container()
+                                      : Expanded(
+                                        child: _buildActionButton(
+                                          context: context,
+                                          icon: Icons.percent,
+                                          label: "Add Offer",
+                                          iconColor: Design.blue,
+                                          textColor: Design.blue,
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) =>
+                                                        AddOfferScreen(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                ],
+                              ),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.black.withOpacity(0.3)
-                                        : Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 6,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: _buildActionButton(
-                                  context: context,
-                                  icon: Icons.apartment,
-                                  label: "Add Venue",
-                                  iconColor: Design.blue,
-                                  textColor: Design.blue,
-                                  onTap: () async {
-                                    Navigator.pop(context);
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                addVenue.AddEggScreen(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: screenWidth * 0.03),
-                              Expanded(
-                                child: _buildActionButton(
-                                  context: context,
-                                  icon: Icons.percent,
-                                  label: "Add Offer",
-                                  iconColor: Design.blue,
-                                  textColor: Design.blue,
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AddOfferScreen(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               );
-            },
-          );
         },
         child: Center(
           child: Image(
@@ -197,6 +210,7 @@ class CustomScaffold extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
           vertical: screenWidth * 0.02,
           horizontal: screenWidth * 0.04,
@@ -218,10 +232,11 @@ class CustomScaffold extends StatelessWidget {
           ],
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: iconColor, size: screenWidth * 0.06),
             SizedBox(width: screenWidth * 0.04),
-            Expanded(
+            Flexible(
               child: Text(
                 label,
                 style: TextStyle(
