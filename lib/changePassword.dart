@@ -410,16 +410,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
 
               const SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  AppConstants.getPasswordRequirements(),
-                  style: TextStyle(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.7),
-                    fontSize: 12,
-                  ),
+              Text(
+                AppConstants.getPasswordRequirements(),
+                style: TextStyle(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.7),
+                  fontSize: 12,
                 ),
               ),
               const Spacer(),
