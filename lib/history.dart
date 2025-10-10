@@ -646,14 +646,20 @@ class _HistoryScreenState extends State<HistoryScreen>
                         children: [
                           // Check-ins tab
                           canViewCheckIns == false
-                              ? Center(
-                                child: Text(
-                                  'You do not have Permission to access Check-Ins.',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodyLarge?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
+                              ? Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Center(
+                                  child: Text(
+                                    'You do not have Permission to access Check-Ins.',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge?.copyWith(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               )

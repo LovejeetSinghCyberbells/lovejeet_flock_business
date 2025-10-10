@@ -139,12 +139,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       _selectedPermissions.add('2');
     }
 
-    if (_selectedPermissions.contains('3') ||
-        _selectedPermissions.contains('4') ||
-        _selectedPermissions.contains('5')) {
-      _selectedPermissions.add('2');
-    }
-
     if (_selectedPermissions.contains('7') ||
         _selectedPermissions.contains('8') ||
         _selectedPermissions.contains('9')) {

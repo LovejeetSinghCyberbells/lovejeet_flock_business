@@ -60,7 +60,9 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
           },
         ),
       );
-
+      print(
+        "Selected Permissions while editing staff member : $_selectedPermissions",
+      );
       if (response.statusCode == 200) {
         final data = response.data['data'];
         _firstNameController.text = data["first_name"] ?? '';
@@ -179,6 +181,21 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
   }
 
   Future<void> _submitForm() async {
+    if (_selectedPermissions.contains('2') == false) {
+      _selectedPermissions.add('2');
+    }
+
+    if (_selectedPermissions.contains('7') ||
+        _selectedPermissions.contains('8') ||
+        _selectedPermissions.contains('9')) {
+      _selectedPermissions.add('6');
+    }
+
+    if (_selectedPermissions.contains('18') ||
+        _selectedPermissions.contains('19') ||
+        _selectedPermissions.contains('20')) {
+      _selectedPermissions.add('17');
+    }
     if (_firstNameController.text.isEmpty || _emailController.text.isEmpty) {
       _showError("Please fill in the required fields.");
       return;
@@ -241,7 +258,9 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
           validateStatus: (status) => status! < 500,
         ),
       );
-
+      print(
+        "Selected Permissions while editing staff member : $_selectedPermissions",
+      );
       if (response.statusCode == 200) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
