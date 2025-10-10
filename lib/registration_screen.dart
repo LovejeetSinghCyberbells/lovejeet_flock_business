@@ -326,24 +326,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(80, 76, 76, 1),
-        elevation: 0,
-        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/back_updated.png',
-            height: 40,
-            width: 34,
-          ), // Increased icon size
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        leadingWidth: 80,
-      ),
-
+      // appBar: AppBar(
+      //   backgroundColor: const Color.fromRGBO(80, 76, 76, 1),
+      //   elevation: 0,
+      //   toolbarHeight: MediaQuery.of(context).size.height * 0.08,
+      //   leading: IconButton(
+      //     icon: Image.asset(
+      //       'assets/back_updated.png',
+      //       height: 40,
+      //       width: 34,
+      //     ), // Increased icon size
+      //     onPressed: () => Navigator.of(context).pop(),
+      //   ),
+      //   leadingWidth: 80,
+      // ),
       body: Stack(
         fit: StackFit.expand,
         children: [
+          // Positioned(
+          //   left: 0,
+          //   top: 0,
+          //   child: IconButton(
+          //     color: Theme.of(context).colorScheme.onSurface,
+          //     icon: Image.asset(
+          //       'assets/back_updated.png',
+          //       height: 40,
+          //       width: 34,
+          //     ), // Increased icon size
+          //     onPressed: () => Navigator.of(context).pop(),
+          //   ),
+          // ),
           Positioned.fill(
             child: Image.asset(
               isDarkMode ? 'assets/Background.jpg' : 'assets/login_back.jpg',
@@ -370,6 +382,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
+                  Align(
+                    alignment: AlignmentGeometry.centerLeft,
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Image.asset(
+                        'assets/back_updated.png',
+                        height: 34,
+                        width: 34,
+                      ),
+                    ),
+                  ),
                   Image.asset(
                     'assets/business_logo.png',
                     width: 120,
@@ -681,6 +704,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     text: "Continue",
                     onPressed: _register,
                   ),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),

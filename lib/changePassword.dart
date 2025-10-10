@@ -33,6 +33,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool newPasswordisEmpty = false;
   bool confirmPasswordisEmpty = false;
   bool newAndConfirmPasswordMismatch = false;
+  bool newAndCurrentPasswordMatched = false;
 
   String? passwordError;
 
@@ -69,6 +70,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         confirmPasswordisEmpty = true;
       });
       return;
+    } else if (currentPassword == newPassword) {
+      setState(() {
+        newAndCurrentPasswordMatched = true;
+      });
+      return;
     } else if (confirmPassword != newPassword) {
       setState(() {
         newAndConfirmPasswordMismatch = true;
@@ -80,13 +86,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         newPasswordisEmpty = false;
         confirmPasswordisEmpty = false;
         newAndConfirmPasswordMismatch = false;
+        newAndCurrentPasswordMatched = false;
       });
     }
 
     // Validate new password
     setState(() {
       passwordError = AppConstants.validatePassword(newPassword);
-    }); 
+    });
+    if (passwordError != null) return;
     // if (passwordError != null) {
     //   Fluttertoast.showToast(
     //     msg: passwordError,
@@ -236,6 +244,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -313,6 +322,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   setState(() {
                     // Validate password as user types
                     newPasswordisEmpty = false;
+                    newAndCurrentPasswordMatched = false;
                     // final error = AppConstants.validatePassword(value);
                     // if (error != null) {
                     //   ScaffoldMessenger.of(context).showSnackBar(
@@ -341,6 +351,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
+              newAndCurrentPasswordMatched
+                  ? Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      "Current and New Password cannot be same.",
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  )
+                  : Container(),
               const SizedBox(height: 15),
               TextField(
                 controller: _confirmPasswordController,
@@ -359,6 +378,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 onChanged: (value) {
                   setState(() {
                     confirmPasswordisEmpty = false;
+                    newAndConfirmPasswordMismatch = false;
                   });
                 },
               ),
@@ -370,14 +390,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
-              if (newAndConfirmPasswordMismatch)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    "New Password and Confirm Password Should be Same.",
-                    style: TextStyle(color: Colors.red, fontSize: 12),
-                  ),
-                ),
+
               if (passwordError != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
@@ -386,6 +399,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
+
+              if (newAndConfirmPasswordMismatch)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    "New Password and Confirm Password should be same.",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+
               const SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -400,6 +423,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               ),
               const Spacer(),
+
               SizedBox(
                 width: double.infinity,
                 height: 48,

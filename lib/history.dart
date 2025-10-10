@@ -128,7 +128,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             headers: headers,
           )
           .timeout(const Duration(seconds: 10));
-
+      print("Response from fetch history : ${response.body} ");
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final allTransactions = data['data'] ?? [];
@@ -248,9 +248,9 @@ class _HistoryScreenState extends State<HistoryScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 5,
+            offset: const Offset(0, 0),
           ),
         ],
       ),

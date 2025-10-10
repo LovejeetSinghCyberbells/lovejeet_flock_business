@@ -258,9 +258,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
           validateStatus: (status) => status! < 500,
         ),
       );
-      print(
-        "Selected Permissions while editing staff member : $_selectedPermissions",
-      );
+
       if (response.statusCode == 200) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -277,9 +275,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
         Navigator.pop(context, true);
       } else {
         final errorMessage = response.data['message'] ?? 'Unknown error';
-        final errors =
-            response.data['errors']?.toString() ?? 'No details provided';
-        _showError('Failed to update member: $errorMessage\nDetails: $errors');
+        _showError(errorMessage);
       }
     } catch (e) {
       _showError('Error updating member: $e');
@@ -461,6 +457,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                     ),
                     const SizedBox(height: 15),
                     TextField(
+                      keyboardType: TextInputType.phone,
                       controller: _phoneController,
                       decoration: _getInputDecoration('Phone'),
                       style: TextStyle(

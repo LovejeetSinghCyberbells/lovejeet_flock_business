@@ -106,13 +106,26 @@ class _ReportScreenState extends State<ReportScreen> {
   bool _showReportTypeDropdown = false;
 
   final TextEditingController _descriptionController = TextEditingController();
-  String _errorMessage = '';
+  bool noVeneuSelected = false;
+  bool noReportTypeSelected = false;
+  bool emptyDesc = false;
 
   @override
   void initState() {
     super.initState();
     _fetchVenues();
     _fetchReportTypes();
+  }
+
+  void _showError(String message) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(message, style: const TextStyle(color: Colors.white)),
+        ),
+      );
+    }
   }
 
   Future<String?> _getToken() async {
@@ -124,7 +137,7 @@ class _ReportScreenState extends State<ReportScreen> {
     final token = await _getToken();
     if (token == null || token.isEmpty) {
       setState(() {
-        _errorMessage = 'No token found. Please login again.';
+        _showError('No token found. Please login again.');
       });
       return;
     }
@@ -156,17 +169,17 @@ class _ReportScreenState extends State<ReportScreen> {
           });
         } else {
           setState(() {
-            _errorMessage = data['message'] ?? 'Failed to load venues.';
+            _showError(data['message'] ?? 'Failed to load venues.');
           });
         }
       } else {
         setState(() {
-          _errorMessage = 'Error ${response.statusCode} loading venues.';
+          _showError('Error while loading venues.');
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Network error: $e';
+        _showError('Network error: $e');
       });
     }
   }
@@ -175,7 +188,7 @@ class _ReportScreenState extends State<ReportScreen> {
     final token = await _getToken();
     if (token == null || token.isEmpty) {
       setState(() {
-        _errorMessage = 'No token found. Please login again.';
+        _showError('No token found. Please login again.');
       });
       return;
     }
@@ -208,47 +221,45 @@ class _ReportScreenState extends State<ReportScreen> {
           });
         } else {
           setState(() {
-            _errorMessage = data['message'] ?? 'Failed to load report types.';
+            _showError(data['message'] ?? 'Failed to load report types.');
           });
         }
       } else {
         setState(() {
-          _errorMessage = 'Error ${response.statusCode} loading report types.';
+          _showError('Error while loading report types.');
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Network error: $e';
+        _showError('Network error: $e');
       });
     }
   }
 
+  bool _validateInputs() {
+    final isVenueEmpty = _selectedVenue == null;
+    final isReportTypeEmpty = _selectedReportType == null;
+    final isDescEmpty = _descriptionController.text.trim().isEmpty;
+
+    setState(() {
+      noVeneuSelected = isVenueEmpty;
+      noReportTypeSelected = isReportTypeEmpty;
+      emptyDesc = isDescEmpty;
+    });
+
+    return !(isVenueEmpty || isReportTypeEmpty || isDescEmpty);
+  }
+
   Future<void> _submitReport() async {
-    if (_selectedVenue == null) {
-      setState(() {
-        _errorMessage = 'Please select a venue.';
-      });
-      return;
-    }
-    if (_selectedReportType == null) {
-      setState(() {
-        _errorMessage = 'Please select a report type.';
-      });
-      return;
-    }
-    if (_descriptionController.text.trim().isEmpty) {
-      setState(() {
-        _errorMessage = 'Please enter a description.';
-      });
-      return;
-    }
+    bool valid = _validateInputs();
 
-    setState(() => _errorMessage = '');
-
+    if (valid == false) {
+      return;
+    }
     final token = await _getToken();
     if (token == null || token.isEmpty) {
       setState(() {
-        _errorMessage = 'No token found. Please login again.';
+        _showError('No token found. Please login again.');
       });
       return;
     }
@@ -282,18 +293,17 @@ class _ReportScreenState extends State<ReportScreen> {
           Navigator.pop(context);
         } else {
           setState(() {
-            _errorMessage =
-                responseData['message'] ?? 'Failed to submit report.';
+            _showError(responseData['message'] ?? 'Failed to submit report.');
           });
         }
       } else {
         setState(() {
-          _errorMessage = 'Error ${response.statusCode}: ${response.body}';
+          _showError('Error while submit report.');
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Network error: $e';
+        _showError('Network error: $e');
       });
     }
   }
@@ -331,6 +341,7 @@ class _ReportScreenState extends State<ReportScreen> {
             onTap: () {
               setState(() {
                 _showVenueDropdown = !_showVenueDropdown;
+                noVeneuSelected = false;
               });
             },
             child: Container(
@@ -480,6 +491,7 @@ class _ReportScreenState extends State<ReportScreen> {
             onTap: () {
               setState(() {
                 _showReportTypeDropdown = !_showReportTypeDropdown;
+                noReportTypeSelected = false;
               });
             },
             child: Container(
@@ -669,6 +681,18 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                   const SizedBox(height: 8),
                   customVenueDropdown(),
+                  const SizedBox(height: 8),
+                  if (noVeneuSelected)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        'Please select a venue.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.red,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 16),
                   Text(
                     "Choose report type",
@@ -682,6 +706,19 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                   const SizedBox(height: 8),
                   customReportTypeDropdown(),
+                  const SizedBox(height: 8),
+
+                  if (noReportTypeSelected)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        'Please select a report type.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.red,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 16),
                   Text(
                     "Description",
@@ -697,6 +734,12 @@ class _ReportScreenState extends State<ReportScreen> {
                   TextField(
                     controller: _descriptionController,
                     maxLines: 5,
+                    onChanged: (value) {
+                      
+                      setState(() {
+                        emptyDesc = false;
+                      });
+                    },
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -733,18 +776,21 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  if (_errorMessage.isNotEmpty)
+                  const SizedBox(height: 8),
+
+                  if (emptyDesc)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
-                        _errorMessage,
+                        'Please enter a description.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.red,
                           fontSize: 14,
                         ),
                       ),
                     ),
+
+                  const SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
                     height: 48,

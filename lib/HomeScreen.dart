@@ -818,279 +818,272 @@ class _TabDashboardState extends State<TabDashboard>
       currentIndex: 0,
       body: Stack(
         children: [
-          SafeArea(
-            child: Container(
-              color:
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Color(0xFF1E1E1E)
-                      : Theme.of(context).scaffoldBackgroundColor,
-              padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.023),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Platform.isIOS ? 20 : 5,
-                      bottom: Platform.isIOS ? 10 : 5,
-                      left: Platform.isIOS ? 15 : 5,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Hello, ',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge!.color,
-                              ),
-                            ),
-                            Text(
-                              '$firstName $lastName',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge!.color,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                          icon: Image.asset(
-                            'assets/scan_qr.png',
-                            width: Platform.isIOS ? 45 : 40,
-                            height: Platform.isIOS ? 45 : 40,
-                          ),
-                          onPressed: verifyOffer,
-                        ),
-                      ],
-                    ),
+          Container(
+            color:
+                Theme.of(context).brightness == Brightness.dark
+                    ? Color(0xFF1E1E1E)
+                    : Theme.of(context).scaffoldBackgroundColor,
+            padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.023),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: Platform.isIOS ? 20 : 5,
+                    bottom: Platform.isIOS ? 10 : 5,
+                    left: Platform.isIOS ? 15 : 5,
                   ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: Platform.isIOS ? 5 : 5,
+                          Text(
+                            'Hello, ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                             ),
-                            child: GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              padding: EdgeInsets.all(deviceWidth * 0.023),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing:
+                          ),
+                          Text(
+                            '$firstName $lastName',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: Image.asset(
+                          'assets/scan_qr.png',
+                          width: Platform.isIOS ? 45 : 40,
+                          height: Platform.isIOS ? 45 : 40,
+                        ),
+                        onPressed: verifyOffer,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: Platform.isIOS ? 5 : 5),
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(deviceWidth * 0.023),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing:
+                                      MediaQuery.of(context).size.height *
+                                      0.016,
+                                  crossAxisSpacing: deviceWidth * 0.04,
+                                  childAspectRatio:
+                                      deviceWidth /
+                                      (MediaQuery.of(context).size.height *
+                                          0.4),
+                                  mainAxisExtent:
+                                      MediaQuery.of(context).size.width * .4,
+                                ),
+                            itemCount: hotelList.length,
+                            itemBuilder: (context, index) {
+                              final item = hotelList[index];
+                              return GestureDetector(
+                                onTap: () => clickCard(item),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                    vertical:
                                         MediaQuery.of(context).size.height *
-                                        0.016,
-                                    crossAxisSpacing: deviceWidth * 0.04,
-                                    childAspectRatio:
-                                        deviceWidth /
-                                        (MediaQuery.of(context).size.height *
-                                            0.4),
-                                    mainAxisExtent:
-                                        MediaQuery.of(context).size.width * .4,
+                                        0.0025,
                                   ),
-                              itemCount: hotelList.length,
-                              itemBuilder: (context, index) {
-                                final item = hotelList[index];
-                                return GestureDetector(
-                                  onTap: () => clickCard(item),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.symmetric(
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                          0.0025,
-                                    ),
-                                    decoration: BoxDecoration(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Color(0xFF242424)
+                                            : Theme.of(
+                                              context,
+                                            ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
                                       color:
                                           Theme.of(context).brightness ==
                                                   Brightness.dark
-                                              ? Color(0xFF242424)
-                                              : Theme.of(
-                                                context,
-                                              ).colorScheme.surface,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.white.withOpacity(0.05)
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .outline
-                                                    .withOpacity(0.1),
-                                        width: 1,
-                                      ),
-                                      boxShadow:
-                                          Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: -2,
-                                                  blurRadius: 12,
-                                                  offset: const Offset(0, 4),
-                                                ),
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.3),
-                                                  spreadRadius: 0,
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0, 2),
-                                                ),
-                                              ]
-                                              : [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.08),
-                                                  spreadRadius: 0,
-                                                  blurRadius: 8,
-                                                  offset: const Offset(0, 4),
-                                                ),
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.05),
-                                                  spreadRadius: -1,
-                                                  blurRadius: 2,
-                                                  offset: const Offset(0, 1),
-                                                ),
-                                              ],
+                                              ? Colors.white.withOpacity(0.05)
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .outline
+                                                  .withOpacity(0.1),
+                                      width: 1,
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            MediaQuery.of(context).size.height *
-                                            0.020,
-                                        horizontal: deviceWidth * 0.03,
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Image.asset(
-                                                    item['img'],
-                                                    width: deviceWidth * 0.06,
-                                                    height: deviceWidth * 0.06,
-                                                    color:
-                                                        Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary,
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  Expanded(
-                                                    child: Text(
-                                                      item['category'],
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            deviceWidth * 0.04,
-                                                        color:
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .titleMedium!
-                                                                .color,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                      softWrap: true,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.visible,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    MediaQuery.of(
-                                                      context,
-                                                    ).size.height *
-                                                    0.01,
-                                              ),
-                                              Center(
-                                                child: Text(
-                                                  item['title'],
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize:
-                                                        deviceWidth * 0.03,
-                                                    color:
-                                                        Theme.of(context)
-                                                            .textTheme
-                                                            .bodyMedium!
-                                                            .color,
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                    boxShadow:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.5,
                                                 ),
+                                                spreadRadius: -2,
+                                                blurRadius: 12,
+                                                offset: const Offset(0, 4),
                                               ),
-                                              SizedBox(
-                                                height:
-                                                    MediaQuery.of(
-                                                      context,
-                                                    ).size.height *
-                                                    0.01,
-                                              ),
-                                              Center(
-                                                child: Text(
-                                                  item['points'],
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize:
-                                                        deviceWidth * 0.08,
-                                                    color:
-                                                        Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.3,
                                                 ),
+                                                spreadRadius: 0,
+                                                blurRadius: 4,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ]
+                                            : [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.08,
+                                                ),
+                                                spreadRadius: 0,
+                                                blurRadius: 8,
+                                                offset: const Offset(0, 4),
+                                              ),
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                  0.05,
+                                                ),
+                                                spreadRadius: -1,
+                                                blurRadius: 2,
+                                                offset: const Offset(0, 1),
                                               ),
                                             ],
-                                          ),
-                                          Positioned(
-                                            top: -10,
-                                            right: -10,
-                                            child: IconButton(
-                                              icon: Image.asset(
-                                                'assets/side_arrow.png',
-                                                width: deviceWidth * 0.035,
-                                                height: deviceWidth * 0.035,
-                                              ),
-                                              onPressed: () => clickCard(item),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical:
+                                          MediaQuery.of(context).size.height *
+                                          0.020,
+                                      horizontal: deviceWidth * 0.03,
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  item['img'],
+                                                  width: deviceWidth * 0.06,
+                                                  height: deviceWidth * 0.06,
+                                                  color:
+                                                      Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                ),
+                                                const SizedBox(width: 6),
+                                                Expanded(
+                                                  child: Text(
+                                                    item['category'],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          deviceWidth * 0.04,
+                                                      color:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .titleMedium!
+                                                              .color,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                    softWrap: true,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.visible,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
+                                            SizedBox(
+                                              height:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  0.01,
+                                            ),
+                                            Center(
+                                              child: Text(
+                                                item['title'],
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: deviceWidth * 0.03,
+                                                  color:
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium!
+                                                          .color,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  0.01,
+                                            ),
+                                            Center(
+                                              child: Text(
+                                                item['points'],
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: deviceWidth * 0.08,
+                                                  color:
+                                                      Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Positioned(
+                                          top: -10,
+                                          right: -10,
+                                          child: IconButton(
+                                            icon: Image.asset(
+                                              'assets/side_arrow.png',
+                                              width: deviceWidth * 0.035,
+                                              height: deviceWidth * 0.035,
+                                            ),
+                                            onPressed: () => clickCard(item),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                          const SizedBox(height: 15),
-                          venueListWithQRCodes(),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 15),
+                        venueListWithQRCodes(),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           if (loader)

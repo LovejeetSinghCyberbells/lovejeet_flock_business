@@ -206,6 +206,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       return;
     }
 
+    setState(() {
+      _passwordError = AppConstants.validatePassword(_passwordController.text);
+    });
+    if (_passwordError != null) return;
     setState(() => _isLoading = true);
 
     try {
@@ -277,10 +281,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         }
       } else {
         final errorMessage = response.data['message'] ?? 'Unknown error';
-        final errors =
-            response.data['errors']?.toString() ?? 'No details provided';
-        print('API error: ${response.data}');
-        _showError('${'Failed to save member: ' + errorMessage}\n$errors');
+        _showError(errorMessage);
       }
     } catch (e) {
       setState(() => _isLoading = false);
@@ -289,10 +290,26 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   }
 
   void _showError(String message) {
+    bool hasError = false;
+    if (message == "The contact field format is invalid.") {
+      setState(() {
+        _phoneError = 'Please Enter a valid number.';
+      });
+      hasError = true;
+    }
+    if (message == "There is already an account with this email!") {
+      setState(() {
+        _emailError = "Email already exists.";
+      });
+      hasError = true;
+    }
+    if (hasError) {
+      return;
+    }
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.red, // <-- This is pure red
+          backgroundColor: Colors.red,
           content: Text(message, style: const TextStyle(color: Colors.white)),
         ),
       );
@@ -758,6 +775,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 ),
                 const SizedBox(height: 15),
                 TextField(
+                  keyboardType: TextInputType.phone,
                   controller: _phoneController,
                   decoration: _getInputDecoration(
                     'Phone',

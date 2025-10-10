@@ -128,7 +128,7 @@ class _TabEggScreenState extends State<TabEggScreen> {
   Timer? _timer;
   Timer? _debounce;
 
-/* --------- permissions section started -----*/
+  /* --------- permissions section started -----*/
   List<Map<String, dynamic>> permissions = [];
   bool canViewVenue = false;
   bool canAddVenue = false;
@@ -193,7 +193,8 @@ class _TabEggScreenState extends State<TabEggScreen> {
     await fetchPermissions();
     checkPermission();
   }
-/* --------- permissions section endede -----*/
+
+  /* --------- permissions section endede -----*/
   @override
   void initState() {
     super.initState();
@@ -1075,315 +1076,308 @@ class _TabEggScreenState extends State<TabEggScreen> {
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
       currentIndex: 1,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                cardWrapper(
-                  borderRadius: 10,
-                  elevation: 5,
-                  color: Design.getSurfaceColor(context),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 11,
-                          vertical: 12,
-                        ),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TabDashboard(),
-                                  ),
-                                );
-                              },
-                              child: Image.asset(
-                                'assets/back_updated.png',
-                                height: 40,
-                                width: 34,
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "All Venues",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Design.getTextColor(context),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 40),
-                          ],
-                        ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              cardWrapper(
+                borderRadius: 10,
+                elevation: 5,
+                color: Design.getSurfaceColor(context),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 11,
+                        vertical: 12,
                       ),
-                      const SizedBox(height: 12),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '$greeting, ',
-                                          style: TextStyle(
-                                            fontSize: Design.font15,
-                                            fontWeight: FontWeight.w400,
-                                            color: Design.getTextColor(context),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: '$firstName $lastName',
-                                          style: TextStyle(
-                                            fontSize: Design.font15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Design.getTextColor(context),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                ],
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TabDashboard(),
+                                ),
+                              );
+                            },
+                            child: Image.asset(
+                              'assets/back_updated.png',
+                              height: 40,
+                              width: 34,
+                            ),
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "All Venues",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: Design.getTextColor(context),
+                                ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 40),
+                        ],
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        child:
-                            categoryList.isEmpty
-                                ? const Center()
-                                : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                  ),
-                                  itemCount: categoryList.length,
-                                  itemBuilder: (context, index) {
-                                    final item = categoryList[index];
-                                    return buildCategoryItem(item, index);
-                                  },
-                                ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child:
-                      loader
-                          ? Stack(
-                            children: [
-                              Container(
-                                color: Design.getBackgroundColor(context),
-                              ),
-                              Center(
-                                child: Image.asset(
-                                  'assets/Bird_Full_Eye_Blinking.gif',
-                                  width: 100,
-                                  height: 100,
-                                ),
-                              ),
-                            ],
-                          )
-                          : canViewVenue == false
-                          ? Center(
-                            child: Text(
-                              "You not have Permission to View Venues",
-                              style: TextStyle(
-                                fontSize: Design.font20,
-                                color: Design.getTextColor(
-                                  context,
-                                ).withOpacity(0.7),
-                              ),
-                            ),
-                          )
-                          : allData.isEmpty
-                          ? Center(
-                            child: Text(
-                              'No Venues Found in ${categoryList.isNotEmpty ? categoryList[cardPosition]['name'] : 'Selected Category'}',
-                              style: TextStyle(
-                                fontSize: Design.font20,
-                                color: Design.getTextColor(
-                                  context,
-                                ).withOpacity(0.7),
-                              ),
-                            ),
-                          )
-                          : Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                padding: const EdgeInsets.only(
-                                  left: 16,
-                                  top: 20,
-                                  bottom: 10,
-                                ),
-                                child: Text.rich(
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text.rich(
                                   TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'Venues in ',
+                                        text: '$greeting, ',
                                         style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
+                                          fontSize: Design.font15,
+                                          fontWeight: FontWeight.w400,
                                           color: Design.getTextColor(context),
                                         ),
                                       ),
                                       TextSpan(
-                                        text:
-                                            categoryList[cardPosition]['name'],
+                                        text: '$firstName $lastName',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: Design.font15,
                                           fontWeight: FontWeight.bold,
-                                          color: Design.primaryColorOrange,
+                                          color: Design.getTextColor(context),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.only(
-                                    left: 8,
-                                    right: 8,
-                                    top: 8,
-                                    bottom:
-                                        90, // Add bottom padding to prevent overflow
-                                  ),
-                                  itemCount: allData.length,
-                                  itemBuilder: (context, index) {
-                                    final item = allData[index];
-                                    return Column(
-                                      children: [
-                                        buildVenueItem(item),
-                                        const SizedBox(height: 12),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                ),
-              ],
-            ),
-            if (dialogAlert)
-              Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      color: Design.getBackgroundColor(
-                        context,
-                      ).withOpacity(0.9),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Design.getSurfaceColor(context),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Design.getBorderColor(context),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Confirm Deletion',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Design.getTextColor(context),
+                                const SizedBox(height: 4),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Are you sure you want to remove venue?',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: Design.font15,
-                              fontWeight: FontWeight.w500,
-                              color: Design.getTextColor(context),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  onPressed:
-                                      () => setState(() => dialogAlert = false),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Design.getTextColor(
-                                      context,
-                                    ).withOpacity(0.7),
-                                    side: BorderSide(
-                                      color: Design.getBorderColor(context),
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Design.getTextColor(context),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: removeVenueBtn,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Design.primaryColorOrange,
-                                    foregroundColor: Design.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    elevation: 2,
-                                  ),
-                                  child: Text(
-                                    'OK',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Design.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      margin: const EdgeInsets.only(top: 8),
+                      height: MediaQuery.of(context).size.height * 0.16,
+                      child:
+                          categoryList.isEmpty
+                              ? const Center()
+                              : ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                itemCount: categoryList.length,
+                                itemBuilder: (context, index) {
+                                  final item = categoryList[index];
+                                  return buildCategoryItem(item, index);
+                                },
+                              ),
+                    ),
+                  ],
+                ),
               ),
-          ],
-        ),
+              Expanded(
+                child:
+                    loader
+                        ? Stack(
+                          children: [
+                            Container(
+                              color: Design.getBackgroundColor(context),
+                            ),
+                            Center(
+                              child: Image.asset(
+                                'assets/Bird_Full_Eye_Blinking.gif',
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                          ],
+                        )
+                        : canViewVenue == false
+                        ? Center(
+                          child: Text(
+                            "You not have Permission to View Venues",
+                            style: TextStyle(
+                              fontSize: Design.font20,
+                              color: Design.getTextColor(
+                                context,
+                              ).withOpacity(0.7),
+                            ),
+                          ),
+                        )
+                        : allData.isEmpty
+                        ? Center(
+                          child: Text(
+                            'No Venues Found in ${categoryList.isNotEmpty ? categoryList[cardPosition]['name'] : 'Selected Category'}',
+                            style: TextStyle(
+                              fontSize: Design.font20,
+                              color: Design.getTextColor(
+                                context,
+                              ).withOpacity(0.7),
+                            ),
+                          ),
+                        )
+                        : Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(
+                                left: 16,
+                                top: 20,
+                                bottom: 10,
+                              ),
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Venues in ',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Design.getTextColor(context),
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: categoryList[cardPosition]['name'],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Design.primaryColorOrange,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                  top: 8,
+                                  bottom:
+                                      90, // Add bottom padding to prevent overflow
+                                ),
+                                itemCount: allData.length,
+                                itemBuilder: (context, index) {
+                                  final item = allData[index];
+                                  return Column(
+                                    children: [
+                                      buildVenueItem(item),
+                                      const SizedBox(height: 12),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+              ),
+            ],
+          ),
+          if (dialogAlert)
+            Stack(
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    color: Design.getBackgroundColor(context).withOpacity(0.9),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Design.getSurfaceColor(context),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Design.getBorderColor(context)),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Confirm Deletion',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Design.getTextColor(context),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Are you sure you want to remove venue?',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: Design.font15,
+                            fontWeight: FontWeight.w500,
+                            color: Design.getTextColor(context),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed:
+                                    () => setState(() => dialogAlert = false),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Design.getTextColor(
+                                    context,
+                                  ).withOpacity(0.7),
+                                  side: BorderSide(
+                                    color: Design.getBorderColor(context),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Design.getTextColor(context),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: removeVenueBtn,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Design.primaryColorOrange,
+                                  foregroundColor: Design.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 2,
+                                ),
+                                child: Text(
+                                  'OK',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Design.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ],
       ),
     );
   }

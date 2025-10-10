@@ -209,11 +209,41 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.onSurface,
+            color: Colors.black.withOpacity(0.2),
             blurRadius: 5,
-            offset: const Offset(0, 2),
+            offset: const Offset(0, 0),
           ),
         ],
+        // boxShadow:
+        //     Theme.of(context).brightness == Brightness.dark
+        //         ? [
+        //           BoxShadow(
+        //             color: Colors.black.withOpacity(0.5),
+        //             spreadRadius: -2,
+        //             blurRadius: 12,
+        //             offset: const Offset(0, 4),
+        //           ),
+        //           BoxShadow(
+        //             color: Colors.black.withOpacity(0.3),
+        //             spreadRadius: 0,
+        //             blurRadius: 4,
+        //             offset: const Offset(0, 2),
+        //           ),
+        //         ]
+        //         : [
+        //           BoxShadow(
+        //             color: Colors.black.withOpacity(0.08),
+        //             spreadRadius: 0,
+        //             blurRadius: 8,
+        //             offset: const Offset(0, 4),
+        //           ),
+        //           BoxShadow(
+        //             color: Colors.black.withOpacity(0.05),
+        //             spreadRadius: -1,
+        //             blurRadius: 2,
+        //             offset: const Offset(0, 1),
+        //           ),
+        //         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

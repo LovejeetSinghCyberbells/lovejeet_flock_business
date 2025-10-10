@@ -529,11 +529,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     'Please enter the description',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
               const SizedBox(height: 16),
@@ -1040,8 +1036,8 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 borderRadius: BorderRadius.circular(10),
                 child: Image.file(
                   File(_pickedImage!.path),
-                  width: 500,
-                  height: 200,
+                  width: 80,
+                  height: 80,
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.fitHeight,
                 ),
