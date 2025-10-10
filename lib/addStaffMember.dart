@@ -350,11 +350,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           width: 2.0,
         ),
       ),
-      errorBorder: OutlineInputBorder(
+      
+      focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.red, width: 2.0),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
+      ),errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.red, width: 2.0),
       ),

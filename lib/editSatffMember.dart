@@ -38,6 +38,12 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
+  // Validation error messages
+  String? _firstNameError;
+  String? _lastNameError;
+  String? _emailError;
+  String? _venuesError;
+
   @override
   void initState() {
     super.initState();
@@ -181,6 +187,63 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
   }
 
   Future<void> _submitForm() async {
+    setState(() {
+      _firstNameError = null;
+      _lastNameError = null;
+      _emailError = null;
+      _phoneError = null;
+      _venuesError = null;
+    });
+
+    // Validate required fields
+    bool hasError = false;
+    if (_firstNameController.text.isEmpty) {
+      setState(() {
+        _firstNameError = 'First name is required';
+      });
+      hasError = true;
+    }
+    if (_lastNameController.text.isEmpty) {
+      setState(() {
+        _lastNameError = 'Last name is required';
+      });
+      hasError = true;
+    }
+    if (_phoneController.text.isEmpty) {
+      setState(() {
+        _phoneError = 'Phone number is required';
+      });
+      hasError = true;
+    } else if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(_phoneController.text)) {
+      setState(() {
+        _phoneError = 'Incorrect phone number format';
+      });
+      hasError = true;
+    }
+
+    if (_emailController.text.isEmpty) {
+      setState(() {
+        _emailError = 'Email is required';
+      });
+      hasError = true;
+    } else if (!RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    ).hasMatch(_emailController.text)) {
+      setState(() {
+        _emailError = 'Incorrect email format';
+      });
+      hasError = true;
+    }
+    if (_selectedVenues.isEmpty) {
+      setState(() {
+        _venuesError = 'Please assign at least one venue';
+      });
+      hasError = true;
+    }
+    if (hasError) {
+      return;
+    }
+
     if (_selectedPermissions.contains('2') == false) {
       _selectedPermissions.add('2');
     }
@@ -196,7 +259,8 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
         _selectedPermissions.contains('20')) {
       _selectedPermissions.add('17');
     }
-    if (_firstNameController.text.isEmpty || _emailController.text.isEmpty) {
+    // _firstNameController.text.isEmpty ||
+    if (_emailController.text.isEmpty) {
       _showError("Please fill in the required fields.");
       return;
     }
@@ -285,18 +349,35 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
   }
 
   void _showError(String message) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(
-          message,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onError,
+    bool hasError = false;
+    if (message == "The contact field format is invalid.") {
+      setState(() {
+        _phoneError = 'Please Enter a valid number.';
+      });
+      hasError = true;
+    }
+    if (message == "There is already an account with this email!") {
+      setState(() {
+        _emailError = "Email already exists.";
+      });
+      hasError = true;
+    }
+    if (hasError) {
+      return;
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            message,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onError,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
@@ -421,27 +502,47 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                     const SizedBox(height: 30),
                     Row(
                       children: [
-                        Expanded(
+                        Flexible(
                           child: TextField(
                             controller: _firstNameController,
-                            decoration: _getInputDecoration('First Name'),
+                            decoration: _getInputDecoration(
+                              'First Name',
+                              errorText: _firstNameError,
+                            ),
                             style: TextStyle(
                               fontSize: 16,
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
                             ),
+                            onChanged: (value) {
+                              if (value.isNotEmpty && _firstNameError != null) {
+                                setState(() {
+                                  _firstNameError = null;
+                                });
+                              }
+                            },
                           ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextField(
                             controller: _lastNameController,
-                            decoration: _getInputDecoration('Last Name'),
+                            decoration: _getInputDecoration(
+                              'Last Name',
+                              errorText: _lastNameError,
+                            ),
                             style: TextStyle(
                               fontSize: 16,
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
                             ),
+                            onChanged: (value) {
+                              if (value.isNotEmpty && _lastNameError != null) {
+                                setState(() {
+                                  _lastNameError = null;
+                                });
+                              }
+                            },
                           ),
                         ),
                       ],
@@ -449,34 +550,54 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                     const SizedBox(height: 15),
                     TextField(
                       controller: _emailController,
-                      decoration: _getInputDecoration('Email'),
+                      decoration: _getInputDecoration(
+                        'Email',
+                        errorText: _emailError,
+                      ),
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
+                      onChanged: (value) {
+                        if (value.isNotEmpty && _emailError != null) {
+                          setState(() {
+                            _emailError = null;
+                          });
+                        }
+                      },
                     ),
                     const SizedBox(height: 15),
                     TextField(
                       keyboardType: TextInputType.phone,
                       controller: _phoneController,
-                      decoration: _getInputDecoration('Phone'),
+                      decoration: _getInputDecoration(
+                        'Phone',
+                        errorText: _phoneError,
+                      ),
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
+                      onChanged: (value) {
+                        if (value.isNotEmpty && _phoneError != null) {
+                          setState(() {
+                            _phoneError = null;
+                          });
+                        }
+                      },
                     ),
-                    if (_phoneError != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          _phoneError!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                    // if (_phoneError != null)
+                    //   Padding(
+                    //     padding: const EdgeInsets.only(top: 4),
+                    //     child: Text(
+                    //       _phoneError!,
+                    //       style: TextStyle(
+                    //         color: Colors.red,
+                    //         fontSize: 12,
+                    //         fontWeight: FontWeight.w600,
+                    //       ),
+                    //     ),
+                    //   ),
                     const SizedBox(height: 15),
                     TextField(
                       controller: _passwordController,
@@ -509,8 +630,10 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                       onConfirm: (values) {
                         setState(() {
                           _selectedVenues = values;
+                          _venuesError = null;
                         });
                       },
+                      errorText: _venuesError,
                     ),
                     const SizedBox(height: 15),
                     _buildDropdownField(
@@ -548,7 +671,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
     );
   }
 
-  InputDecoration _getInputDecoration(String label) {
+  InputDecoration _getInputDecoration(String label, {String? errorText}) {
     return InputDecoration(
       labelText: label,
       labelStyle: TextStyle(
@@ -589,6 +712,12 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
               : null,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       isDense: true,
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+      ),
+      errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
+      errorText: errorText,
     );
   }
 
@@ -597,6 +726,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
     required List<dynamic> items,
     required List<String> selectedValues,
     required Function(List<String>) onConfirm,
+    String? errorText,
   }) {
     final isPermissions = label.toLowerCase().contains('permission');
     return InkWell(
@@ -755,7 +885,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 56),
         child: InputDecorator(
-          decoration: _getInputDecoration(label),
+          decoration: _getInputDecoration(label, errorText: errorText),
           baseStyle: TextStyle(
             fontSize: 16,
             color: Theme.of(context).textTheme.bodyLarge!.color,
