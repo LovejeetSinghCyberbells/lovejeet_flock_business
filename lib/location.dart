@@ -25,7 +25,7 @@ class _LocationPickerState extends State<LocationPicker> {
   bool _isLoadingLocation = false;
   Timer? _debounce;
 
-  static const String _googleApiKey = 'AIzaSyD7yN8OYOWDyirfXc4OkVKJ3G2pF-y7-wo';
+  static const String _googleApiKey = '';
 
   @override
   void initState() {
