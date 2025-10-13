@@ -457,6 +457,14 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   decoration: _inputDecoration('Title of Offer'),
                   textInputAction: TextInputAction.next,
                   validator: (v) => null,
+                  onChanged: (value) {
+                    setState(() {
+                      if (_showValidationMessages &&
+                          _nameController.text.isEmpty) {
+                        _showValidationMessages = false;
+                      }
+                    });
+                  },
                 ),
               ),
               if (_showValidationMessages && _nameController.text.isEmpty)
@@ -784,6 +792,14 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 decoration: _inputDecoration('Min Limit is 5'),
                 validator:
                     (v) => null, // Remove built-in error, use custom below
+                onChanged: (value) {
+                  setState(() {
+                    if (_showValidationMessages &&
+                        _venuePointsController.text.isEmpty) {
+                      _showValidationMessages = false;
+                    }
+                  });
+                },
               ),
               if (_showValidationMessages &&
                   _useVenuePoints &&
@@ -818,6 +834,14 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 decoration: _inputDecoration('Min Limit is 5'),
                 validator:
                     (v) => null, // Remove built-in error, use custom below
+                onChanged: (value) {
+                  setState(() {
+                    if (_showValidationMessages &&
+                        _venuePointsController.text.isEmpty) {
+                      _showValidationMessages = false;
+                    }
+                  });
+                },
               ),
               if (_showValidationMessages &&
                   _useAppPoints &&
@@ -898,25 +922,42 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
             ),
           ],
         ),
-        child: TextFormField(
-          controller: _descriptionController,
-          maxLines: 4,
-          style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
-          decoration: InputDecoration(
-            hintText: 'Offer description',
-            hintStyle: TextStyle(
-              color: Design.getTextColor(context).withOpacity(0.5),
-              fontSize: 14,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            inputDecorationTheme: const InputDecorationTheme(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 15,
-            ),
-            border: InputBorder.none,
           ),
-          textInputAction: TextInputAction.done,
-          onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
-          validator: (v) => null, // Remove built-in error, use custom below
+          child: TextFormField(
+            controller: _descriptionController,
+            maxLines: 4,
+            style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
+            decoration: InputDecoration(
+              hintText: 'Offer description',
+              hintStyle: TextStyle(
+                color: Design.getTextColor(context).withOpacity(0.5),
+                fontSize: 14,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15,
+              ),
+            ),
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+            validator: (v) => null,
+            onChanged: (value) {
+              setState(() {
+                if (_showValidationMessages &&
+                    _descriptionController.text.isEmpty) {
+                  _showValidationMessages = false;
+                }
+              });
+            },
+          ),
         ),
       ),
     ],
@@ -1039,7 +1080,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   width: 80,
                   height: 80,
                   filterQuality: FilterQuality.high,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
             ),

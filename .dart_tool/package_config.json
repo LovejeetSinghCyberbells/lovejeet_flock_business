@@ -338,6 +338,24 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "flutter_local_notifications",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_local_notifications-17.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_local_notifications_linux-4.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_local_notifications_platform_interface-7.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_localizations",
       "rootUri": "file:///usr/local/Caskroom/flutter/3.29.2/flutter/packages/flutter_localizations",
       "packageUri": "lib/",
@@ -975,7 +993,7 @@
     },
     {
       "name": "timezone",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/timezone-0.10.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/timezone-0.9.4",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },

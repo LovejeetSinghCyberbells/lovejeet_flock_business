@@ -20,6 +20,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   bool _isDeleting = false;
   String _errorMessage = '';
 
+  bool nameError = false;
+  bool emailError = false;
+  bool reasonError = false;
+
   @override
   void initState() {
     super.initState();
@@ -51,9 +55,32 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     final String email = _email.trim();
     final String? phone = _phone;
     final String reason = _reasonController.text.trim();
-    if (name.isEmpty || email.isEmpty || reason.isEmpty) {
-      Fluttertoast.showToast(msg: 'Reason field is required');
+    // if (name.isEmpty || email.isEmpty || reason.isEmpty) {
+    //   Fluttertoast.showToast(msg: 'Reason field is required');
+    //   return;
+    // }
+
+    if (name.isEmpty) {
+      setState(() {
+        nameError = true;
+      });
       return;
+    } else if (email.isEmpty) {
+      setState(() {
+        emailError = true;
+      });
+      return;
+    } else if (reason.isEmpty) {
+      setState(() {
+        reasonError = true;
+      });
+      return;
+    } else {
+      setState(() {
+        nameError = false;
+        emailError = false;
+        reasonError = false;
+      });
     }
 
     setState(() {
@@ -189,6 +216,14 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         ],
                       ),
                     ),
+                    if (nameError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          'Name field is required.',
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
                     // Email (plain text)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -209,6 +244,14 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         ],
                       ),
                     ),
+                    if (emailError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          'Email field is required.',
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
                     // Phone (plain text, only if present)
                     if (_phone != null)
                       Padding(
@@ -252,7 +295,20 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                               context,
                             ).inputDecorationTheme.focusedBorder,
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          reasonError = false;
+                        });
+                      },
                     ),
+                    if (reasonError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          'Reason field is required.',
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
                     const SizedBox(height: 30),
 
                     // Continue button

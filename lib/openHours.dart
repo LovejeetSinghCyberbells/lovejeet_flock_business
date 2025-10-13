@@ -321,7 +321,7 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
                 data['message'] ?? 'Hours updated successfully!',
                 style: Theme.of(context).snackBarTheme.contentTextStyle,
               ),
-              backgroundColor: Theme.of(context).snackBarTheme.backgroundColor,
+              backgroundColor: Colors.green,
             ),
           );
           setState(() {

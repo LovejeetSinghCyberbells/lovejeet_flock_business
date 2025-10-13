@@ -71,6 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailError = null;
+    _passwordError = null;
     super.dispose();
   }
 
@@ -583,11 +585,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               _emailError!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
       ],
@@ -750,10 +748,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed:
-                                () => Navigator.pushNamed(
-                                  context,
-                                  '/forgot-password',
-                                ),
+                                () => {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/forgot-password',
+                                  ),
+                                },
                             child: Text.rich(
                               TextSpan(
                                 style: const TextStyle(fontSize: 14),

@@ -242,7 +242,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Colors.green,
             content: Text(
               "Member deleted successfully!",
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(

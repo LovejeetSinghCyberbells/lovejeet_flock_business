@@ -501,48 +501,85 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                     ),
                     const SizedBox(height: 30),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Flexible(
-                          child: TextField(
-                            controller: _firstNameController,
-                            decoration: _getInputDecoration(
-                              'First Name',
-                              errorText: _firstNameError,
-                            ),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            onChanged: (value) {
-                              if (value.isNotEmpty && _firstNameError != null) {
-                                setState(() {
-                                  _firstNameError = null;
-                                });
-                              }
-                            },
+                        // ===== FIRST NAME FIELD =====
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextField(
+                                controller: _firstNameController,
+                                decoration: _getInputDecoration('First Name'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge!.color,
+                                ),
+                                onChanged: (value) {
+                                  if (value.isNotEmpty &&
+                                      _firstNameError != null) {
+                                    setState(() {
+                                      _firstNameError = null;
+                                    });
+                                  }
+                                },
+                              ),
+                              if (_firstNameError != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    _firstNameError!,
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
+
                         const SizedBox(width: 10),
+
+                        // ===== LAST NAME FIELD =====
                         Expanded(
-                          child: TextField(
-                            controller: _lastNameController,
-                            decoration: _getInputDecoration(
-                              'Last Name',
-                              errorText: _lastNameError,
-                            ),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            onChanged: (value) {
-                              if (value.isNotEmpty && _lastNameError != null) {
-                                setState(() {
-                                  _lastNameError = null;
-                                });
-                              }
-                            },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextField(
+                                controller: _lastNameController,
+                                decoration: _getInputDecoration('Last Name'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge!.color,
+                                ),
+                                onChanged: (value) {
+                                  if (value.isNotEmpty &&
+                                      _lastNameError != null) {
+                                    setState(() {
+                                      _lastNameError = null;
+                                    });
+                                  }
+                                },
+                              ),
+                              if (_lastNameError != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    _lastNameError!,
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ],
@@ -550,10 +587,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                     const SizedBox(height: 15),
                     TextField(
                       controller: _emailController,
-                      decoration: _getInputDecoration(
-                        'Email',
-                        errorText: _emailError,
-                      ),
+                      decoration: _getInputDecoration('Email'),
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -566,14 +600,22 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                         }
                       },
                     ),
+                    if (_emailError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          _emailError!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 15),
                     TextField(
                       keyboardType: TextInputType.phone,
                       controller: _phoneController,
-                      decoration: _getInputDecoration(
-                        'Phone',
-                        errorText: _phoneError,
-                      ),
+                      decoration: _getInputDecoration('Phone'),
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -586,18 +628,18 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                         }
                       },
                     ),
-                    // if (_phoneError != null)
-                    //   Padding(
-                    //     padding: const EdgeInsets.only(top: 4),
-                    //     child: Text(
-                    //       _phoneError!,
-                    //       style: TextStyle(
-                    //         color: Colors.red,
-                    //         fontSize: 12,
-                    //         fontWeight: FontWeight.w600,
-                    //       ),
-                    //     ),
-                    //   ),
+                    if (_phoneError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          _phoneError!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+
                     const SizedBox(height: 15),
                     TextField(
                       controller: _passwordController,
@@ -671,7 +713,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
     );
   }
 
-  InputDecoration _getInputDecoration(String label, {String? errorText}) {
+  InputDecoration _getInputDecoration(String label) {
     return InputDecoration(
       labelText: label,
       labelStyle: TextStyle(
@@ -716,8 +758,6 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.red, width: 2.0),
       ),
-      errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
-      errorText: errorText,
     );
   }
 
@@ -882,50 +922,64 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
           },
         );
       },
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 56),
-        child: InputDecorator(
-          decoration: _getInputDecoration(label, errorText: errorText),
-          baseStyle: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  selectedValues.isEmpty
-                      ? 'Select $label'
-                      : items
-                          .where(
-                            (item) =>
-                                selectedValues.contains(item['id'].toString()),
-                          )
-                          .map((item) => item['name'].toString())
-                          .join(', '),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color:
-                        selectedValues.isEmpty
-                            ? Theme.of(context).brightness == Brightness.dark
-                                ? Colors.grey[400]
-                                : Colors.grey[700]
-                            : Theme.of(context).textTheme.bodyLarge!.color,
+      child: Column(
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 56),
+            child: InputDecorator(
+              decoration: _getInputDecoration(label),
+              baseStyle: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      selectedValues.isEmpty
+                          ? 'Select $label'
+                          : items
+                              .where(
+                                (item) => selectedValues.contains(
+                                  item['id'].toString(),
+                                ),
+                              )
+                              .map((item) => item['name'].toString())
+                              .join(', '),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            selectedValues.isEmpty
+                                ? Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.grey[400]
+                                    : Colors.grey[700]
+                                : Theme.of(context).textTheme.bodyLarge!.color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[400]
+                            : Colors.grey[700],
+                  ),
+                ],
               ),
-              Icon(
-                Icons.arrow_drop_down,
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.grey[400]
-                        : Colors.grey[700],
-              ),
-            ],
+            ),
           ),
-        ),
+          if (errorText != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                errorText!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
+            ),
+        ],
       ),
     );
   }

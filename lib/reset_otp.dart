@@ -22,6 +22,7 @@ class OtpVerificationScreen1 extends StatefulWidget {
 class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
   final TextEditingController _otpController = TextEditingController();
   final String _otpUrl = 'https://api.getflock.io/api/vendor/otp-login';
+  bool otpError = false;
 
   // Theme-aware input decoration
   InputDecoration _getInputDecoration(String hintText) {
@@ -74,11 +75,9 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
   Future<void> _verifyOtp() async {
     final String otp = _otpController.text.trim();
     if (otp.isEmpty) {
-      Fluttertoast.showToast(
-        msg: 'Please enter the OTP.',
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      setState(() {
+        otpError = true;
+      });
       return;
     }
 
@@ -113,7 +112,7 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
         }
       } else {
         Fluttertoast.showToast(
-          msg: 'OTP verification failed with status: ${response.statusCode}.',
+          msg: 'OTP verification failed.',
           backgroundColor: Colors.red,
           textColor: Colors.white,
         );
@@ -193,7 +192,23 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
                         : Colors.black,
               ),
               decoration: _getInputDecoration('OTP'),
+              onChanged: (value) {
+                setState(() {
+                  otpError = false;
+                });
+              },
             ),
+            if (otpError)
+              Align(
+                alignment: AlignmentGeometry.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Please enter the otp.',
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+              ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,

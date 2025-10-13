@@ -306,7 +306,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    "Current Password is Required.",
+                    "Current Password is required.",
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
@@ -347,7 +347,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    "New Password is Required.",
+                    "New Password is required.",
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
@@ -386,7 +386,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    "Confirm Password is Required.",
+                    "Confirm Password is required.",
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),

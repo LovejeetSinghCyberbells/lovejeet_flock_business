@@ -22,6 +22,7 @@
         "flutter_branch_sdk",
         "flutter_html",
         "flutter_image_compress",
+        "flutter_local_notifications",
         "flutter_multi_select_items",
         "flutter_spinkit",
         "fluttertoast",
@@ -252,9 +253,8 @@
     },
     {
       "name": "timezone",
-      "version": "0.10.0",
+      "version": "0.9.4",
       "dependencies": [
-        "http",
         "path"
       ]
     },
@@ -306,6 +306,17 @@
         "geocoding_android",
         "geocoding_ios",
         "geocoding_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_local_notifications",
+      "version": "17.2.4",
+      "dependencies": [
+        "clock",
+        "flutter",
+        "flutter_local_notifications_linux",
+        "flutter_local_notifications_platform_interface",
+        "timezone"
       ]
     },
     {
@@ -1061,6 +1072,26 @@
         "flutter",
         "meta",
         "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "version": "7.2.0",
+      "dependencies": [
+        "flutter",
+        "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "version": "4.0.1",
+      "dependencies": [
+        "dbus",
+        "ffi",
+        "flutter",
+        "flutter_local_notifications_platform_interface",
+        "path",
+        "xdg_directories"
       ]
     },
     {

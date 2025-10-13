@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -255,9 +257,25 @@ class FCMService {
             'sound': settings.sound,
           },
         );
+      } else if (Platform.isAndroid) {
+        await LoggerService.log(
+          'FCM Service',
+          'Requesting Android notification permission',
+          LogType.notification,
+        );
+
+        final status = await Permission.notification.status;
+        if (!status.isGranted) {
+          final result = await Permission.notification.request();
+          print("Result of Permissions: $result");
+          await LoggerService.log(
+            'FCM Service',
+            'Android notification permission result: $result',
+            LogType.notification,
+          );
+        }
       }
 
-      // Handle incoming messages when app is in foreground
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         await LoggerService.log(
           'FCM Service',
@@ -270,6 +288,46 @@ class FCMService {
             'data': message.data,
           },
         );
+        final notification = message.notification;
+        print("Notification : ${notification?.title} ${notification?.body} ");
+        final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        const AndroidInitializationSettings initializationSettingsAndroid =
+            AndroidInitializationSettings('@mipmap/ic_launcher');
+
+        const InitializationSettings initializationSettings =
+            InitializationSettings(android: initializationSettingsAndroid);
+
+        await flutterLocalNotificationsPlugin.initialize(
+          initializationSettings,
+        );
+        // Handle incoming messages when app is in foreground
+        if (notification != null) {
+          print("Notification12 : $notification");
+
+          const AndroidNotificationDetails androidDetails =
+              AndroidNotificationDetails(
+                'default_channel_id',
+                'Default Channel',
+                channelDescription: 'Used for important notifications',
+                importance: Importance.high,
+                priority: Priority.high,
+                playSound: true,
+                icon: '@drawable/app_logo', // ✅ from res/drawable
+                largeIcon: DrawableResourceAndroidBitmap('app_logo'),
+              );
+
+          const NotificationDetails platformDetails = NotificationDetails(
+            android: androidDetails,
+          );
+
+          await flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title ?? 'No Title',
+            notification.body ?? 'No Body',
+            platformDetails,
+          );
+        }
       });
 
       // Handle notification open events when app is in background

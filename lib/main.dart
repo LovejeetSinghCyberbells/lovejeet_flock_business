@@ -15,6 +15,7 @@ import 'package:flock/tutorial.dart';
 import 'package:flock/venue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
 import 'login_screen.dart';
 import 'checkIns.dart';
@@ -205,8 +206,7 @@ class NotificationModel {
 // Handle background messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('Background message received: ${message.toMap()}');
-
+  print("Notification Message : $message");
   // Store notification locally
   await _storeNotification(message);
 }
@@ -354,6 +354,7 @@ void main() async {
       try {
         await Firebase.initializeApp();
         firebaseInitialized = true;
+        print("[Firebase] Firebase has been initialized successfully.");
         developer.log("[Firebase] Firebase has been initialized successfully.");
 
         // Set up FCM background message handler
@@ -373,6 +374,28 @@ void main() async {
           developer.log(
             "[Firebase] iOS notification settings: ${settings.authorizationStatus}",
           );
+          print(
+            "[Firebase] iOS notification settings: ${settings.authorizationStatus}",
+          );
+        } else if (Platform.isAndroid) {
+          // ✅ Android 13+ requires runtime notification permission
+          developer.log(
+            "[Firebase] Requesting Android notification permissions",
+          );
+          final status = await Permission.notification.status;
+
+          if (status.isDenied || status.isRestricted) {
+            final result = await Permission.notification.request();
+            developer.log(
+              "[Firebase] Android notification permission: $result",
+            );
+            print("[Firebase] Android notification permission: $result");
+          } else {
+            developer.log(
+              "[Firebase] Android notification permission already granted",
+            );
+            print("[Firebase] Android notification permission already granted");
+          }
         }
 
         // Enable FCM auto-init

@@ -151,6 +151,15 @@ class _OffersScreenState extends State<OffersScreen> {
       if (response.statusCode == 200) {
         setState(() {
           offersList.removeWhere((offer) => offer['id'] == offerId);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Offer deleted successfully.',
+                style: Theme.of(context).snackBarTheme.contentTextStyle,
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

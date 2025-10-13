@@ -23,6 +23,7 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final TextEditingController _otpController = TextEditingController();
   final String _otpUrl = 'https://api.getflock.io/api/vendor/otp-login';
+  bool otpError = false;
 
   @override
   void dispose() {
@@ -33,7 +34,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Future<void> _verifyOtp() async {
     final String otp = _otpController.text.trim();
     if (otp.isEmpty) {
-      _showError('Please enter the OTP.');
+      setState(() {
+        otpError = true;
+      });
       return;
     }
 
@@ -192,7 +195,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
                 keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    otpError = false;
+                  });
+                },
               ),
+              if (otpError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Please enter the otp.',
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,

@@ -266,7 +266,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Colors.green,
               content: Text(
                 widget.existingMember != null
                     ? "Member updated successfully!"
@@ -316,7 +316,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     }
   }
 
-  InputDecoration _getInputDecoration(String label, {String? errorText}) {
+  InputDecoration _getInputDecoration(String label) {
     return InputDecoration(
       labelText: label,
       labelStyle: TextStyle(
@@ -359,7 +359,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.red, width: 2.0),
       ),
-      errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
       filled: Theme.of(context).brightness == Brightness.dark,
       fillColor:
           Theme.of(context).brightness == Brightness.dark
@@ -367,7 +366,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               : null,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       isDense: true,
-      errorText: errorText,
     );
   }
 
@@ -532,47 +530,62 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       },
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 56),
-        child: InputDecorator(
-          decoration: _getInputDecoration(label, errorText: errorText),
-          baseStyle: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  selectedValues.isEmpty
-                      ? 'Select $label'
-                      : items
-                          .where(
-                            (item) =>
-                                selectedValues.contains(item['id'].toString()),
-                          )
-                          .map((item) => item['name'].toString())
-                          .join(', '),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color:
-                        selectedValues.isEmpty
-                            ? Theme.of(context).brightness == Brightness.dark
-                                ? Colors.grey[400]
-                                : Colors.grey[700]
-                            : Theme.of(context).textTheme.bodyLarge!.color,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputDecorator(
+              decoration: _getInputDecoration(label),
+              baseStyle: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      selectedValues.isEmpty
+                          ? 'Select $label'
+                          : items
+                              .where(
+                                (item) => selectedValues.contains(
+                                  item['id'].toString(),
+                                ),
+                              )
+                              .map((item) => item['name'].toString())
+                              .join(', '),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            selectedValues.isEmpty
+                                ? Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.grey[400]
+                                    : Colors.grey[700]
+                                : Theme.of(context).textTheme.bodyLarge!.color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[400]
+                            : Colors.grey[700],
+                  ),
+                ],
+              ),
+            ),
+            if (errorText != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  errorText,
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
                 ),
               ),
-              Icon(
-                Icons.arrow_drop_down,
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Colors.grey[400]
-                        : Colors.grey[700],
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -710,47 +723,79 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 ),
                 const SizedBox(height: 30),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: TextField(
-                        controller: _firstNameController,
-                        decoration: _getInputDecoration(
-                          'First Name',
-                          errorText: _firstNameError,
-                        ),
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
-                        onChanged: (value) {
-                          if (value.isNotEmpty && _firstNameError != null) {
-                            setState(() {
-                              _firstNameError = null;
-                            });
-                          }
-                        },
+                    // ===== FIRST NAME FIELD =====
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            controller: _firstNameController,
+                            decoration: _getInputDecoration('First Name'),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            ),
+                            onChanged: (value) {
+                              if (value.isNotEmpty && _firstNameError != null) {
+                                setState(() {
+                                  _firstNameError = null;
+                                });
+                              }
+                            },
+                          ),
+                          if (_firstNameError != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(
+                                _firstNameError!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
 
                     const SizedBox(width: 10),
+
+                    // ===== LAST NAME FIELD =====
                     Expanded(
-                      child: TextField(
-                        controller: _lastNameController,
-                        decoration: _getInputDecoration(
-                          'Last Name',
-                          errorText: _lastNameError,
-                        ),
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
-                        onChanged: (value) {
-                          if (value.isNotEmpty && _lastNameError != null) {
-                            setState(() {
-                              _lastNameError = null;
-                            });
-                          }
-                        },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            controller: _lastNameController,
+                            decoration: _getInputDecoration('Last Name'),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            ),
+                            onChanged: (value) {
+                              if (value.isNotEmpty && _lastNameError != null) {
+                                setState(() {
+                                  _lastNameError = null;
+                                });
+                              }
+                            },
+                          ),
+                          if (_lastNameError != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(
+                                _lastNameError!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ],
@@ -758,10 +803,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 const SizedBox(height: 15),
                 TextField(
                   controller: _emailController,
-                  decoration: _getInputDecoration(
-                    'Email',
-                    errorText: _emailError,
-                  ),
+                  decoration: _getInputDecoration('Email'),
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -774,14 +816,19 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     }
                   },
                 ),
+                if (_emailError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      _emailError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 15),
                 TextField(
                   keyboardType: TextInputType.phone,
                   controller: _phoneController,
-                  decoration: _getInputDecoration(
-                    'Phone',
-                    errorText: _phoneError,
-                  ),
+                  decoration: _getInputDecoration('Phone'),
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -794,13 +841,18 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     }
                   },
                 ),
+                if (_phoneError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      _phoneError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 15),
                 TextField(
                   controller: _passwordController,
-                  decoration: _getInputDecoration(
-                    'Password',
-                    errorText: _passwordError,
-                  ).copyWith(
+                  decoration: _getInputDecoration('Password').copyWith(
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
@@ -828,6 +880,14 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     }
                   },
                 ),
+                if (_passwordError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      _passwordError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 15),
                 _buildDropdownField(
                   label: 'Venues',

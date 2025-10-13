@@ -298,7 +298,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['status'] == 'success') {
-          Fluttertoast.showToast(msg: data['message'] ?? 'Profile updated!');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                data['message'] ?? 'Profile updated!',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          );
+          // Fluttertoast.showToast(msg: data['message'] ?? 'Profile updated!');
           String newProfilePic =
               data['data']?['image']?.toString() ?? profilePic;
 

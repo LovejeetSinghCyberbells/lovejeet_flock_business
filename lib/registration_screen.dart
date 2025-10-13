@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   bool isValidPhone(String phone) {
-    return phone.length == 10 && RegExp(r'^[0-9]+$').hasMatch(phone);
+    return RegExp(r'^\+?[0-9]{10,10}$').hasMatch(_phoneController.text);
   }
 
   bool _validateInputs() {
@@ -76,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final lastName = _lastNameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-
+    final phone = _phoneController.text.trim();
     if (firstName.isEmpty) {
       _firstNameError = 'First name is required';
       isValid = false;
@@ -89,10 +89,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _emailError = 'Email is required';
       isValid = false;
     } else if (!isValidEmail(email)) {
-      _emailError = 'Please enter a valid email address';
+      _emailError = 'Please enter a valid email address.';
       isValid = false;
     }
 
+    if (phone.isNotEmpty) {
+      if (!isValidPhone(phone)) {
+        _phoneError = 'Please enter a valid phone number.';
+        isValid = false;
+      }
+    }
     // Use the new password validation
     _passwordError = AppConstants.validatePassword(password);
     if (_passwordError != null) {
@@ -100,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     if (!isChecked) {
-      _termsError = 'Please accept terms&conditions and Privacy Policy';
+      _termsError = 'Please accept Terms&Conditions and Privacy Policy';
       isValid = false;
     }
     return isValid;
@@ -287,34 +293,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 horizontal: 15,
                 vertical: 15,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: errorText != null ? Colors.red : Colors.transparent,
-                  width: 1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color:
-                      errorText != null
-                          ? Colors.red
-                          : Theme.of(context).colorScheme.primary,
-                  width: 1.5,
-                ),
-              ),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
               suffixIcon: suffixIcon,
             ),
             onChanged: onChanged,
           ),
         ),
         if (errorText != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              errorText,
-              style: TextStyle(color: Colors.red, fontSize: 12),
+          Align(
+            alignment: AlignmentGeometry.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                errorText,
+                style: TextStyle(color: Colors.red, fontSize: 12),
+              ),
             ),
           ),
       ],
@@ -424,6 +419,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: _firstNameController,
                           hintText: 'First Name',
                           errorText: _firstNameError,
+                          onChanged: (value) {
+                            if (_firstNameError != null) {
+                              setState(() {
+                                _firstNameError = null;
+                              });
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -432,6 +434,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: _lastNameController,
                           hintText: 'Last Name',
                           errorText: _lastNameError,
+                          onChanged: (value) {
+                            if (_lastNameError != null) {
+                              setState(() {
+                                _lastNameError = null;
+                              });
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -442,6 +451,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: 'Enter Email Address',
                     errorText: _emailError,
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      if (_emailError != null) {
+                        setState(() {
+                          _emailError = null;
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 25),
                   _buildTextField(
@@ -449,6 +465,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: 'Enter phone number (optional)',
                     errorText: _phoneError,
                     keyboardType: TextInputType.phone,
+                    onChanged: (value) {
+                      if (_phoneError != null) {
+                        setState(() {
+                          _phoneError = null;
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 25),
                   _buildTextField(
@@ -456,6 +479,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: 'Date of Birth (optional)',
                     errorText: _dobError,
                     readOnly: true,
+                    onChanged: (value) {
+                      if (_dobError != null) {
+                        setState(() {
+                          _dobError = null;
+                        });
+                      }
+                    },
                     suffixIcon: IconButton(
                       icon: Icon(
                         Icons.calendar_today,
@@ -512,7 +542,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: 'Enter password',
                     errorText: _passwordError,
                     obscureText: _obscureText,
-
+                    onChanged: (value) {
+                      if (_passwordError != null) {
+                        setState(() {
+                          _passwordError = null;
+                        });
+                      }
+                    },
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -595,10 +631,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Transform.translate(
                     offset: const Offset(-12, 0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Checkbox(
@@ -689,11 +724,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                         if (_termsError != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 14),
-                            child: Text(
-                              _termsError!,
-                              style: TextStyle(color: Colors.red, fontSize: 12),
+                          Align(
+                            alignment: AlignmentGeometry.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 4, left: 14),
+                              child: Text(
+                                _termsError!,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
                           ),
                       ],

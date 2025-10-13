@@ -281,7 +281,7 @@ class _ReportScreenState extends State<ReportScreen> {
         if (responseData['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Colors.green,
               content: Text(
                 responseData['message'] ?? 'Report submitted!',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -693,7 +693,6 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                       ),
                     ),
-                  const SizedBox(height: 16),
                   Text(
                     "Choose report type",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -719,7 +718,6 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                       ),
                     ),
-                  const SizedBox(height: 16),
                   Text(
                     "Description",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -735,7 +733,6 @@ class _ReportScreenState extends State<ReportScreen> {
                     controller: _descriptionController,
                     maxLines: 5,
                     onChanged: (value) {
-                      
                       setState(() {
                         emptyDesc = false;
                       });

@@ -23,11 +23,13 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   bool _isLoading = false;
+  String? emailError;
 
   // Theme-aware input decoration
   InputDecoration _getInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
+
       hintStyle: TextStyle(
         color:
             Theme.of(context).brightness == Brightness.dark
@@ -68,12 +70,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _resetPassword() async {
     final String email = _emailController.text.trim();
+    bool isValidEmail(String email) {
+      final RegExp regex = RegExp(r"^[\w.\+\-]+@([\w\-]+\.)+[\w\-]{2,4}$");
+      return regex.hasMatch(email);
+    }
+
     if (email.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "Please enter your email address.",
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      setState(() {
+        emailError = "Email is required.";
+      });
+      // Fluttertoast.showToast(
+      //   msg: "Please enter your email address.",
+      //   backgroundColor: Colors.red,
+      //   textColor: Colors.white,
+      // );
+      return;
+    } else if (!isValidEmail(email)) {
+      setState(() {
+        emailError = 'Please enter a valid email address';
+      });
       return;
     }
     setState(() {
@@ -105,7 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               'success',
             )) {
           Fluttertoast.showToast(
-            msg: "Reset instructions have been sent to your email.",
+            msg: "OTP sent successfully.",
             backgroundColor: Colors.green,
             textColor: Colors.white,
           );
@@ -289,8 +304,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 : Colors.black,
                       ),
                       decoration: _getInputDecoration("Enter Email Address"),
+                      onChanged: (value) {
+                        setState(() {
+                          emailError = null;
+                        });
+                      },
                     ),
                   ),
+                  if (emailError != null)
+                    Align(
+                      alignment: AlignmentGeometry.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          emailError!,
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 25),
                   AppConstants.fullWidthButton(
                     text: "Continue",

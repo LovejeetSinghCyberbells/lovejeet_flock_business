@@ -13,7 +13,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-      
+
+      // ✅ Kotlin DSL syntax for desugaring
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -59,5 +61,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.multidex:multidex:2.0.1")
+
+     // ✅ Kotlin DSL syntax for dependency
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     
 }
