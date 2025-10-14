@@ -12,7 +12,16 @@
 
     <!-- For Android 13+ consider adding: -->
     <!-- <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/> -->
-
+ <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https"/>
+        </intent>
+    </queries>
     <application
         android:enableOnBackInvokedCallback="true"
         android:label="Flock Business"
