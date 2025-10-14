@@ -169,9 +169,9 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         _phoneError = 'Phone number is required';
       });
       hasError = true;
-    } else if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(_phoneController.text)) {
+    } else if (!RegExp(r'^\+?[0-9]{10}$').hasMatch(_phoneController.text)) {
       setState(() {
-        _phoneError = 'Incorrect phone number format';
+        _phoneError = 'Invalid Phone number.';
       });
       hasError = true;
     }

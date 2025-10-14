@@ -661,18 +661,6 @@ class _TabEggScreenState extends State<TabEggScreen> {
                           ).colorScheme.onSurface.withOpacity(0.2),
                         )
                         : null,
-                boxShadow:
-                    isSelected
-                        ? [
-                          BoxShadow(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withOpacity(0.1),
-                            blurRadius: 5,
-                            offset: const Offset(0, 2),
-                          ),
-                        ]
-                        : [],
               ),
               padding: EdgeInsets.all(screenWidth * 0.020),
               child: Column(
@@ -940,19 +928,9 @@ class _TabEggScreenState extends State<TabEggScreen> {
                     children: [
                       canRemoveVenue == false
                           ? Container()
-                          : Container(
+                          : SizedBox(
                             height: 32,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.2),
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
+
                             child: cardWrapper(
                               borderRadius: 5,
                               elevation: 2,
@@ -1003,19 +981,9 @@ class _TabEggScreenState extends State<TabEggScreen> {
                       const SizedBox(width: 15),
                       canEditVenue == false
                           ? Container()
-                          : Container(
+                          : SizedBox(
                             height: 32,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.2),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
+
                             child: cardWrapper(
                               borderRadius: 5,
                               elevation: 2,

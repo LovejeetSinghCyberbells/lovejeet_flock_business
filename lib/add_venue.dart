@@ -154,6 +154,10 @@ class _AddEggScreenState extends State<AddEggScreen> {
   List<dynamic> allDietaryTags = [];
   List<String> arrOfDietaryTags = [];
   bool _submitted = false;
+  bool _isDietaryFocused = false;
+  bool _isCategoryFocused = false;
+  bool _isAmenitiesFocused = false;
+  bool _isSelectedTagFocused = false;
 
   // Validation constants
   static const int minVenueNameLength = 3;
@@ -225,10 +229,10 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateName() {
     setState(() {
       if (nameController.text.trim().isEmpty) {
-        nameError = "Venue name is required";
+        nameError = "Venue name is required.";
       } else if (nameController.text.trim().length < minVenueNameLength) {
         nameError =
-            "Venue name must be at least $minVenueNameLength characters";
+            "Venue name must be at least $minVenueNameLength characters.";
       } else {
         nameError = null;
       }
@@ -238,7 +242,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateDietaryTags() {
     setState(() {
       if (arrOfDietaryTags.isEmpty) {
-        dietaryTagsError = "Please select at least one dietary tag";
+        dietaryTagsError = "Please select at least one dietary tag.";
       } else {
         dietaryTagsError = null;
       }
@@ -248,7 +252,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateCategory() {
     setState(() {
       if (nameofegg.isEmpty || catId.isEmpty) {
-        categoryError = "Please select a category";
+        categoryError = "Please select a category.";
       } else {
         categoryError = null;
       }
@@ -258,9 +262,9 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateSuburb() {
     setState(() {
       if (suburbController.text.trim().isEmpty) {
-        suburbError = "Suburb is required";
+        suburbError = "Suburb is required.";
       } else if (suburbController.text.trim().length < minSuburbLength) {
-        suburbError = "Suburb must be at least $minSuburbLength characters";
+        suburbError = "Suburb must be at least $minSuburbLength characters.";
       } else {
         suburbError = null;
       }
@@ -270,9 +274,9 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateLocation() {
     setState(() {
       if (location.isEmpty || lat == 0.0 || lng == 0.0) {
-        locationError = "Please select a valid location";
+        locationError = "Please select a valid location.";
       } else if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-        locationError = "Invalid location coordinates";
+        locationError = "Invalid location coordinates.";
       } else {
         locationError = null;
       }
@@ -282,7 +286,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateAmenities() {
     setState(() {
       if (arrOfAmenities.isEmpty) {
-        amenitiesError = "Please select at least one amenity";
+        amenitiesError = "Please select at least one amenity.";
       } else {
         amenitiesError = null;
       }
@@ -292,11 +296,11 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateDescription() {
     setState(() {
       if (descriptionController.text.trim().isEmpty) {
-        descriptionError = "Description is required";
+        descriptionError = "Description is required.";
       } else if (descriptionController.text.trim().length <
           minDescriptionLength) {
         descriptionError =
-            "Description must be at least $minDescriptionLength characters";
+            "Description must be at least $minDescriptionLength characters.";
       } else {
         descriptionError = null;
       }
@@ -306,7 +310,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validatePhotos() {
     setState(() {
       if (photos.isEmpty) {
-        photosError = "Please upload at least one photo";
+        photosError = "Please upload at least one photo.";
       } else {
         photosError = null;
       }
@@ -316,9 +320,9 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateNotice() {
     setState(() {
       if (noticeController.text.trim().isEmpty) {
-        noticeError = "Notice is required";
+        noticeError = "Notice is required.";
       } else if (noticeController.text.length > maxNoticeLength) {
-        noticeError = "Notice must be less than $maxNoticeLength characters";
+        noticeError = "Notice must be less than $maxNoticeLength characters.";
       } else {
         noticeError = null;
       }
@@ -328,9 +332,9 @@ class _AddEggScreenState extends State<AddEggScreen> {
   void validateTags() {
     setState(() {
       if (selectedTags.isEmpty) {
-        tagsError = "Please select at least one tag";
+        tagsError = "Please select at least one tag.";
       } else if (selectedTags.length > maxTags) {
-        tagsError = "Maximum $maxTags tags allowed";
+        tagsError = "Maximum $maxTags tags allowed.";
       } else {
         tagsError = null;
       }
@@ -366,7 +370,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
         });
       } else {
         // Fluttertoast.showToast(msg: "Failed to load tags: ${response.statusCode}");
-        Fluttertoast.showToast(msg: "Failed to load tags");
+        Fluttertoast.showToast(msg: "Failed to load tags.");
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "Error fetching tags: $e");
@@ -551,7 +555,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
         if (photos.length + validImages.length <= maxPhotos) {
           photos.addAll(validImages);
         } else {
-          photosError = "Maximum $maxPhotos photos allowed";
+          photosError = "Maximum $maxPhotos photos allowed.";
         }
       });
       validatePhotos();
@@ -644,7 +648,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          Fluttertoast.showToast(msg: "Location permission denied");
+          Fluttertoast.showToast(msg: "Location permission denied.");
           return;
         }
       }
@@ -656,7 +660,9 @@ class _AddEggScreenState extends State<AddEggScreen> {
                 "Location permission permanently denied. Please enable it in Settings > Privacy & Security > Location Services > Flock Business.",
           );
         } else {
-          Fluttertoast.showToast(msg: "Location permission permanently denied");
+          Fluttertoast.showToast(
+            msg: "Location permission permanently denied.",
+          );
         }
         return;
       }
@@ -682,7 +688,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
       validateLocation();
     } catch (e) {
       print('Error getting current location: $e');
-      String errorMessage = 'Unable to get current location';
+      String errorMessage = 'Unable to get current location.';
 
       if (e.toString().contains('timeout')) {
         errorMessage = 'Location request timed out. Please try again.';
@@ -906,7 +912,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
     if (response.statusCode < 300) {
       final responseJson = jsonDecode(responseString);
       Fluttertoast.showToast(
-        msg: responseJson['message'] ?? "Venue added successfully",
+        msg: responseJson['message'] ?? "Venue added successfully.",
       );
       setState(() {
         loader = false;
@@ -992,12 +998,17 @@ class _AddEggScreenState extends State<AddEggScreen> {
   }
 
   // Common container decoration method
-  BoxDecoration getThemedContainerDecoration(bool hasError) {
+  BoxDecoration getThemedContainerDecoration(
+    bool hasError, {
+    bool? isFocused = false,
+  }) {
     return BoxDecoration(
       color: Design.getSurfaceColor(context),
       borderRadius: BorderRadius.circular(10),
       border:
-          hasError
+          isFocused == true
+              ? Border.all(color: Design.primaryColorOrange)
+              : hasError
               ? Border.all(color: Design.errorRed)
               : Border.all(color: Design.getBorderColor(context)),
       boxShadow: [
@@ -1085,10 +1096,10 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     if (value.trim().isEmpty) {
-                                      nameError = 'Name is required';
+                                      nameError = 'Name is required.';
                                     } else if (value.trim().length < 3) {
                                       nameError =
-                                          'Name must be at least 3 characters';
+                                          'Name must be at least 3 characters.';
                                     } else {
                                       nameError = null;
                                     }
@@ -1124,6 +1135,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                               Container(
                                 decoration: getThemedContainerDecoration(
                                   categoryError != null,
+                                  isFocused: _isCategoryFocused,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1132,6 +1144,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                       key: _categoryFieldKey,
                                       onTap: () {
                                         setState(() {
+                                          _isCategoryFocused = true;
                                           showCategoryDropdown =
                                               !showCategoryDropdown;
                                         });
@@ -1208,6 +1221,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                             return InkWell(
                                               onTap: () {
                                                 setState(() {
+                                                  _isCategoryFocused = false;
                                                   catId =
                                                       category['id'].toString();
                                                   nameofegg = category['name'];
@@ -1283,6 +1297,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                               Container(
                                 decoration: getThemedContainerDecoration(
                                   tagsError != null,
+                                  isFocused: _isSelectedTagFocused,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1291,6 +1306,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                       key: _tagsFieldKey,
                                       onTap: () {
                                         setState(() {
+                                          _isSelectedTagFocused = true;
                                           showTagsDropdown = !showTagsDropdown;
                                           tagSearchQuery = '';
                                         });
@@ -1574,6 +1590,8 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     setState(() {
+                                                      _isSelectedTagFocused =
+                                                          false;
                                                       showTagsDropdown = false;
                                                     });
                                                     validateTags();
@@ -1632,10 +1650,10 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     if (value.trim().isEmpty) {
-                                      suburbError = 'Suburb is required';
+                                      suburbError = 'Suburb is required.';
                                     } else if (value.trim().length < 3) {
                                       suburbError =
-                                          'Suburb must be at least 3 characters';
+                                          'Suburb must be at least 3 characters.';
                                     } else {
                                       suburbError = null;
                                     }
@@ -1724,6 +1742,8 @@ class _AddEggScreenState extends State<AddEggScreen> {
                               Container(
                                 decoration: getThemedContainerDecoration(
                                   amenitiesError != null,
+
+                                  isFocused: _isAmenitiesFocused,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1732,6 +1752,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                       key: _amenityFieldKey,
                                       onTap: () {
                                         setState(() {
+                                          _isAmenitiesFocused = true;
                                           showAmenityDropdown =
                                               !showAmenityDropdown;
                                         });
@@ -1924,6 +1945,8 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     setState(() {
+                                                      _isAmenitiesFocused =
+                                                          false;
                                                       showAmenityDropdown =
                                                           false;
                                                     });
@@ -1980,6 +2003,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                               Container(
                                 decoration: getThemedContainerDecoration(
                                   dietaryTagsError != null,
+                                  isFocused: _isDietaryFocused,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1988,6 +2012,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                       key: _dietaryFieldKey,
                                       onTap: () {
                                         setState(() {
+                                          _isDietaryFocused = true;
                                           showDietaryDropdown =
                                               !showDietaryDropdown;
                                         });
@@ -2179,6 +2204,8 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     setState(() {
+                                                      _isDietaryFocused = false;
+
                                                       showDietaryDropdown =
                                                           false;
                                                     });
@@ -2238,10 +2265,10 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     if (value.trim().isEmpty) {
-                                      noticeError = 'Notice is required';
+                                      noticeError = 'Notice is required.';
                                     } else if (value.length > maxNoticeLength) {
                                       noticeError =
-                                          'Notice must be less than $maxNoticeLength characters';
+                                          'Notice must be less than $maxNoticeLength characters.';
                                     } else {
                                       noticeError = null;
                                     }
@@ -2276,10 +2303,10 @@ class _AddEggScreenState extends State<AddEggScreen> {
                             onChanged: (value) {
                               setState(() {
                                 if (value.trim().isEmpty) {
-                                  descriptionError = 'Description is required';
+                                  descriptionError = 'Description is required.';
                                 } else if (value.trim().length < 10) {
                                   descriptionError =
-                                      'Description must be at least 10 characters';
+                                      'Description must be at least 10 characters.';
                                 } else {
                                   descriptionError = null;
                                 }
@@ -2755,7 +2782,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                   pickedPosition.latitude > 90 ||
                   pickedPosition.longitude < -180 ||
                   pickedPosition.longitude > 180) {
-                Fluttertoast.showToast(msg: "Invalid location coordinates");
+                Fluttertoast.showToast(msg: "Invalid location coordinates.");
                 return;
               }
               Navigator.pop(context, {

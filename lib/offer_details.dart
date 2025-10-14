@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flock/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -232,7 +233,6 @@ class _OfferDetailsState extends State<OfferDetails> {
   }
 
   Future<void> removeOffer() async {
-    Navigator.pop(context);
     _setLoading(true);
     final token = await _getToken();
     if (token == null || token.isEmpty) {
@@ -261,19 +261,21 @@ class _OfferDetailsState extends State<OfferDetails> {
           'Content-Type': 'application/json',
         },
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Colors.green,
             content: Text(
-              'Offer removed successfully!',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+              'Offer deleted sucessfully.',
+              style: Theme.of(context).snackBarTheme.contentTextStyle,
             ),
+            backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context, true);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => TabDashboard()),
+          (Route<dynamic> route) => false,
+        );
       } else {
         setState(() {
           errorMessage = 'Failed to remove offer. Code: ${response.statusCode}';
@@ -774,7 +776,6 @@ class _OfferDetailsState extends State<OfferDetails> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
                   removeOffer();
                 },
                 child: Text(

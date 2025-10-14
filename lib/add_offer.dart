@@ -425,53 +425,54 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   color: Design.getTextColor(context),
                 ),
               ),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Design.getSurfaceColor(context),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color:
-                        _showValidationMessages && _nameController.text.isEmpty
-                            ? Design.errorRed
-                            : Design.getBorderColor(context),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.black.withOpacity(0.3)
-                              : Colors.black.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 6,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: TextFormField(
-                  controller: _nameController,
-                  style: TextStyle(
-                    color: Design.getTextColor(context),
-                    fontSize: 14,
-                  ),
-                  decoration: _inputDecoration('Title of Offer'),
-                  textInputAction: TextInputAction.next,
-                  validator: (v) => null,
-                  onChanged: (value) {
-                    setState(() {
-                      if (_showValidationMessages &&
-                          _nameController.text.isEmpty) {
-                        _showValidationMessages = false;
-                      }
-                    });
-                  },
-                ),
-              ),
+              const SizedBox(height: 8), _buildTitleField(),
+
+              // Container(
+              //   decoration: BoxDecoration(
+              //     color: Design.getSurfaceColor(context),
+              //     borderRadius: BorderRadius.circular(10),
+              //     border: Border.all(
+              //       color:
+              //           _showValidationMessages && _nameController.text.isEmpty
+              //               ? Design.errorRed
+              //               : Design.getBorderColor(context),
+              //     ),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color:
+              //             Theme.of(context).brightness == Brightness.dark
+              //                 ? Colors.black.withOpacity(0.3)
+              //                 : Colors.black.withOpacity(0.1),
+              //         spreadRadius: 1,
+              //         blurRadius: 6,
+              //         offset: const Offset(0, 3),
+              //       ),
+              //     ],
+              //   ),
+              //   child: TextFormField(
+              //     controller: _nameController,
+              //     style: TextStyle(
+              //       color: Design.getTextColor(context),
+              //       fontSize: 14,
+              //     ),
+              //     decoration: _inputDecoration('Title of Offer'),
+              //     textInputAction: TextInputAction.next,
+              //     validator: (v) => null,
+              //     onChanged: (value) {
+              //       setState(() {
+              //         if (_showValidationMessages &&
+              //             _nameController.text.isEmpty) {
+              //           _showValidationMessages = false;
+              //         }
+              //       });
+              //     },
+              //   ),
+              // ),
               if (_showValidationMessages && _nameController.text.isEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Please Enter Title',
+                    'Please enter title.',
                     style: TextStyle(color: Design.errorRed, fontSize: 12),
                   ),
                 ),
@@ -495,7 +496,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Please select venue',
+                    'Please select venue.',
                     style: TextStyle(color: Design.errorRed, fontSize: 12),
                   ),
                 ),
@@ -513,7 +514,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Select at least one redeem type',
+                    'Select at least one redeem type.',
                     style: TextStyle(color: Design.errorRed, fontSize: 12),
                   ),
                 ),
@@ -536,7 +537,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Please enter the description',
+                    'Please enter the description.',
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
@@ -549,7 +550,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Invalid redemption limit',
+                    'Invalid redemption limit.',
                     style: TextStyle(color: Design.errorRed, fontSize: 12),
                   ),
                 ),
@@ -559,7 +560,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Please upload an image',
+                    'Please upload an image.',
                     style: TextStyle(color: Design.errorRed, fontSize: 12),
                   ),
                 ),
@@ -785,22 +786,8 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _venuePointsController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: _inputDecoration('Min Limit is 5'),
-                validator:
-                    (v) => null, // Remove built-in error, use custom below
-                onChanged: (value) {
-                  setState(() {
-                    if (_showValidationMessages &&
-                        _venuePointsController.text.isEmpty) {
-                      _showValidationMessages = false;
-                    }
-                  });
-                },
-              ),
+              _buildVenueField(),
+
               if (_showValidationMessages &&
                   _useVenuePoints &&
                   (_venuePointsController.text.isEmpty ||
@@ -810,8 +797,8 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     _venuePointsController.text.isEmpty
-                        ? 'Please enter Venue Points'
-                        : 'Minimum 5 points',
+                        ? 'Please enter venue points.'
+                        : 'Minimum 5 points.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.red,
                       fontSize: 12,
@@ -827,22 +814,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _appPointsController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: _inputDecoration('Min Limit is 5'),
-                validator:
-                    (v) => null, // Remove built-in error, use custom below
-                onChanged: (value) {
-                  setState(() {
-                    if (_showValidationMessages &&
-                        _venuePointsController.text.isEmpty) {
-                      _showValidationMessages = false;
-                    }
-                  });
-                },
-              ),
+              _buildFeathersField(),
               if (_showValidationMessages &&
                   _useAppPoints &&
                   (_appPointsController.text.isEmpty ||
@@ -852,8 +824,8 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     _appPointsController.text.isEmpty
-                        ? 'Please enter Feathers'
-                        : 'Minimum 5 points',
+                        ? 'Please enter feathers.'
+                        : 'Minimum 5 points.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.red,
                       fontSize: 12,
@@ -873,8 +845,8 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
       fontSize: 14,
     ),
     contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-    filled: true,
-    fillColor: Design.getSurfaceColor(context),
+    // filled: true,
+    // fillColor: Design.getSurfaceColor(context),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Design.getBorderColor(context)),
@@ -883,18 +855,204 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Design.getBorderColor(context)),
     ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: Design.primaryColorOrange),
-    ),
+
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Design.errorRed),
     ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(color: Design.errorRed),
-    ),
+  );
+
+  Widget _buildVenueField() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          color: Design.getSurfaceColor(context),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                _showValidationMessages && _venuePointsController.text.isEmpty
+                    ? Design.errorRed
+                    : Design.getBorderColor(context),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            inputDecorationTheme: const InputDecorationTheme(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+            ),
+          ),
+          child: TextFormField(
+            controller: _venuePointsController,
+            style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
+            decoration: InputDecoration(
+              hintText: 'Min limit is 5',
+              hintStyle: TextStyle(
+                color: Design.getTextColor(context).withOpacity(0.5),
+                fontSize: 14,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15,
+              ),
+            ),
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+            validator: (v) => null,
+            onChanged: (value) {
+              setState(() {
+                if (_showValidationMessages &&
+                    _venuePointsController.text.isEmpty) {
+                  _showValidationMessages = false;
+                }
+              });
+            },
+          ),
+        ),
+      ),
+    ],
+  );
+
+  Widget _buildFeathersField() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          color: Design.getSurfaceColor(context),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                _showValidationMessages && _appPointsController.text.isEmpty
+                    ? Design.errorRed
+                    : Design.getBorderColor(context),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            inputDecorationTheme: const InputDecorationTheme(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+            ),
+          ),
+          child: TextFormField(
+            controller: _appPointsController,
+            style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
+            decoration: InputDecoration(
+              hintText: 'Min limit is 5',
+              hintStyle: TextStyle(
+                color: Design.getTextColor(context).withOpacity(0.5),
+                fontSize: 14,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15,
+              ),
+            ),
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+            validator: (v) => null,
+            onChanged: (value) {
+              setState(() {
+                if (_showValidationMessages &&
+                    _appPointsController.text.isEmpty) {
+                  _showValidationMessages = false;
+                }
+              });
+            },
+          ),
+        ),
+      ),
+    ],
+  );
+  Widget _buildTitleField() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          color: Design.getSurfaceColor(context),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                _showValidationMessages && _nameController.text.isEmpty
+                    ? Design.errorRed
+                    : Design.getBorderColor(context),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            inputDecorationTheme: const InputDecorationTheme(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+            ),
+          ),
+          child: TextFormField(
+            controller: _nameController,
+            style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
+            decoration: InputDecoration(
+              hintText: 'Title of offer',
+              hintStyle: TextStyle(
+                color: Design.getTextColor(context).withOpacity(0.5),
+                fontSize: 14,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15,
+              ),
+            ),
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+            validator: (v) => null,
+            onChanged: (value) {
+              setState(() {
+                if (_showValidationMessages && _nameController.text.isEmpty) {
+                  _showValidationMessages = false;
+                }
+              });
+            },
+          ),
+        ),
+      ),
+    ],
   );
 
   Widget _buildDescriptionField() => Column(
@@ -970,7 +1128,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Redemption Limit  ',
+              text: 'Redemption Limit ',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -1080,7 +1238,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   width: 80,
                   height: 80,
                   filterQuality: FilterQuality.high,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),

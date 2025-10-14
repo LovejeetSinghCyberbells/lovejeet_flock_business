@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as dom;
 import 'package:http/http.dart' as http;
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Helper function to extract the content inside the <body> tag
 String extractBodyContent(String html) {
@@ -84,9 +86,17 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Theme.of(context).brightness == Brightness.dark
+              ? Color(0xFF1E1E1E)
+              : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("Terms and Conditions"),
+        title: Text(
+          "Terms and Conditions",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.titleMedium!.color,
+          ),
+        ),
         backgroundColor: const Color.fromRGBO(255, 130, 16, 1),
       ),
       body: Padding(
@@ -120,24 +130,28 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                 : SingleChildScrollView(
                   child: Html(
                     data: extractBodyContent(termsHtml),
+
                     style: {
                       "body": Style(
                         fontFamily: 'Arial',
                         fontSize: FontSize(16),
                         lineHeight: LineHeight(1.6),
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "h1": Style(
                         fontSize: FontSize(22),
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "h2": Style(
                         fontSize: FontSize(20),
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "h3": Style(
                         fontSize: FontSize(18),
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "ul": Style(margin: Margins.all(8)),
                       "li": Style(margin: Margins.only(bottom: 6)),

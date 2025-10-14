@@ -34,7 +34,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool confirmPasswordisEmpty = false;
   bool newAndConfirmPasswordMismatch = false;
   bool newAndCurrentPasswordMatched = false;
-
+  bool currentPasswordWrong = false;
   String? passwordError;
 
   Future<String?> _getToken() async {
@@ -159,11 +159,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           );
         }
       } else {
-        Fluttertoast.showToast(
-          msg: "Error: ${response.statusCode}",
-          backgroundColor: Colors.red,
-          textColor: Theme.of(context).colorScheme.onError,
-        );
+        setState(() {
+          currentPasswordWrong = true;
+        });
       }
     } catch (error) {
       Fluttertoast.showToast(
@@ -298,6 +296,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 onChanged: (value) {
                   setState(() {
                     currentPasswordisEmpty = false;
+                    currentPasswordWrong = false;
+                    newAndCurrentPasswordMatched = false;
                   });
                 },
               ),
@@ -307,6 +307,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     "Current Password is required.",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+              if (currentPasswordWrong)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    "Current password is incorrect.",
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
@@ -351,15 +359,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
-              newAndCurrentPasswordMatched
-                  ? Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      "Current and New Password cannot be same.",
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                    ),
-                  )
-                  : Container(),
+              if (newAndCurrentPasswordMatched)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    "Current and New Password cannot be same.",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
               const SizedBox(height: 15),
               TextField(
                 controller: _confirmPasswordController,

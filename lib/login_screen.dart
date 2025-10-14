@@ -67,12 +67,18 @@ class _LoginScreenState extends State<LoginScreen> {
     foundation.debugPrint(formattedMessage);
   }
 
+  void _refreshData() {
+    setState(() {
+      _emailError = null;
+      _passwordError = null;
+    });
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _emailError = null;
-    _passwordError = null;
+
     super.dispose();
   }
 
@@ -92,15 +98,15 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     if (email.isEmpty) {
-      _emailError = 'Email is required';
+      _emailError = 'Email is required.';
       isValid = false;
     } else if (!isValidEmail(email)) {
-      _emailError = 'Please enter a valid email address';
+      _emailError = 'Please enter a valid email address.';
       isValid = false;
     }
 
     if (password.isEmpty) {
-      _passwordError = 'Password is required';
+      _passwordError = 'Password is required.';
       isValid = false;
     }
 
@@ -454,6 +460,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // Navigate first, then update token in background
           Navigator.pushReplacementNamed(context, '/home');
+          _refreshData();
 
           // Add a longer delay before updating device token in release mode
           _logInfo('Waiting before device token update...');
@@ -499,8 +506,20 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder:
           (_) => AlertDialog(
-            title: const Text('Login Failed'),
-            content: Text(message),
+            title: Text(
+              'Login Failed',
+              style: TextStyle(
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            content: Text(
+              message,
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -530,53 +549,43 @@ class _LoginScreenState extends State<LoginScreen> {
                       : Theme.of(context).colorScheme.outline.withOpacity(0.3),
             ),
           ),
-          child: TextField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) {
-              setState(() {
-                if (value.trim().isEmpty) {
-                  _emailError = 'Email is required';
-                } else if (!isValidEmail(value.trim())) {
-                  _emailError = 'Please enter a valid email address';
-                } else {
-                  _emailError = null;
-                }
-              });
-            },
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 14.0,
-              fontFamily: 'YourFontFamily',
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              inputDecorationTheme: const InputDecorationTheme(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+              ),
             ),
-            decoration: InputDecoration(
-              hintText: "Enter Email Address",
-              hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            child: TextFormField(
+              controller: _emailController,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14.0,
+                fontFamily: 'YourFontFamily',
               ),
-              filled: true,
-              fillColor: Colors.transparent,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 15,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    _emailError != null
-                        ? const BorderSide(color: Colors.red)
-                        : BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color:
-                      _emailError != null
-                          ? Colors.red
-                          : Theme.of(context).colorScheme.primary,
+              decoration: InputDecoration(
+                hintText: "Enter Email Address",
+                hintStyle: TextStyle(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.5),
+                  fontSize: 14.0,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 15,
                 ),
               ),
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+              validator: (v) => null,
+              onChanged: (value) {
+                setState(() {
+                  _emailError = null;
+                });
+              },
             ),
           ),
         ),
@@ -611,64 +620,43 @@ class _LoginScreenState extends State<LoginScreen> {
                       : Theme.of(context).colorScheme.outline.withOpacity(0.3),
             ),
           ),
-          child: TextField(
-            controller: _passwordController,
-            obscureText: _obscureText,
-            onChanged: (value) {
-              setState(() {
-                if (value.isEmpty) {
-                  _passwordError = 'Password is required';
-                } else {
-                  _passwordError = null;
-                }
-              });
-            },
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 14.0,
-              fontFamily: 'YourFontFamily',
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              inputDecorationTheme: const InputDecorationTheme(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+              ),
             ),
-            decoration: InputDecoration(
-              hintText: "Enter password",
-              hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            child: TextFormField(
+              controller: _passwordController,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14.0,
+                fontFamily: 'YourFontFamily',
               ),
-              filled: true,
-              fillColor: Colors.transparent,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 15,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    _passwordError != null
-                        ? const BorderSide(color: Colors.red)
-                        : BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color:
-                      _passwordError != null
-                          ? Colors.red
-                          : Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility_off : Icons.visibility,
+              decoration: InputDecoration(
+                hintText: "Enter Password",
+                hintStyle: TextStyle(
                   color: Theme.of(
                     context,
                   ).colorScheme.onSurface.withOpacity(0.5),
+                  fontSize: 14.0,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 15,
+                ),
               ),
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+              validator: (v) => null,
+              onChanged: (value) {
+                setState(() {
+                  _passwordError = null;
+                });
+              },
             ),
           ),
         ),
@@ -677,11 +665,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               _passwordError!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
       ],
@@ -749,6 +733,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextButton(
                             onPressed:
                                 () => {
+                                  _refreshData(),
+
                                   Navigator.pushNamed(
                                     context,
                                     '/forgot-password',
@@ -786,7 +772,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 20),
                         TextButton(
                           onPressed:
-                              () => Navigator.pushNamed(context, '/register'),
+                              () => {
+                                _refreshData(),
+                                Navigator.pushNamed(context, '/register'),
+                              },
                           child: Text.rich(
                             TextSpan(
                               text: 'Don\'t have an account? ',

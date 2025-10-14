@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:url_launcher/url_launcher.dart';
 
 // Helper function to extract the content inside the <body> tag
 String extractBodyContent(String html) {
@@ -19,6 +21,7 @@ class PrivacyPage extends StatefulWidget {
 class _PrivacyPageState extends State<PrivacyPage> {
   String termsHtml = "";
   bool _isLoading = true;
+  String baseUrl = 'https://www.getflock.io/';
 
   // Fetch the Privacy Policies from the API
   Future<void> _fetchTermsAndConditions() async {
@@ -84,9 +87,17 @@ class _PrivacyPageState extends State<PrivacyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Theme.of(context).brightness == Brightness.dark
+              ? Color(0xFF1E1E1E)
+              : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("Privacy Policies"),
+        title: Text(
+          "Privacy Policies",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.titleMedium!.color,
+          ),
+        ),
         backgroundColor: const Color.fromRGBO(255, 130, 16, 1),
       ),
       body: Padding(
@@ -114,30 +125,54 @@ class _PrivacyPageState extends State<PrivacyPage> {
                   ],
                 )
                 : termsHtml.isEmpty
-                ? const Center(
-                  child: Text("No Privacy Policies available."),
-                )
+                ? const Center(child: Text("No Privacy Policies available."))
                 : SingleChildScrollView(
                   child: Html(
                     data: extractBodyContent(termsHtml),
+                    onLinkTap: (
+                      String? url,
+                      Map<String, String> attributes,
+                      dom.Element? element,
+                    ) async {
+                      if (url == null) return;
+
+                      final fullUrl =
+                          url.startsWith('http')
+                              ? url
+                              : baseUrl + (url.startsWith('/') ? url : '/$url');
+
+                      final uri = Uri.parse(fullUrl);
+
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } else {
+                        debugPrint('Could not launch $fullUrl');
+                      }
+                    },
                     style: {
                       "body": Style(
                         fontFamily: 'Arial',
                         fontSize: FontSize(16),
                         lineHeight: LineHeight(1.6),
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "h1": Style(
                         fontSize: FontSize(22),
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "h2": Style(
                         fontSize: FontSize(20),
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "h3": Style(
                         fontSize: FontSize(18),
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                       "ul": Style(margin: Margins.all(8)),
                       "li": Style(margin: Margins.only(bottom: 6)),

@@ -153,7 +153,7 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
           _allCategories = data['data'] ?? data['categories'] ?? [];
         });
       } else {
-        Fluttertoast.showToast(msg: 'Failed to fetch categories');
+        Fluttertoast.showToast(msg: 'Failed to fetch categories.');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error fetching categories: $e');
@@ -180,7 +180,7 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
               data['data'] ?? []; // Adjust according to your response structure
         });
       } else {
-        Fluttertoast.showToast(msg: 'Failed to fetch dietary tags');
+        Fluttertoast.showToast(msg: 'Failed to fetch dietary tags.');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error fetching dietary tags: $e');
@@ -204,7 +204,7 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
           _allTags = data['data'] ?? data['tags'] ?? [];
         });
       } else {
-        Fluttertoast.showToast(msg: 'Failed to fetch tags');
+        Fluttertoast.showToast(msg: 'Failed to fetch tags.');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error fetching tags: $e');
@@ -228,7 +228,7 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
           _allAmenities = data['data'] ?? data['amenities'] ?? [];
         });
       } else {
-        Fluttertoast.showToast(msg: 'Failed to fetch amenities');
+        Fluttertoast.showToast(msg: 'Failed to fetch amenities.');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error fetching amenities: $e');
@@ -369,7 +369,7 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade400, width: 1),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6),
@@ -651,143 +651,154 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
       },
     );
   }
-Widget _buildTagsDropdown() {
-  final selectedTagNames = _allTags
-      .where((tag) => _selectedTagIds.contains(tag['id']))
-      .map((tag) => tag['name'].toString())
-      .toList();
 
-  return InkWell(
-    onTap: () async {
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String localSearchText = _tagSearchText;
-          return StatefulBuilder(
-            builder: (context, setStateDialog) {
-              final filteredTags = _allTags.where((tag) {
-                final tagName = tag['name']?.toString().toLowerCase() ?? '';
-                return tagName.contains(localSearchText.toLowerCase());
-              }).toList();
-              return AlertDialog(
-                backgroundColor: Theme.of(context).brightness == Brightness.dark
-                    ? Design.darkSurface
-                    : Theme.of(context).colorScheme.surface,
-                title: Text(
-                  "Select Tags (Max: 5)",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).textTheme.titleLarge!.color,
+  Widget _buildTagsDropdown() {
+    final selectedTagNames =
+        _allTags
+            .where((tag) => _selectedTagIds.contains(tag['id']))
+            .map((tag) => tag['name'].toString())
+            .toList();
+
+    return InkWell(
+      onTap: () async {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            String localSearchText = _tagSearchText;
+            return StatefulBuilder(
+              builder: (context, setStateDialog) {
+                final filteredTags =
+                    _allTags.where((tag) {
+                      final tagName =
+                          tag['name']?.toString().toLowerCase() ?? '';
+                      return tagName.contains(localSearchText.toLowerCase());
+                    }).toList();
+                return AlertDialog(
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Design.darkSurface
+                          : Theme.of(context).colorScheme.surface,
+                  title: Text(
+                    "Select Tags (Max: 5)",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.titleLarge!.color,
+                    ),
                   ),
-                ),
-                content: SizedBox(
-                  width: double.maxFinite,
-                  height: 200,
-                  child: Column(
-                    children: [
-                      TextField(
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
-                        decoration: _getInputDecoration('Search Tags'),
-                        onChanged: (value) {
-                          setStateDialog(() {
-                            localSearchText = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: filteredTags.length,
-                          itemBuilder: (context, index) {
-                            final tag = filteredTags[index];
-                            final tagId = tag['id'] as int;
-                            final tagName = tag['name'].toString();
-                            final isSelected = _selectedTagIds.contains(tagId);
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 1),
-                              child: Row(
-                                children: [
-                                  Transform.scale(
-                                    scale: 0.75,
-                                    child: Checkbox(
-                                      value: isSelected,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
-                                      visualDensity: const VisualDensity(
-                                        vertical: -4,
-                                        horizontal: -4,
-                                      ),
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      onChanged: (bool? value) {
-                                        setStateDialog(() {
-                                          if (value == true) {
-                                            if (_selectedTagIds.length < 5) {
-                                              setState(() {
-                                                _selectedTagIds.add(tagId);
-                                              });
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                msg:
-                                                    "You can select up to 5 tags only.",
-                                                backgroundColor: Colors.red,
-                                                textColor: Colors.white,
-                                              );
-                                            }
-                                          } else {
-                                            setState(() {
-                                              _selectedTagIds.remove(tagId);
-                                            });
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      tagName,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .color,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
+                  content: SizedBox(
+                    width: double.maxFinite,
+                    height: 200,
+                    child: Column(
+                      children: [
+                        TextField(
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                          ),
+                          decoration: _getInputDecoration('Search Tags'),
+                          onChanged: (value) {
+                            setStateDialog(() {
+                              localSearchText = value;
+                            });
                           },
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: filteredTags.length,
+                            itemBuilder: (context, index) {
+                              final tag = filteredTags[index];
+                              final tagId = tag['id'] as int;
+                              final tagName = tag['name'].toString();
+                              final isSelected = _selectedTagIds.contains(
+                                tagId,
+                              );
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 1,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Transform.scale(
+                                      scale: 0.75,
+                                      child: Checkbox(
+                                        value: isSelected,
+                                        activeColor:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                        visualDensity: const VisualDensity(
+                                          vertical: -4,
+                                          horizontal: -4,
+                                        ),
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        onChanged: (bool? value) {
+                                          setStateDialog(() {
+                                            if (value == true) {
+                                              if (_selectedTagIds.length < 5) {
+                                                setState(() {
+                                                  _selectedTagIds.add(tagId);
+                                                });
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      "You can select up to 5 tags only.",
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                );
+                                              }
+                                            } else {
+                                              setState(() {
+                                                _selectedTagIds.remove(tagId);
+                                              });
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        tagName,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.bodyLarge!.color,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-      );
-    },
-    child: InputDecorator(
-      decoration: _getInputDecoration('Tags'),
-      child: Text(
-        selectedTagNames.isNotEmpty
-            ? selectedTagNames.join(", ")
-            : "Select Tags",
-        style: TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
+                );
+              },
+            );
+          },
+        );
+      },
+      child: InputDecorator(
+        decoration: _getInputDecoration('Tags'),
+        child: Text(
+          selectedTagNames.isNotEmpty
+              ? selectedTagNames.join(", ")
+              : "Select Tags",
+          style: TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
+
   Widget _buildDietaryTagsDropdown() {
     final selectedDietaryNames =
         _allDietaryTags
@@ -1148,54 +1159,53 @@ Widget _buildTagsDropdown() {
 
   // In edit_venue.dart, replace the _updateVenue method with this:
   Future<void> _updateVenue() async {
+    if (_nameController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Venue name is required.',
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
 
- if (_nameController.text.isEmpty) {
-    Fluttertoast.showToast(
-      msg: 'Venue name is required',
-      backgroundColor: Colors.red,
-    );
-    return;
-  }
+    if (_suburbController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Suburb is required.',
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
 
-  if (_suburbController.text.isEmpty) {
-    Fluttertoast.showToast(
-      msg: 'Suburb is required',
-      backgroundColor: Colors.red,
-    );
-    return;
-  }
+    if (_descriptionController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Description is required.',
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
 
-  if (_descriptionController.text.isEmpty) {
-    Fluttertoast.showToast(
-      msg: 'Description is required',
-      backgroundColor: Colors.red,
-    );
-    return;
-  }
+    if (_locationController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Location is required.',
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
 
-  if (_locationController.text.isEmpty) {
-    Fluttertoast.showToast(
-      msg: 'Location is required',
-      backgroundColor: Colors.red,
-    );
-    return;
-  }
+    if (_latController.text.isEmpty || _lonController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Latitude and Longitude are required.',
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
 
-  if (_latController.text.isEmpty || _lonController.text.isEmpty) {
-    Fluttertoast.showToast(
-      msg: 'Latitude and Longitude are required',
-      backgroundColor: Colors.red,
-    );
-    return;
-  }
-    
     if (_nameController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         _locationController.text.isEmpty ||
         _latController.text.isEmpty ||
         _lonController.text.isEmpty) {
       Fluttertoast.showToast(
-        msg: 'Please fill in all required fields',
+        msg: 'Please fill in all required fields.',
         backgroundColor: Colors.red,
       );
       return;
@@ -1203,7 +1213,7 @@ Widget _buildTagsDropdown() {
     if (double.tryParse(_latController.text) == null ||
         double.tryParse(_lonController.text) == null) {
       Fluttertoast.showToast(
-        msg: 'Invalid latitude or longitude',
+        msg: 'Invalid latitude or longitude.',
         backgroundColor: Colors.red,
       );
       return;
@@ -1215,10 +1225,10 @@ Widget _buildTagsDropdown() {
 
     try {
       final token = await _getToken();
-      if (token.isEmpty) throw Exception('No authentication token');
+      if (token.isEmpty) throw Exception('No authentication token.');
 
       final venueId = widget.venueData['id']?.toString() ?? '';
-      if (venueId.isEmpty) throw Exception('No venue ID found');
+      if (venueId.isEmpty) throw Exception('No venue ID found.');
 
       final url = Uri.parse('${Server.updateVenue}/$venueId');
       final request = http.MultipartRequest('POST', url);
@@ -1324,14 +1334,14 @@ Widget _buildTagsDropdown() {
         };
 
         Fluttertoast.showToast(
-          msg: respData['message'] ?? 'Venue updated successfully',
+          msg: respData['message'] ?? 'Venue updated successfully.',
           backgroundColor: Colors.green,
         );
 
         // Pop the screen and return the updated venue data
         Navigator.pop(context, updatedVenue);
       } else {
-        final errorMsg = respData['message'] ?? 'Failed to update venue';
+        final errorMsg = respData['message'] ?? 'Failed to update venue.';
         throw Exception(errorMsg);
       }
     } on TimeoutException catch (e) {
@@ -1527,6 +1537,7 @@ Widget _buildTagsDropdown() {
                       // 🔝 Label with camera icon
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+
                         children: [
                           ElevatedButton(
                             onPressed: _showImagePickerSheet,
@@ -1541,55 +1552,56 @@ Widget _buildTagsDropdown() {
                             ),
                             child: Stack(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 4,
-                                    horizontal: 2,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Design.getSurfaceColor(context),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Design.getBorderColor(context),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? Colors.black.withOpacity(0.3)
+                                                : Colors.grey.withOpacity(0.3),
+                                        spreadRadius: 1,
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
                                   ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      // color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(
-                                            0.4,
-                                          ), // 👈 Grey shadow
-                                          blurRadius: 6,
-                                          offset: const Offset(0, 3),
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Add Image(s)',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.titleLarge!.color,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                      ],
-                                    ),
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'Add Image(s)',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color:
-                                                Theme.of(
-                                                  context,
-                                                ).textTheme.titleLarge!.color,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Image.asset(
+                                        'assets/camera.png',
+                                        height: 38,
+                                        width: 38,
+                                        fit: BoxFit.contain,
+                                        color: const Color.fromRGBO(
+                                          255,
+                                          130,
+                                          16,
+                                          1,
                                         ),
-                                        const SizedBox(height: 6),
-                                        Image.asset(
-                                          'assets/camera.png',
-                                          height: 30,
-                                          width: 36,
-                                          fit: BoxFit.contain,
-                                          color: const Color.fromRGBO(
-                                            255,
-                                            130,
-                                            16,
-                                            1,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

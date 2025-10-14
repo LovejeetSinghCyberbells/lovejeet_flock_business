@@ -78,15 +78,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final password = _passwordController.text;
     final phone = _phoneController.text.trim();
     if (firstName.isEmpty) {
-      _firstNameError = 'First name is required';
+      _firstNameError = 'First name is required.';
       isValid = false;
     }
     if (lastName.isEmpty) {
-      _lastNameError = 'Last name is required';
+      _lastNameError = 'Last name is required.';
       isValid = false;
     }
     if (email.isEmpty) {
-      _emailError = 'Email is required';
+      _emailError = 'Email is required.';
       isValid = false;
     } else if (!isValidEmail(email)) {
       _emailError = 'Please enter a valid email address.';
@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     if (!isChecked) {
-      _termsError = 'Please accept Terms&Conditions and Privacy Policy';
+      _termsError = 'Please accept Terms&Conditions and Privacy Policy.';
       isValid = false;
     }
     return isValid;
@@ -631,7 +631,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Transform.translate(
                     offset: const Offset(-12, 0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,

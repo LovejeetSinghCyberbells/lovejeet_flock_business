@@ -11,25 +11,25 @@ class AppConstants {
   // Password validation methods
   static String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
-      return 'Password is required';
+      return 'Password is required.';
     }
     if (password.length < minPasswordLength) {
-      return 'Password must be at least $minPasswordLength characters';
+      return 'Password must be at least $minPasswordLength characters.';
     }
     if (password.length > maxPasswordLength) {
-      return 'Password must not exceed $maxPasswordLength characters';
+      return 'Password must not exceed $maxPasswordLength characters.';
     }
     if (!password.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter';
+      return 'Password must contain at least one uppercase letter.';
     }
     if (!password.contains(RegExp(r'[a-z]'))) {
-      return 'Password must contain at least one lowercase letter';
+      return 'Password must contain at least one lowercase letter.';
     }
     if (!password.contains(RegExp(r'[0-9]'))) {
-      return 'Password must contain at least one number';
+      return 'Password must contain at least one number.';
     }
     if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password must contain at least one special character';
+      return 'Password must contain at least one special character.';
     }
     return null;
   }

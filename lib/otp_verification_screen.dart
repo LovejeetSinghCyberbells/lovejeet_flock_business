@@ -70,7 +70,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             await prefs.setString('access_token', newToken);
             debugPrint("Stored token after OTP verification: $newToken");
           } else {
-            debugPrint("No token returned from OTP verification API");
+            debugPrint("No token returned from OTP verification API.");
           }
 
           if (mounted) {
@@ -84,9 +84,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           _showError(responseData['message'] ?? 'OTP verification failed.');
         }
       } else {
-        _showError(
-          'OTP verification failed with status: ${response.statusCode}.',
-        );
+        _showError('OTP verification failed.');
       }
     } catch (error) {
       debugPrint("Error during OTP verification: $error");
@@ -202,11 +200,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 },
               ),
               if (otpError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Please enter the otp.',
-                    style: TextStyle(color: Colors.red, fontSize: 12),
+                Align(
+                  alignment: AlignmentGeometry.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Please enter the OTP.',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
                   ),
                 ),
               const SizedBox(height: 20),

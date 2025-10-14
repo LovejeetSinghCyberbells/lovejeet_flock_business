@@ -87,7 +87,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       return;
     } else if (!isValidEmail(email)) {
       setState(() {
-        emailError = 'Please enter a valid email address';
+        emailError = 'Please enter a valid email address.';
       });
       return;
     }
@@ -160,7 +160,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         // Handle other status codes
         debugPrint("Error response: ${response.body}");
         Fluttertoast.showToast(
-          msg: "Reset failed with status: ${response.statusCode}",
+          msg: "Please enter a registered email.",
           backgroundColor: Colors.red,
           textColor: Colors.white,
         );
@@ -210,6 +210,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -322,7 +323,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ),
                     ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
                   AppConstants.fullWidthButton(
                     text: "Continue",
                     onPressed: _resetPassword,

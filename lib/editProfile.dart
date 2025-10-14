@@ -62,6 +62,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isUpdating = false;
   String _errorMessage = '';
   File? _selectedImage;
+  String? firstNameError;
+  String? lastNameError;
+  String? phoneNumberError;
 
   final bool _obscurePassword = true;
 
@@ -248,9 +251,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final password = passwordController.text.trim();
     final contact = phoneController.text.trim();
 
-    if (firstName.isEmpty || lastName.isEmpty || email.isEmpty) {
-      Fluttertoast.showToast(msg: "Please fill in all fields");
+    if (firstName.isEmpty && lastName.isEmpty) {
+      setState(() {
+        lastNameError = "Last name is required.";
+        firstNameError = "First name is required.";
+      });
       return;
+    } else if (firstName.isEmpty) {
+      setState(() {
+        firstNameError = "First name is required.";
+      });
+      return;
+    } else if (lastName.isEmpty) {
+      setState(() {
+        lastNameError = "Last name is required.";
+      });
+      return;
+    } else if (contact.isNotEmpty &&
+        !RegExp(r'^\+?[0-9]{10}$').hasMatch(contact)) {
+      setState(() {
+        phoneNumberError = 'Invalid phone number.';
+      });
+      return;
+    } else {
+      setState(() {
+        lastNameError = null;
+
+        firstNameError = null;
+        phoneNumberError = null;
+      });
     }
 
     setState(() {
@@ -503,30 +532,83 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             const SizedBox(height: 30),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // First Name Field
                                 Expanded(
-                                  child: _buildTextField(
-                                    controller: firstNameController,
-                                    hint: 'First Name',
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter first name';
-                                      }
-                                      return null;
-                                    },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildTextField(
+                                        controller: firstNameController,
+                                        hint: 'First Name',
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter first name';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          setState(() {
+                                            firstNameError = null;
+                                          });
+                                        },
+                                      ),
+                                      if (firstNameError != null)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                          ),
+                                          child: Text(
+                                            firstNameError!,
+                                            style: TextStyle(
+                                              color: Design.errorRed,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
+
                                 const SizedBox(width: 10),
+
+                                // Last Name Field
                                 Expanded(
-                                  child: _buildTextField(
-                                    controller: lastNameController,
-                                    hint: 'Last Name',
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter last name';
-                                      }
-                                      return null;
-                                    },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildTextField(
+                                        controller: lastNameController,
+                                        hint: 'Last Name',
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter last name';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          setState(() {
+                                            lastNameError = null;
+                                          });
+                                        },
+                                      ),
+                                      if (lastNameError != null)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                          ),
+                                          child: Text(
+                                            lastNameError!,
+                                            style: TextStyle(
+                                              color: Design.errorRed,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -544,16 +626,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               hint: 'Enter phone number',
                               readOnly: false,
                               keyboardType: TextInputType.phone,
+                              onChanged: (value) {
+                                setState(() {
+                                  phoneNumberError = null;
+                                });
+                              },
                             ),
+                            if (phoneNumberError != null)
+                              Align(
+                                alignment: AlignmentGeometry.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    phoneNumberError!,
+                                    style: TextStyle(
+                                      color: Design.errorRed,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             const SizedBox(height: 30),
                             if (_errorMessage.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  _errorMessage,
-                                  style: TextStyle(
-                                    color: Design.errorRed,
-                                    fontSize: 14,
+                              Align(
+                                alignment: AlignmentGeometry.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: Text(
+                                    _errorMessage,
+                                    style: TextStyle(
+                                      color: Design.errorRed,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -614,12 +718,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bool readOnly = false,
     TextInputType? keyboardType,
     String? Function(String?)? validator,
+    void Function(String)? onChanged,
   }) {
     return TextField(
       controller: controller,
       readOnly: readOnly,
       keyboardType: keyboardType,
       style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
+      onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(

@@ -398,14 +398,23 @@ class _TabDashboardState extends State<TabDashboard>
     }
     String slug = item['slug'];
     if (slug == "offers" && canViewOffers) {
+      setState(() {});
       Navigator.pushNamed(context, '/offers');
     } else if (slug == "Check-Ins" && canViewCheckIns) {
+      setState(() {});
+
       Navigator.pushNamed(context, '/tab_checkin');
     } else if (slug == "feathers") {
+      setState(() {});
+
       await totalFeatherApi();
     } else if (slug == "venues" && canViewVenues) {
+      setState(() {});
+
       Navigator.pushNamed(context, '/tab_egg');
     } else if (slug == "faq" && canViewTransactionHistory) {
+      setState(() {});
+
       Navigator.pushNamed(context, '/history');
     }
   }
@@ -578,7 +587,7 @@ class _TabDashboardState extends State<TabDashboard>
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 2,
             offset: const Offset(1, 1),

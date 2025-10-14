@@ -315,7 +315,7 @@ class _ReportScreenState extends State<ReportScreen> {
             Theme.of(context).brightness == Brightness.dark
                 ? Design.darkCard
                 : Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color:
               Theme.of(context).brightness == Brightness.dark
@@ -351,7 +351,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     Theme.of(context).brightness == Brightness.dark
                         ? Design.darkCard
                         : Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -384,10 +384,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     Theme.of(context).brightness == Brightness.dark
                         ? Design.darkCard
                         : Theme.of(context).colorScheme.surface,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(5),
-                ),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color:
                       Theme.of(context).brightness == Brightness.dark
@@ -465,7 +462,7 @@ class _ReportScreenState extends State<ReportScreen> {
             Theme.of(context).brightness == Brightness.dark
                 ? Design.darkCard
                 : Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color:
               Theme.of(context).brightness == Brightness.dark
@@ -501,7 +498,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     Theme.of(context).brightness == Brightness.dark
                         ? Design.darkCard
                         : Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -762,14 +759,14 @@ class _ReportScreenState extends State<ReportScreen> {
                                     context,
                                   ).colorScheme.onSurface.withOpacity(0.3),
                         ),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Theme.of(context).colorScheme.primary,
                           width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
