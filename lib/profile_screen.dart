@@ -518,6 +518,7 @@ class _TabProfileState extends State<TabProfile> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),

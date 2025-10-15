@@ -51,7 +51,7 @@ class _CustomFABLocation extends FloatingActionButtonLocation {
     final double fabY =
         scaffoldGeometry.contentBottom -
         scaffoldGeometry.floatingActionButtonSize.height / 2 +
-        (scaffoldGeometry.scaffoldSize.height * 0.06);
+        (scaffoldGeometry.scaffoldSize.height * 0.01);
     return Offset(fabX, fabY);
   }
 }
@@ -192,7 +192,31 @@ class CustomScaffold extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(currentIndex: currentIndex),
+      bottomNavigationBar: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomCenter,
+        children: [
+          Positioned(
+            bottom: (screenHeight * 0.05) / 2,
+            child: Container(
+              width: screenWidth * 0.2,
+              height: screenWidth * 0.2,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Design.getSurfaceColor(context),
+                boxShadow: [
+                  BoxShadow(
+                    color: Design.getBorderColor(context),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          CustomBottomBar(currentIndex: currentIndex),
+        ],
+      ),
     );
   }
 
@@ -338,31 +362,40 @@ class CustomBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Container(
-      color: Design.getBackgroundColor(context),
-      height: screenHeight * 0.13,
+      height: screenHeight * 0.08,
+      decoration: BoxDecoration(
+        color: Design.getSurfaceColor(context),
+        boxShadow: [
+          // BoxShadow(
+          //   color: Design.getBorderColor(context),
+          //   blurRadius: 8,
+          //   offset: const Offset(0, 2),
+          // ),
+        ],
+      ),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Design.getBackgroundColor(context),
-              child: Image.asset(
-                Theme.of(context).brightness == Brightness.dark
-                    ? 'assets/bottom_nav_dark.png'
-                    : 'assets/bottom_nav.png',
-                fit: BoxFit.cover,
-                height: screenHeight * 0.14,
-              ),
-            ),
-          ),
+          // Remove or comment out the Positioned widget with the background image
+          // Positioned(
+          //   top: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: Container(
+          //     color: Design.getBackgroundColor(context),
+          //     child: Image.asset(
+          //       Theme.of(context).brightness == Brightness.dark
+          //           ? 'assets/bottom_nav_dark.png'
+          //           : 'assets/bottom_nav.png',
+          //       fit: BoxFit.cover,
+          //       height: screenHeight * 0.14,
+          //     ),
+          //   ),
+          // ),
+          // Keep your Row of icons and labels
           Padding(
             padding: EdgeInsets.only(
-              top: screenHeight * 0.035,
               left: screenWidth * 0.05,
               right: screenWidth * 0.05,
             ),
@@ -374,7 +407,9 @@ class CustomBottomBar extends StatelessWidget {
                   icon: Icons.grid_view_rounded,
                   label: "Dashboard",
                   index: 0,
-                  color: Colors.black,
+                  color:
+                      Colors
+                          .black, // You can change icon/text color for visibility
                 ),
                 _buildNavItem(
                   context,
@@ -405,4 +440,75 @@ class CustomBottomBar extends StatelessWidget {
       ),
     );
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   final screenHeight = MediaQuery.of(context).size.height;
+  //   final screenWidth = MediaQuery.of(context).size.width;
+
+  //   return Container(
+  //     color: Design.getBackgroundColor(context),
+  //     height: screenHeight * 0.13,
+  //     child: Stack(
+  //       alignment: Alignment.center,
+  //       children: [
+  //         Positioned(
+  //           top: 0,
+  //           left: 0,
+  //           right: 0,
+  //           child: Container(
+  //             color: Design.getBackgroundColor(context),
+  //             child: Image.asset(
+  //               Theme.of(context).brightness == Brightness.dark
+  //                   ? 'assets/bottom_nav_dark.png'
+  //                   : 'assets/bottom_nav.png',
+  //               fit: BoxFit.cover,
+  //               height: screenHeight * 0.14,
+  //             ),
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.only(
+  //             top: screenHeight * 0.035,
+  //             left: screenWidth * 0.05,
+  //             right: screenWidth * 0.05,
+  //           ),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: <Widget>[
+  //               _buildNavItem(
+  //                 context,
+  //                 icon: Icons.grid_view_rounded,
+  //                 label: "Dashboard",
+  //                 index: 0,
+  //                 color: Colors.black,
+  //               ),
+  //               _buildNavItem(
+  //                 context,
+  //                 icon: Icons.apartment,
+  //                 label: "Venues",
+  //                 index: 1,
+  //                 color: Colors.black,
+  //               ),
+  //               SizedBox(width: screenWidth * 0.2),
+  //               _buildNavItem(
+  //                 context,
+  //                 icon: Icons.login_outlined,
+  //                 label: "Check In",
+  //                 index: 3,
+  //                 color: Colors.black,
+  //               ),
+  //               _buildNavItem(
+  //                 context,
+  //                 icon: Icons.person,
+  //                 label: "My Profile",
+  //                 index: 4,
+  //                 color: Colors.black,
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
