@@ -824,6 +824,7 @@ class _TabDashboardState extends State<TabDashboard>
       canAddVenue: canAddVenue,
       currentIndex: 0,
       body: Stack(
+        fit: StackFit.expand,
         children: [
           Container(
             color:

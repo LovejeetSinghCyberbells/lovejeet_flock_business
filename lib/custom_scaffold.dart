@@ -5,7 +5,6 @@ import 'package:flock/venue.dart' as venue;
 import 'package:flock/checkIns.dart';
 import 'package:flock/profile_screen.dart' as profile;
 import 'package:flock/HomeScreen.dart';
-import 'package:flutter/services.dart';
 
 class Design {
   static const Color primaryColorOrange = Color.fromRGBO(255, 152, 0, 1);
@@ -342,7 +341,7 @@ class CustomBottomBar extends StatelessWidget {
 
     return Container(
       color: Design.getBackgroundColor(context),
-      height: screenHeight * 0.14,
+      height: screenHeight * 0.13,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -357,15 +356,15 @@ class CustomBottomBar extends StatelessWidget {
                     ? 'assets/bottom_nav_dark.png'
                     : 'assets/bottom_nav.png',
                 fit: BoxFit.cover,
-                height: screenHeight * 0.16,
+                height: screenHeight * 0.14,
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(
-              top: screenHeight * 0.04,
+              top: screenHeight * 0.035,
               left: screenWidth * 0.05,
-              right: screenWidth * 0.03,
+              right: screenWidth * 0.05,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
