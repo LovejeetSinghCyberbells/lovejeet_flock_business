@@ -697,7 +697,9 @@ class _HistoryScreenState extends State<HistoryScreen>
         ),
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 
   Widget _buildEmptyState(String message) {

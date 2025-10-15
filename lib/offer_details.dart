@@ -1203,6 +1203,8 @@ class _OfferDetailsState extends State<OfferDetails> {
         //   ),
       ],
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

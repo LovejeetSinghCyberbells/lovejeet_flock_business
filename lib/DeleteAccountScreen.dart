@@ -376,7 +376,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         ],
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 
   @override

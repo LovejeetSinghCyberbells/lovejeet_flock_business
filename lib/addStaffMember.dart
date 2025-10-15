@@ -593,7 +593,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final scaffold= Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -951,7 +951,9 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             ),
         ],
       ),
-    );    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
-
+    );
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

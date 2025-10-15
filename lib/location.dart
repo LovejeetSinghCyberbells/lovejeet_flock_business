@@ -733,6 +733,8 @@ class _LocationPickerState extends State<LocationPicker> {
         ],
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

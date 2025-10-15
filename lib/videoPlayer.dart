@@ -68,6 +68,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               )
               : null,
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

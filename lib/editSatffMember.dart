@@ -711,7 +711,9 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                 ),
               ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 
   InputDecoration _getInputDecoration(String label) {

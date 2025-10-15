@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flock/qr_code_scanner_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -402,7 +402,6 @@ class _TabDashboardState extends State<TabDashboard>
       Navigator.pushNamed(context, '/offers');
     } else if (slug == "Check-Ins" && canViewCheckIns) {
       setState(() {});
-
       Navigator.pushNamed(context, '/tab_checkin');
     } else if (slug == "feathers") {
       setState(() {});
@@ -410,11 +409,9 @@ class _TabDashboardState extends State<TabDashboard>
       await totalFeatherApi();
     } else if (slug == "venues" && canViewVenues) {
       setState(() {});
-
       Navigator.pushNamed(context, '/tab_egg');
     } else if (slug == "faq" && canViewTransactionHistory) {
       setState(() {});
-
       Navigator.pushNamed(context, '/history');
     }
   }
@@ -821,6 +818,7 @@ class _TabDashboardState extends State<TabDashboard>
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+
     final scaffold = CustomScaffold(
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
@@ -905,7 +903,11 @@ class _TabDashboardState extends State<TabDashboard>
                             itemBuilder: (context, index) {
                               final item = hotelList[index];
                               return GestureDetector(
-                                onTap: () => clickCard(item),
+                                onTap:
+                                    () => setState(() async {
+                                      await dashboardApi();
+                                      clickCard(item);
+                                    }),
                                 child: Container(
                                   alignment: Alignment.center,
                                   margin: EdgeInsets.symmetric(
@@ -1126,6 +1128,8 @@ class _TabDashboardState extends State<TabDashboard>
         ],
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

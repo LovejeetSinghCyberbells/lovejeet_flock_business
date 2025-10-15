@@ -5,6 +5,7 @@ import 'package:flock/venue.dart' as venue;
 import 'package:flock/checkIns.dart';
 import 'package:flock/profile_screen.dart' as profile;
 import 'package:flock/HomeScreen.dart';
+import 'package:flutter/services.dart';
 
 class Design {
   static const Color primaryColorOrange = Color.fromRGBO(255, 152, 0, 1);

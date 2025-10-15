@@ -619,6 +619,8 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
         ),
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

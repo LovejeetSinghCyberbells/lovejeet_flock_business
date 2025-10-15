@@ -233,6 +233,8 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
         ),
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

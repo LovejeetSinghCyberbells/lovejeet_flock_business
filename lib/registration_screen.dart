@@ -753,6 +753,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

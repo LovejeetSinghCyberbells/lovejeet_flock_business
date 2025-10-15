@@ -598,7 +598,9 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
         ),
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 
   Widget _buildVenueDropdown() => Column(
@@ -897,6 +899,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
             ),
           ),
           child: TextFormField(
+            keyboardType: TextInputType.numberWithOptions(),
             controller: _venuePointsController,
             style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
             decoration: InputDecoration(
@@ -962,6 +965,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
             ),
           ),
           child: TextFormField(
+            keyboardType: TextInputType.numberWithOptions(),
             controller: _appPointsController,
             style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
             decoration: InputDecoration(

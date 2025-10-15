@@ -453,6 +453,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppThemes.darkTheme,
       themeMode: ThemeMode.system, // Automatically switch based on device
       home: const LoadingScreen(),
+
       routes: {
         '/forgot-password': (context) => ForgotPasswordScreen(),
         '/home': (context) => TabDashboard(),
@@ -716,6 +717,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         ),
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 }

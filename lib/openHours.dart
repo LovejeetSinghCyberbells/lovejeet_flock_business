@@ -750,7 +750,9 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
         ],
       ),
     );
-    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+    return Platform.isAndroid
+        ? SafeArea(top: false, child: scaffold)
+        : scaffold;
   }
 
   void _showVenueSelectionDialog() {
