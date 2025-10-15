@@ -1028,7 +1028,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Design.getBackgroundColor(context),
       body: Stack(
         children: [
@@ -2370,7 +2370,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
                                   ),
                                   Expanded(
                                     child: SizedBox(
-                                      height: 100,
+                                      height: 90,
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
                                         itemCount: photos.length,
@@ -2734,6 +2734,7 @@ class _AddEggScreenState extends State<AddEggScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }
 

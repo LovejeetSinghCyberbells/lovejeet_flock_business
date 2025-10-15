@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'package:flock/constants.dart'; // Assuming this is where AppConstants is defined
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -80,7 +81,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Set New Password'),
@@ -118,5 +119,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

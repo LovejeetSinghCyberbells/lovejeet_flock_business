@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -415,7 +416,7 @@ class _HistoryScreenState extends State<HistoryScreen>
     final filteredCheckInData = _getFilteredData(checkInData);
     final filteredOfferRedemptionData = _getFilteredData(offerRedemptionData);
 
-    return CustomScaffold(
+    final scaffold = CustomScaffold(
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
       currentIndex: 2, // History tab
@@ -696,6 +697,7 @@ class _HistoryScreenState extends State<HistoryScreen>
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 
   Widget _buildEmptyState(String message) {

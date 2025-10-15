@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -606,7 +607,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design
@@ -818,5 +819,6 @@ class _ReportScreenState extends State<ReportScreen> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -189,7 +190,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppConstants.customAppBar(
         context: context,
@@ -367,5 +368,6 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                 ),
               ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

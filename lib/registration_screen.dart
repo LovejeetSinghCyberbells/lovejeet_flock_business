@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/TermsAndConditionsPage.dart';
 import 'package:flock/location.dart';
 import 'package:flock/privacy.dart';
@@ -319,7 +320,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
+    final scaffold = Scaffold(
       // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       // appBar: AppBar(
       //   backgroundColor: const Color.fromRGBO(80, 76, 76, 1),
@@ -752,5 +753,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

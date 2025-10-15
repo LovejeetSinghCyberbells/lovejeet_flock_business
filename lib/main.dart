@@ -684,7 +684,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       appBar: AppBar(title: const Text('Flock Business')),
       drawer: Drawer(
         child: ListView(
@@ -716,5 +716,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

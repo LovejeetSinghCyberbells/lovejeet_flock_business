@@ -1,5 +1,6 @@
 import 'dart:async'; // Import for TimeoutException
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -209,7 +210,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
@@ -353,5 +354,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

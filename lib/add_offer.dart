@@ -91,9 +91,6 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
     super.initState();
     _selectedVenue = _venues.first;
     _fetchVenues();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).addListener(_onFocusChange);
-    });
   }
 
   @override
@@ -382,224 +379,227 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Design.getBackgroundColor(context),
-    appBar: AppBar(
-      backgroundColor:
-          Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF1E1E1E)
-              : Theme.of(context).scaffoldBackgroundColor,
-      elevation: 0,
-      leading: IconButton(
-        icon: Image.asset('assets/back_updated.png', height: 40, width: 34),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      title: Text(
-        'Add New Offer',
-        style: TextStyle(
-          color: Theme.of(context).textTheme.titleLarge!.color,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
+  Widget build(BuildContext context) {
+    final scaffold = Scaffold(
+      backgroundColor: Design.getBackgroundColor(context),
+      appBar: AppBar(
+        backgroundColor:
+            Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF1E1E1E)
+                : Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: Image.asset('assets/back_updated.png', height: 40, width: 34),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        title: Text(
+          'Add New Offer',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.titleLarge!.color,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
       ),
-      centerTitle: true,
-    ),
-    resizeToAvoidBottomInset: false,
-    body: Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Title of Offer',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Design.getTextColor(context),
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Title of Offer',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Design.getTextColor(context),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8), _buildTitleField(),
+                const SizedBox(height: 8), _buildTitleField(),
 
-              // Container(
-              //   decoration: BoxDecoration(
-              //     color: Design.getSurfaceColor(context),
-              //     borderRadius: BorderRadius.circular(10),
-              //     border: Border.all(
-              //       color:
-              //           _showValidationMessages && _nameController.text.isEmpty
-              //               ? Design.errorRed
-              //               : Design.getBorderColor(context),
-              //     ),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color:
-              //             Theme.of(context).brightness == Brightness.dark
-              //                 ? Colors.black.withOpacity(0.3)
-              //                 : Colors.black.withOpacity(0.1),
-              //         spreadRadius: 1,
-              //         blurRadius: 6,
-              //         offset: const Offset(0, 3),
-              //       ),
-              //     ],
-              //   ),
-              //   child: TextFormField(
-              //     controller: _nameController,
-              //     style: TextStyle(
-              //       color: Design.getTextColor(context),
-              //       fontSize: 14,
-              //     ),
-              //     decoration: _inputDecoration('Title of Offer'),
-              //     textInputAction: TextInputAction.next,
-              //     validator: (v) => null,
-              //     onChanged: (value) {
-              //       setState(() {
-              //         if (_showValidationMessages &&
-              //             _nameController.text.isEmpty) {
-              //           _showValidationMessages = false;
-              //         }
-              //       });
-              //     },
-              //   ),
-              // ),
-              if (_showValidationMessages && _nameController.text.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Please enter title.',
-                    style: TextStyle(color: Design.errorRed, fontSize: 12),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: Design.getSurfaceColor(context),
+                //     borderRadius: BorderRadius.circular(10),
+                //     border: Border.all(
+                //       color:
+                //           _showValidationMessages && _nameController.text.isEmpty
+                //               ? Design.errorRed
+                //               : Design.getBorderColor(context),
+                //     ),
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color:
+                //             Theme.of(context).brightness == Brightness.dark
+                //                 ? Colors.black.withOpacity(0.3)
+                //                 : Colors.black.withOpacity(0.1),
+                //         spreadRadius: 1,
+                //         blurRadius: 6,
+                //         offset: const Offset(0, 3),
+                //       ),
+                //     ],
+                //   ),
+                //   child: TextFormField(
+                //     controller: _nameController,
+                //     style: TextStyle(
+                //       color: Design.getTextColor(context),
+                //       fontSize: 14,
+                //     ),
+                //     decoration: _inputDecoration('Title of Offer'),
+                //     textInputAction: TextInputAction.next,
+                //     validator: (v) => null,
+                //     onChanged: (value) {
+                //       setState(() {
+                //         if (_showValidationMessages &&
+                //             _nameController.text.isEmpty) {
+                //           _showValidationMessages = false;
+                //         }
+                //       });
+                //     },
+                //   ),
+                // ),
+                if (_showValidationMessages && _nameController.text.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Please enter title.',
+                      style: TextStyle(color: Design.errorRed, fontSize: 12),
+                    ),
+                  ),
+                SizedBox(
+                  height:
+                      _showValidationMessages && _nameController.text.isEmpty
+                          ? 8
+                          : 16,
+                ),
+                Text(
+                  'Venue',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Design.getTextColor(context),
                   ),
                 ),
-              SizedBox(
-                height:
-                    _showValidationMessages && _nameController.text.isEmpty
-                        ? 8
-                        : 16,
-              ),
-              Text(
-                'Venue',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Design.getTextColor(context),
-                ),
-              ),
-              const SizedBox(height: 8),
-              _buildVenueDropdown(),
-              if (_venueValidationError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Please select venue.',
-                    style: TextStyle(color: Design.errorRed, fontSize: 12),
+                const SizedBox(height: 8),
+                _buildVenueDropdown(),
+                if (_venueValidationError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Please select venue.',
+                      style: TextStyle(color: Design.errorRed, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                Text(
+                  'Redemption Requirements',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Design.getTextColor(context),
                   ),
                 ),
-              const SizedBox(height: 16),
-              Text(
-                'Redemption Requirements',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Design.getTextColor(context),
-                ),
-              ),
-              _buildRedeemTypeRow(),
-              if (_redeemTypeValidationError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Select at least one redeem type.',
-                    style: TextStyle(color: Design.errorRed, fontSize: 12),
+                _buildRedeemTypeRow(),
+                if (_redeemTypeValidationError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Select at least one redeem type.',
+                      style: TextStyle(color: Design.errorRed, fontSize: 12),
+                    ),
+                  ),
+                if (_useVenuePoints || _useAppPoints) ...[
+                  _buildPointsInputs(),
+                  const SizedBox(height: 16),
+                ],
+                Text(
+                  'Description',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Design.getTextColor(context),
                   ),
                 ),
-              if (_useVenuePoints || _useAppPoints) ...[
-                _buildPointsInputs(),
+                const SizedBox(height: 8),
+                _buildDescriptionField(),
+                if (_showValidationMessages &&
+                    _descriptionController.text.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Please enter the description.',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                _buildRedemptionLimit(),
+                if (_showValidationMessages &&
+                    _redemptionLimitController.text.isNotEmpty &&
+                    (int.tryParse(_redemptionLimitController.text) == null ||
+                        int.parse(_redemptionLimitController.text) < -1))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Invalid redemption limit.',
+                      style: TextStyle(color: Design.errorRed, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                _buildImagePicker(),
+                if (_imageValidationError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Please upload an image.',
+                      style: TextStyle(color: Design.errorRed, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: _isSubmitting ? null : _submitOffer,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 48,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Design.primaryColorOrange.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child:
+                        _isSubmitting
+                            ? Image.asset(
+                              'assets/Bird_Full_Eye_Blinking.gif',
+                              width: 100,
+                              height: 100,
+                              alignment: AlignmentGeometry.center,
+                            )
+                            : Text(
+                              'Save Offer',
+                              style: TextStyle(
+                                color: Design.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                  ),
+                ),
                 const SizedBox(height: 16),
               ],
-              Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Design.getTextColor(context),
-                ),
-              ),
-              const SizedBox(height: 8),
-              _buildDescriptionField(),
-              if (_showValidationMessages &&
-                  _descriptionController.text.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Please enter the description.',
-                    style: TextStyle(color: Colors.red, fontSize: 12),
-                  ),
-                ),
-              const SizedBox(height: 16),
-              _buildRedemptionLimit(),
-              if (_showValidationMessages &&
-                  _redemptionLimitController.text.isNotEmpty &&
-                  (int.tryParse(_redemptionLimitController.text) == null ||
-                      int.parse(_redemptionLimitController.text) < -1))
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Invalid redemption limit.',
-                    style: TextStyle(color: Design.errorRed, fontSize: 12),
-                  ),
-                ),
-              const SizedBox(height: 16),
-              _buildImagePicker(),
-              if (_imageValidationError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    'Please upload an image.',
-                    style: TextStyle(color: Design.errorRed, fontSize: 12),
-                  ),
-                ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: _isSubmitting ? null : _submitOffer,
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 48,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Design.primaryColorOrange.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child:
-                      _isSubmitting
-                          ? Image.asset(
-                            'assets/Bird_Full_Eye_Blinking.gif',
-                            width: 100,
-                            height: 100,
-                            alignment: AlignmentGeometry.center,
-                          )
-                          : Text(
-                            'Save Offer',
-                            style: TextStyle(
-                              color: Design.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+  }
 
   Widget _buildVenueDropdown() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1026,6 +1026,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
             ),
           ),
           child: TextFormField(
+            focusNode: FocusNode(canRequestFocus: false),
             controller: _nameController,
             style: TextStyle(color: Design.getTextColor(context), fontSize: 14),
             decoration: InputDecoration(

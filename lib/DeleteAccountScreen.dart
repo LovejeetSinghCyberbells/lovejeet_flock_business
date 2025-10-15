@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -121,12 +122,24 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       setState(() {
         _isDeleting = false;
       });
+      // if (mounted) {
+      //   Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(builder: (_) => LoginScreen()),
+      //     (Route<dynamic> route) => false,
+      //   );
+      // }
+      // Fluttertoast.showToast(msg: 'Account deleted successfully.');
+
       print("Response : ${response.body} status code: ${response.statusCode}");
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success') {
           Fluttertoast.showToast(msg: data['message'] ?? 'Account deleted.');
           if (mounted) {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+            await prefs.setBool('isLoggedIn', false);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (_) => LoginScreen()),
@@ -150,7 +163,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
@@ -363,6 +376,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 
   @override

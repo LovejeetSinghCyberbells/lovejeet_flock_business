@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/NewPasswordScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -128,7 +129,7 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -232,5 +233,6 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

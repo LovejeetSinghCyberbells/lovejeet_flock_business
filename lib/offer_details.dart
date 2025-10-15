@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -856,7 +857,7 @@ class _OfferDetailsState extends State<OfferDetails> {
   Widget build(BuildContext context) {
     bool isExpired = expireAt != null;
 
-    return Stack(
+    final scaffold = Stack(
       children: [
         Scaffold(
           backgroundColor:
@@ -1202,5 +1203,6 @@ class _OfferDetailsState extends State<OfferDetails> {
         //   ),
       ],
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -528,7 +529,7 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
@@ -691,6 +692,8 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
                     height: 520,
                     child: ListView.builder(
                       itemCount: _days.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final dayInfo = _days[index];
                         return _buildDayRow(dayInfo, index);
@@ -718,6 +721,7 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -746,6 +750,7 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 
   void _showVenueSelectionDialog() {

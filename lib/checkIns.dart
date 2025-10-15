@@ -378,7 +378,7 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+   final scaffold = CustomScaffold(
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
       currentIndex: 3,
@@ -479,6 +479,7 @@ class _CheckInsScreenState extends State<CheckInsScreen> {
           ],
         ),
       ),
-    );
+    );    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
+
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as dom;
 import 'package:http/http.dart' as http;
@@ -85,7 +87,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Color(0xFF1E1E1E)
@@ -161,5 +163,6 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                 ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

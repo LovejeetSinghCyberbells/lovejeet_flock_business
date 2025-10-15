@@ -377,7 +377,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Design.getBackgroundColor(context),
       body: Stack(
         children: [
@@ -710,6 +710,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 
   Widget _buildTextField({

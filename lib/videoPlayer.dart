@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,7 +36,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -66,5 +68,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               )
               : null,
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

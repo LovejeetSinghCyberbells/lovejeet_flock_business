@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flock/editSatffMember.dart';
 import 'package:flutter/material.dart';
@@ -286,7 +287,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -618,5 +619,6 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

@@ -1411,7 +1411,7 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
   Widget build(BuildContext context) {
     final selectedImagesWidget = _buildSelectedImages();
 
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -1668,5 +1668,6 @@ class _EditVenueScreenState extends State<EditVenueScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

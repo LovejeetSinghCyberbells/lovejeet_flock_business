@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flock/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -91,7 +93,7 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppConstants.customAppBar(
         context: context,
@@ -228,5 +230,6 @@ class _FaqScreenState extends State<FaqScreen> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

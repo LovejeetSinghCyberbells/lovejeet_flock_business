@@ -382,7 +382,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor:
           Theme.of(context).brightness == Brightness.dark
               ? Design.darkBackground
@@ -711,6 +711,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
                 ),
               ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 
   InputDecoration _getInputDecoration(String label) {

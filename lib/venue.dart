@@ -1040,7 +1040,7 @@ class _TabEggScreenState extends State<TabEggScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    final scaffold = CustomScaffold(
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
       currentIndex: 1,
@@ -1348,5 +1348,6 @@ class _TabEggScreenState extends State<TabEggScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

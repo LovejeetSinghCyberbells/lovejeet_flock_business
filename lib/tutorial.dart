@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flock/videoPlayer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -179,7 +181,7 @@ class _TutorialsScreenState extends State<TutorialsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
@@ -338,5 +340,6 @@ class _TutorialsScreenState extends State<TutorialsScreen> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

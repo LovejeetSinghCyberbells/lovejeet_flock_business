@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flock/constants.dart';
 import 'package:flock/offer_details.dart';
 import 'package:flutter/material.dart';
@@ -187,7 +188,7 @@ class _OffersScreenState extends State<OffersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppConstants.customAppBar(context: context, title: 'Offers'),
       body:
@@ -710,6 +711,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 ),
               ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }
 

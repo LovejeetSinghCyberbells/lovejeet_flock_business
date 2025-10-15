@@ -356,7 +356,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2A4CE1),
         elevation: 0,
@@ -583,5 +583,6 @@ class _QRScanScreenState extends State<QRScanScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

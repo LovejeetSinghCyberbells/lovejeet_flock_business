@@ -290,7 +290,7 @@ class _TabProfileState extends State<TabProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    final scaffold = CustomScaffold(
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
       currentIndex: 4,
@@ -539,5 +539,6 @@ class _TabProfileState extends State<TabProfile> {
         ),
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

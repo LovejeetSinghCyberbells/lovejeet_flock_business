@@ -821,7 +821,7 @@ class _TabDashboardState extends State<TabDashboard>
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    return CustomScaffold(
+    final scaffold = CustomScaffold(
       canAddOffer: canAddOffer,
       canAddVenue: canAddVenue,
       currentIndex: 0,
@@ -1126,5 +1126,6 @@ class _TabDashboardState extends State<TabDashboard>
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }

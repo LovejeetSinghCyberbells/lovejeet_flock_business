@@ -631,12 +631,27 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             child: TextFormField(
               controller: _passwordController,
+              obscureText: _obscureText,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14.0,
                 fontFamily: 'YourFontFamily',
               ),
               decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
+
                 hintText: "Enter Password",
                 hintStyle: TextStyle(
                   color: Theme.of(
@@ -649,6 +664,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   vertical: 15,
                 ),
               ),
+
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
               validator: (v) => null,
@@ -675,7 +691,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
+
+    final scaffold = Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -807,5 +824,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+    return Platform.isAndroid ? SafeArea(child: scaffold) : scaffold;
   }
 }
