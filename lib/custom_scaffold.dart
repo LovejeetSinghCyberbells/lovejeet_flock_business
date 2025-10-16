@@ -51,7 +51,7 @@ class _CustomFABLocation extends FloatingActionButtonLocation {
     final double fabY =
         scaffoldGeometry.contentBottom -
         scaffoldGeometry.floatingActionButtonSize.height / 2 +
-        (scaffoldGeometry.scaffoldSize.height * 0.01);
+        (scaffoldGeometry.scaffoldSize.height * 0.02);
     return Offset(fabX, fabY);
   }
 }
@@ -197,7 +197,7 @@ class CustomScaffold extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           Positioned(
-            bottom: (screenHeight * 0.05) / 2,
+            bottom: (screenHeight * 0.03) / 2,
             child: Container(
               width: screenWidth * 0.2,
               height: screenWidth * 0.2,
@@ -206,9 +206,10 @@ class CustomScaffold extends StatelessWidget {
                 color: Design.getSurfaceColor(context),
                 boxShadow: [
                   BoxShadow(
-                    color: Design.getBorderColor(context),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 6,
+                    blurRadius: 10,
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -367,11 +368,12 @@ class CustomBottomBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Design.getSurfaceColor(context),
         boxShadow: [
-          // BoxShadow(
-          //   color: Design.getBorderColor(context),
-          //   blurRadius: 8,
-          //   offset: const Offset(0, 2),
-          // ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            spreadRadius: 6,
+            blurRadius: 10,
+            offset: Offset(0, 2),
+          ),
         ],
       ),
       child: Stack(
@@ -394,6 +396,19 @@ class CustomBottomBar extends StatelessWidget {
           //   ),
           // ),
           // Keep your Row of icons and labels
+          Transform.translate(
+            offset: Offset(0, -(screenHeight * 0.05) / 2),
+            child: Container(
+              width: screenHeight * 0.085,
+              height: screenHeight * 0.1,
+              decoration: BoxDecoration(
+                color: Design.getSurfaceColor(context),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(screenHeight * 0.20),
+              ),
+            ),
+          ),
+
           Padding(
             padding: EdgeInsets.only(
               left: screenWidth * 0.05,
