@@ -197,7 +197,7 @@ class CustomScaffold extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           Positioned(
-            bottom: (screenHeight * 0.03) / 2,
+            bottom: (screenHeight * 0.07) / 2,
             child: Container(
               width: screenWidth * 0.2,
               height: screenWidth * 0.2,
@@ -364,7 +364,7 @@ class CustomBottomBar extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: screenHeight * 0.08,
+      height: screenHeight * 0.1,
       decoration: BoxDecoration(
         color: Design.getSurfaceColor(context),
         boxShadow: [
@@ -397,10 +397,10 @@ class CustomBottomBar extends StatelessWidget {
           // ),
           // Keep your Row of icons and labels
           Transform.translate(
-            offset: Offset(0, -(screenHeight * 0.05) / 2),
+            offset: Offset(0, -(screenHeight * 0.068) / 2),
             child: Container(
-              width: screenHeight * 0.085,
-              height: screenHeight * 0.1,
+              width: screenHeight * 0.08,
+              height: screenHeight * 0.08,
               decoration: BoxDecoration(
                 color: Design.getSurfaceColor(context),
                 shape: BoxShape.rectangle,
@@ -408,7 +408,6 @@ class CustomBottomBar extends StatelessWidget {
               ),
             ),
           ),
-
           Padding(
             padding: EdgeInsets.only(
               left: screenWidth * 0.05,

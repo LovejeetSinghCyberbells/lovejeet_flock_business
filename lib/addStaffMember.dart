@@ -266,6 +266,12 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               backgroundColor: Colors.green,
               content: Text(
                 widget.existingMember != null
@@ -309,6 +315,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(message, style: const TextStyle(color: Colors.white)),
         ),

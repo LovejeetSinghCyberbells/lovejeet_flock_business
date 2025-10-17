@@ -327,6 +327,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             backgroundColor: Colors.green,
             content: Text(
               "Member updated successfully!",
@@ -368,6 +369,7 @@ class _EditStaffMemberScreenState extends State<EditStaffMemberScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             message,

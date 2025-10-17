@@ -154,6 +154,12 @@ class _OffersScreenState extends State<OffersScreen> {
           offersList.removeWhere((offer) => offer['id'] == offerId);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 'Offer deleted successfully.',
                 style: Theme.of(context).snackBarTheme.contentTextStyle,
@@ -165,6 +171,7 @@ class _OffersScreenState extends State<OffersScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             content: Text(
               'Failed to remove offer. Code: ${response.statusCode}',
               style: Theme.of(context).snackBarTheme.contentTextStyle,
@@ -176,6 +183,7 @@ class _OffersScreenState extends State<OffersScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text(
             'Network error: $e',
             style: Theme.of(context).snackBarTheme.contentTextStyle,
@@ -622,6 +630,12 @@ class _OffersScreenState extends State<OffersScreen> {
                                                 context,
                                               ).showSnackBar(
                                                 SnackBar(
+                                                  padding: EdgeInsets.only(
+                                                    left: 20,
+                                                    right: 20,
+                                                    top: 20,
+                                                    bottom: 25,
+                                                  ),
                                                   content: Text(
                                                     'Failed to navigate to details: $e',
                                                     style:

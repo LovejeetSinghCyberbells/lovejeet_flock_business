@@ -153,6 +153,7 @@ class _TutorialsScreenState extends State<TutorialsScreen> {
     if (rawUrl.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: const Text('No video available'),
           backgroundColor: Theme.of(context).snackBarTheme.backgroundColor,
           // contentTextStyle: Theme.of(context).snackBarTheme.contentTextStyle,
@@ -304,6 +305,12 @@ class _TutorialsScreenState extends State<TutorialsScreen> {
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
+                              padding: EdgeInsets.only(
+                                left: 20,
+                                right: 20,
+                                top: 20,
+                                bottom: 25,
+                              ),
                               content: const Text('Could not open the link'),
                               backgroundColor:
                                   Theme.of(
@@ -319,6 +326,12 @@ class _TutorialsScreenState extends State<TutorialsScreen> {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              top: 20,
+                              bottom: 25,
+                            ),
                             content: Text('Error launching URL: $e'),
                             backgroundColor:
                                 Theme.of(context).snackBarTheme.backgroundColor,

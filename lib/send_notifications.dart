@@ -101,21 +101,30 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
   Future<void> sendNotification() async {
     // Validate fields
     if (_titleController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please enter a title.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('Please enter a title.'),
+        ),
+      );
       return;
     }
     if (_messageController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please enter a message.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('Please enter a message.'),
+        ),
+      );
       return;
     }
     if (_selectedVenue?['id'] == -1) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please select a venue.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('Please select a venue.'),
+        ),
+      );
       return;
     }
 
@@ -157,7 +166,15 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (responseJson['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Notification sent successfully!')),
+            const SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
+              content: Text('Notification sent successfully!'),
+            ),
           );
           // Clear the form
           _titleController.clear();

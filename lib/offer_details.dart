@@ -184,6 +184,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Authentication failed. Please login again.',
@@ -240,6 +241,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Authentication failed. Please login again.',
@@ -265,6 +267,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             content: Text(
               'Offer deleted sucessfully.',
               style: Theme.of(context).snackBarTheme.contentTextStyle,
@@ -298,6 +301,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Authentication failed. Please login again.',
@@ -331,6 +335,12 @@ class _OfferDetailsState extends State<OfferDetails> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 expireAt != null
                     ? 'Offer Ended Successfully!'
@@ -349,6 +359,12 @@ class _OfferDetailsState extends State<OfferDetails> {
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 errorMessage,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -366,6 +382,7 @@ class _OfferDetailsState extends State<OfferDetails> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             content: Text(
               errorMessage,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -382,6 +399,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text(
             errorMessage,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -400,6 +418,7 @@ class _OfferDetailsState extends State<OfferDetails> {
     if (expireAt != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Cannot scan QR code: Offer is expired.',
@@ -467,6 +486,7 @@ class _OfferDetailsState extends State<OfferDetails> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Error starting scanner: $e',
@@ -486,6 +506,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Authentication failed. Please login again.',
@@ -502,6 +523,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Cannot verify QR code: Offer is expired.',
@@ -518,6 +540,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Invalid QR code: Empty data.',
@@ -537,6 +560,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Invalid QR code.',
@@ -554,6 +578,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Invalid QR code.',
@@ -573,6 +598,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       _setLoading(false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             'Invalid QR code.',
@@ -602,6 +628,12 @@ class _OfferDetailsState extends State<OfferDetails> {
         if (data['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 data['message'] ?? 'Offer verified successfully!',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -616,6 +648,12 @@ class _OfferDetailsState extends State<OfferDetails> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 data['message'] ?? 'Verification failed.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -629,6 +667,7 @@ class _OfferDetailsState extends State<OfferDetails> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             content: Text(
               'Verification error: ${response.statusCode} - ${response.body}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -642,6 +681,7 @@ class _OfferDetailsState extends State<OfferDetails> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text(
             'Network error: $e',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(

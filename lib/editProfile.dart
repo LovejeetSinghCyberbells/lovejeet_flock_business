@@ -329,6 +329,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         if (data['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               backgroundColor: Colors.green,
               content: Text(
                 data['message'] ?? 'Profile updated!',

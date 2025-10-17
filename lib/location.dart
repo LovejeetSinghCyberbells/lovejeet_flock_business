@@ -51,6 +51,12 @@ class _LocationPickerState extends State<LocationPicker> {
         if (Platform.isIOS) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 'Location services are disabled. Please enable them in Settings > Privacy & Security > Location Services.',
               ),
@@ -60,6 +66,12 @@ class _LocationPickerState extends State<LocationPicker> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 'Location services are disabled. Please enable them in your device settings.',
               ),
@@ -81,6 +93,12 @@ class _LocationPickerState extends State<LocationPicker> {
         if (permission == LocationPermission.denied) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 'Location permission denied. Please grant location permission to use this feature.',
               ),
@@ -95,6 +113,12 @@ class _LocationPickerState extends State<LocationPicker> {
         if (Platform.isIOS) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 'Location permission permanently denied. Please enable it in Settings > Privacy & Security > Location Services > Flock Business.',
               ),
@@ -104,6 +128,12 @@ class _LocationPickerState extends State<LocationPicker> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 'Location permission permanently denied. Please enable it in your device settings.',
               ),
@@ -123,6 +153,7 @@ class _LocationPickerState extends State<LocationPicker> {
       print('Error checking location permission: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text('Error checking location permission: $e'),
           duration: const Duration(seconds: 4),
         ),
@@ -139,6 +170,7 @@ class _LocationPickerState extends State<LocationPicker> {
       // Show loading indicator
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text('Getting your current location...'),
           duration: Duration(seconds: 2),
         ),
@@ -178,6 +210,7 @@ class _LocationPickerState extends State<LocationPicker> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text('Location obtained successfully!'),
           duration: Duration(seconds: 2),
         ),
@@ -202,6 +235,7 @@ class _LocationPickerState extends State<LocationPicker> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           content: Text(errorMessage),
           duration: const Duration(seconds: 4),
         ),
@@ -713,7 +747,15 @@ class _LocationPickerState extends State<LocationPicker> {
                   });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please select a location')),
+                    const SnackBar(
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 25,
+                      ),
+                      content: Text('Please select a location'),
+                    ),
                   );
                 }
               },

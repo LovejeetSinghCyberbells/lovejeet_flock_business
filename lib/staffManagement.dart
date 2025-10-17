@@ -212,6 +212,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
       debugPrint("Cannot delete member: ID is missing.");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             "Cannot delete member: ID is missing.",
@@ -243,6 +244,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             backgroundColor: Colors.green,
             content: Text(
               "Member deleted successfully!",
@@ -259,6 +261,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
         );
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
             backgroundColor: Colors.red,
             content: Text(
               "Failed to delete member: $errorMessage",
@@ -273,6 +276,7 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
       debugPrint("Exception while deleting staff member: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(
             "Error deleting member: $e",

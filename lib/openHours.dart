@@ -318,6 +318,12 @@ class _OpenHoursScreenState extends State<OpenHoursScreen> {
         if (data['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               content: Text(
                 data['message'] ?? 'Hours updated successfully!',
                 style: Theme.of(context).snackBarTheme.contentTextStyle,

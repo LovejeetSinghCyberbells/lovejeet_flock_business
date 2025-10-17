@@ -25,14 +25,20 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
     if (password.isEmpty || confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in both fields')),
+        const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('Please fill in both fields'),
+        ),
       );
       return;
     }
     if (password != confirmPassword) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('Passwords do not match'),
+        ),
+      );
       return;
     }
 
@@ -46,17 +52,26 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
       if (response.statusCode == 200) {
         Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password reset successfully')),
+          const SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+            content: Text('Password reset successfully'),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to reset password: ${response.body}')),
+          SnackBar(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+            content: Text('Failed to reset password: ${response.body}'),
+          ),
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('An error occurred')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('An error occurred'),
+        ),
+      );
     }
   }
 

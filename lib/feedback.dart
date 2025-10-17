@@ -122,6 +122,7 @@ class _ReportScreenState extends State<ReportScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
           backgroundColor: Colors.red,
           content: Text(message, style: const TextStyle(color: Colors.white)),
         ),
@@ -282,6 +283,12 @@ class _ReportScreenState extends State<ReportScreen> {
         if (responseData['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 25,
+              ),
               backgroundColor: Colors.green,
               content: Text(
                 responseData['message'] ?? 'Report submitted!',

@@ -238,7 +238,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       debugPrint('Error getting location: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to get location. Please try again.')),
+        SnackBar(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
+          content: Text('Unable to get location. Please try again.'),
+        ),
       );
     }
   }
