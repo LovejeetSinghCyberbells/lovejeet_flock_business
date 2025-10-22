@@ -276,7 +276,38 @@ class FCMService {
         }
       }
 
+      Future<bool> _fetchNotificationPermission() async {
+        final prefs = await SharedPreferences.getInstance();
+        final permissionsString = prefs.getString('permissions');
+
+        if (permissionsString == null || permissionsString.isEmpty) {
+          print("✅ No permissions saved → user has full access.");
+          return true;
+        }
+
+        final List<dynamic> decoded = jsonDecode(permissionsString);
+        final permissions = List<Map<String, dynamic>>.from(decoded);
+
+        if (permissions.isEmpty) {
+          print("✅ Permissions list empty → full access granted.");
+          return true;
+        }
+
+        // Otherwise, check if 'Send notification' exists
+        final hasPermission = permissions.any((p) => p['id'] == 13);
+
+        print("🔍 Permission check: canSendNotification = $hasPermission");
+        return hasPermission;
+      }
+
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        final canListenNotifications = await _fetchNotificationPermission();
+
+        if (canListenNotifications == false) {
+          print("🚫 User does not have permission to receive notifications.");
+          return;
+        }
+        
         await LoggerService.log(
           'FCM Service',
           'Received foreground message',

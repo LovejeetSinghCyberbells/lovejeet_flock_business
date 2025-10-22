@@ -203,11 +203,10 @@ class NotificationModel {
       );
 }
 
-// Handle background messages
+// // Handle background messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print("Notification Message : $message");
-  // Store notification locally
   await _storeNotification(message);
 }
 

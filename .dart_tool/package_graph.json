@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "flock",
-      "version": "20.0.9+106",
+      "version": "20.1.5+116",
       "dependencies": [
         "api_request",
         "cached_network_image",
