@@ -59,6 +59,7 @@ dependencies:
  
   flutter_branch_sdk: ^8.5.0
   connectivity_plus: ^6.1.4
+  device_info_plus: ^10.0.0
  
 
 dev_dependencies:

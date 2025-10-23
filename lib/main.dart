@@ -206,7 +206,6 @@ class NotificationModel {
 // // Handle background messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print("Notification Message : $message");
   await _storeNotification(message);
 }
 
@@ -357,9 +356,44 @@ void main() async {
         developer.log("[Firebase] Firebase has been initialized successfully.");
 
         // Set up FCM background message handler
-        FirebaseMessaging.onBackgroundMessage(
-          _firebaseMessagingBackgroundHandler,
-        );
+        bool canListenNotifications = false;
+        final prefs = await SharedPreferences.getInstance();
+        final permissionsString = prefs.getString('permissions');
+
+        if (permissionsString == null || permissionsString.isEmpty) {
+          print("✅ No permissions saved → user has full access.");
+          canListenNotifications = true;
+        }
+
+        final List<dynamic> decoded = jsonDecode(permissionsString!);
+        final permissions = List<Map<String, dynamic>>.from(decoded);
+
+        if (permissions.isEmpty) {
+          print("✅ Permissions list empty → full access granted.");
+          canListenNotifications = true;
+        }
+
+        // Otherwise, check if 'Send notification' exists
+        if (permissions.isNotEmpty) {
+          final hasPermission = permissions.any(
+            (p) => p['id'] == 13 || p['name'] == 'Send notification',
+          );
+          canListenNotifications = hasPermission;
+          print("✅ Permissions status : $canListenNotifications.");
+        }
+
+        if (canListenNotifications == false) {
+          print("🚫 User does not have permission to receive notifications.");
+          return;
+        }
+        print("Hccgvjhvjhvjhbhbh");
+        if (canListenNotifications) {
+          print("xgfxgffgfgfggffgcfgcfgcfghvgh");
+          FirebaseMessaging.onBackgroundMessage(
+            _firebaseMessagingBackgroundHandler,
+          );
+          print("xgfxgffgfgfggffgcfgcfgcfghvgh");
+        }
 
         // Request permissions for iOS
         if (Platform.isIOS) {
@@ -421,6 +455,137 @@ void main() async {
 
   runApp(MyApp());
 }
+
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   developer.log("[FCM] Background message received: ${message.messageId}");
+// }
+
+// // Example Workmanager tasks
+// void callbackDispatcher() {
+//   Workmanager().executeTask((task, inputData) async {
+//     developer.log("[Workmanager] Task executed: $task");
+//     return Future.value(true);
+//   });
+// }
+
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   // Initialize Branch SDK
+//   await FlutterBranchSdk.init();
+
+//   // Initialize Workmanager for iOS background tasks
+//   if (Platform.isIOS) {
+//     await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+
+//     await Workmanager().registerPeriodicTask(
+//       "refresh",
+//       "backgroundRefreshTask",
+//       frequency: const Duration(minutes: 15),
+//       initialDelay: const Duration(seconds: 60),
+//     );
+
+//     await Workmanager().registerPeriodicTask(
+//       "processing",
+//       "backgroundProcessingTask",
+//       frequency: const Duration(hours: 1),
+//       initialDelay: const Duration(minutes: 5),
+//     );
+//   }
+
+//   // Firebase initialization with retry
+//   bool firebaseInitialized = false;
+//   int retryCount = 0;
+//   const int maxRetries = 3;
+
+//   while (!firebaseInitialized && retryCount < maxRetries) {
+//     try {
+//       await Firebase.initializeApp();
+//       firebaseInitialized = true;
+//       developer.log("[Firebase] Initialized successfully.");
+
+//       // Handle permissions
+//       bool canListenNotifications = false;
+//       final prefs = await SharedPreferences.getInstance();
+//       final permissionsString = prefs.getString('permissions');
+
+//       if (permissionsString == null || permissionsString.isEmpty) {
+//         canListenNotifications = true;
+//         developer.log("✅ No permissions saved → full access granted.");
+//       } else {
+//         final List<dynamic> decoded = jsonDecode(permissionsString);
+//         final permissions = List<Map<String, dynamic>>.from(decoded);
+
+//         if (permissions.isEmpty) {
+//           canListenNotifications = true;
+//           developer.log("✅ Permissions list empty → full access granted.");
+//         } else {
+//           final hasPermission = permissions.any(
+//             (p) => p['id'] == 13 || p['name'] == 'Send notification',
+//           );
+//           canListenNotifications = hasPermission;
+//           developer.log(
+//             "✅ Permission to receive notifications: $canListenNotifications",
+//           );
+//         }
+//       }
+
+//       if (!canListenNotifications) {
+//         developer.log("🚫 User does not have permission for notifications.");
+//         break;
+//       }
+
+//       // Set up background message handler
+//       FirebaseMessaging.onBackgroundMessage(
+//         _firebaseMessagingBackgroundHandler,
+//       );
+
+//       // Platform-specific notification permissions
+//       if (Platform.isIOS) {
+//         developer.log("[Firebase] Requesting iOS notification permissions");
+//         final settings = await FirebaseMessaging.instance.requestPermission(
+//           alert: true,
+//           badge: true,
+//           sound: true,
+//           provisional: false,
+//         );
+//         developer.log(
+//           "[Firebase] iOS notification settings: ${settings.authorizationStatus}",
+//         );
+//       } else if (Platform.isAndroid) {
+//         final status = await Permission.notification.status;
+//         if (status.isDenied || status.isRestricted) {
+//           final result = await Permission.notification.request();
+//           developer.log("[Firebase] Android notification permission: $result");
+//         } else {
+//           developer.log(
+//             "[Firebase] Android notification permission already granted",
+//           );
+//         }
+//       }
+
+//       // Enable FCM auto-init
+//       await FirebaseMessaging.instance.setAutoInitEnabled(true);
+//     } catch (e, stack) {
+//       retryCount++;
+//       developer.log(
+//         "[Firebase] Initialization attempt $retryCount failed: $e\n$stack",
+//       );
+//       if (retryCount < maxRetries) {
+//         await Future.delayed(const Duration(seconds: 2));
+//       }
+//     }
+//   }
+
+//   if (!firebaseInitialized) {
+//     developer.log(
+//       "[Firebase] Failed to initialize Firebase after $maxRetries attempts",
+//     );
+//   }
+
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -546,9 +711,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
       // Get access token and set up FCM
       final prefs = await SharedPreferences.getInstance();
       final accessToken = prefs.getString('access_token');
+      print("Acess token hiiii @@@@@@@@@ $accessToken");
       if (accessToken != null) {
+        print("Acess token hiiii  2222 @@@@@@@@@ $accessToken");
+
         await FCMService.setupFCMListeners(accessToken);
         // Try to update token if needed
+        print("Acess token hiiii  33333 @@@@@@@@@ $accessToken");
+
         await FCMService.updateToken(accessToken);
       }
     } catch (e, stackTrace) {
