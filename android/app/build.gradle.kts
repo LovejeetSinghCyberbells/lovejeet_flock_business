@@ -37,10 +37,11 @@ android {
             storePassword = "123@Business"
             keyAlias = "flockbusiness-release-key"
             keyPassword = "123@Business"
-            enableV1Signing = true
-            enableV2Signing = true
+           
         }
     }
+
+    
 
     buildTypes {
         getByName("release") {
@@ -63,6 +64,6 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
 
      // ✅ Kotlin DSL syntax for dependency
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     
 }

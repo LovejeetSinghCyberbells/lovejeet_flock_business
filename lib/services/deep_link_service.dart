@@ -168,6 +168,6 @@ class DeepLinkService {
 
   // Initialize Branch SDK with your keys
   static Future<void> initializeBranch() async {
-    await FlutterBranchSdk.init(enableLogging: true, disableTracking: false);
+    await FlutterBranchSdk.init(enableLogging: true);
   }
 }
