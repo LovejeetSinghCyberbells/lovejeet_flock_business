@@ -24,6 +24,7 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
   final TextEditingController _otpController = TextEditingController();
   final String _otpUrl = 'https://api.getflock.io/api/vendor/otp-login';
   bool otpError = false;
+  String? otpFailureError;
 
   // Theme-aware input decoration
   InputDecoration _getInputDecoration(String hintText) {
@@ -105,25 +106,37 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
           );
         } else {
           // Show error if status isn't success
-          Fluttertoast.showToast(
-            msg: responseData['message'] ?? 'OTP verification failed.',
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          // Fluttertoast.showToast(
+          //   msg: responseData['message'] ?? 'OTP verification failed.',
+          //   backgroundColor: Colors.red,
+          //   textColor: Colors.white,
+          // );
+          setState(() {
+            otpError = true;
+            otpFailureError = "OTP verification failed.";
+          });
         }
       } else {
-        Fluttertoast.showToast(
-          msg: 'OTP verification failed.',
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'OTP verification failed.',
+        //   backgroundColor: Colors.red,
+        //   textColor: Colors.white,
+        // );
+        setState(() {
+          otpError = true;
+          otpFailureError = "OTP verification failed.";
+        });
       }
     } catch (error) {
-      Fluttertoast.showToast(
-        msg: 'An error occurred. Please try again.',
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      // Fluttertoast.showToast(
+      //   msg: 'An error occurred. Please try again.',
+      //   backgroundColor: Colors.red,
+      //   textColor: Colors.white,
+      // );
+      setState(() {
+        otpError = true;
+        otpFailureError = "An error occurred. Please try again.";
+      });
     }
   }
 
@@ -196,6 +209,7 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
               onChanged: (value) {
                 setState(() {
                   otpError = false;
+                  otpFailureError = null;
                 });
               },
             ),
@@ -205,7 +219,7 @@ class _OtpVerificationScreen1State extends State<OtpVerificationScreen1> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Please enter the otp.',
+                    otpFailureError ?? 'Please enter the otp.',
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),

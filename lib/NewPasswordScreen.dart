@@ -26,8 +26,10 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     if (password.isEmpty || confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          backgroundColor: Colors.red,
+
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
-          content: Text('Please fill in both fields'),
+          content: Text('Please fill in both fields.'),
         ),
       );
       return;
@@ -35,8 +37,10 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          backgroundColor: Colors.red,
+
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
-          content: Text('Passwords do not match'),
+          content: Text('Passwords do not match.'),
         ),
       );
       return;
@@ -53,23 +57,27 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
+            backgroundColor: Colors.green,
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
-            content: Text('Password reset successfully'),
+            content: Text('Password reset successfully.'),
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            backgroundColor: Colors.red,
+
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
-            content: Text('Failed to reset password: ${response.body}'),
+            content: Text('Failed to reset password.'),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          backgroundColor: Colors.red,
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 25),
-          content: Text('An error occurred'),
+          content: Text('Failed to reset password.'),
         ),
       );
     }
@@ -97,6 +105,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Set New Password'),

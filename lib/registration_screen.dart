@@ -483,6 +483,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: 'Date of Birth (optional)',
                     errorText: _dobError,
                     readOnly: true,
+                    onTap: () async {
+                      final DateTime today = DateTime.now();
+                      final DateTime eighteenYearsAgo = DateTime(
+                        today.year - 18,
+                        today.month,
+                        today.day,
+                      );
+
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime(2000),
+                        firstDate: DateTime(1900),
+                        lastDate: eighteenYearsAgo,
+                      );
+
+                      if (pickedDate != null) {
+                        String formattedDate =
+                            "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                        _dobController.text = formattedDate;
+                      }
+                    },
                     onChanged: (value) {
                       if (_dobError != null) {
                         setState(() {

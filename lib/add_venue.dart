@@ -549,6 +549,19 @@ class _AddEggScreenState extends State<AddEggScreen> {
       for (var image in selectedImages) {
         if (await validatePhoto(image)) {
           validImages.add(image);
+        } else {
+          setState(() {
+            dialogAlert = false;
+
+            photosError = "Photo size must be less than $maxPhotoSizeMB MB";
+            print(photosError);
+            Fluttertoast.showToast(
+              msg: photosError!,
+              backgroundColor: Colors.red,
+              toastLength: Toast.LENGTH_LONG,
+            );
+            return;
+          });
         }
       }
       setState(() {
@@ -568,10 +581,8 @@ class _AddEggScreenState extends State<AddEggScreen> {
   Future<bool> validatePhoto(XFile photo) async {
     final fileSize = await photo.length();
     final sizeInMB = fileSize / (1024 * 1024);
+
     if (sizeInMB > maxPhotoSizeMB) {
-      setState(() {
-        photosError = "Photo size must be less than $maxPhotoSizeMB MB";
-      });
       return false;
     }
     return true;

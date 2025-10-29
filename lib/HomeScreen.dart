@@ -89,6 +89,7 @@ class _TabDashboardState extends State<TabDashboard>
   bool canViewOffers = false;
   bool canViewVenues = false;
   bool canViewTransactionHistory = false;
+  bool canVerifyVoucher = false;
 
   Future<void> fetchPermissions() async {
     final prefs = await SharedPreferences.getInstance();
@@ -120,6 +121,7 @@ class _TabDashboardState extends State<TabDashboard>
         canViewOffers = true;
         canViewVenues = true;
         canViewTransactionHistory = true;
+        canVerifyVoucher = true;
         return;
       }
       canAddVenue = hasPermissionToUser('Add venue');
@@ -128,12 +130,15 @@ class _TabDashboardState extends State<TabDashboard>
       canViewOffers = hasPermissionToUser('List offers');
       canViewVenues = hasPermissionToUser('View venue');
       canViewTransactionHistory = hasPermissionToUser('List transactions');
+      canVerifyVoucher = hasPermissionToUser('Verify voucher');
 
       if (canAddVenue) print("✅ User can add venues.");
       if (canAddOffer) print("✅ User can add offer.");
       if (canViewCheckIns) print("✅ User can view check-ins.");
       if (canViewOffers) print("✅ User can offers.");
       if (canViewVenues) print("✅ User can view venues.");
+
+      if (canVerifyVoucher) print("✅ User can verify Vouicher.");
       if (canViewTransactionHistory)
         print("✅ User can view transaction history.");
 
@@ -142,7 +147,8 @@ class _TabDashboardState extends State<TabDashboard>
           !canViewCheckIns &&
           !canViewOffers &&
           !canViewVenues &&
-          !canViewTransactionHistory) {
+          !canViewTransactionHistory &&
+          !canVerifyVoucher) {
         print("❌ User has no permission to access venues.");
       }
     });
@@ -865,14 +871,16 @@ class _TabDashboardState extends State<TabDashboard>
                           ),
                         ],
                       ),
-                      IconButton(
-                        icon: Image.asset(
-                          'assets/scan_qr.png',
-                          width: Platform.isIOS ? 45 : 40,
-                          height: Platform.isIOS ? 45 : 40,
-                        ),
-                        onPressed: verifyOffer,
-                      ),
+                      canVerifyVoucher
+                          ? IconButton(
+                            icon: Image.asset(
+                              'assets/scan_qr.png',
+                              width: Platform.isIOS ? 45 : 40,
+                              height: Platform.isIOS ? 45 : 40,
+                            ),
+                            onPressed: verifyOffer,
+                          )
+                          : Container(),
                     ],
                   ),
                 ),
