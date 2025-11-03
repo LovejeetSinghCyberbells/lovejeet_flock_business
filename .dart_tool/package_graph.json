@@ -21,6 +21,7 @@
         "firebase_messaging",
         "flutter",
         "flutter_branch_sdk",
+        "flutter_dotenv",
         "flutter_html",
         "flutter_image_compress",
         "flutter_local_notifications",
@@ -327,6 +328,13 @@
         "geocoding_android",
         "geocoding_ios",
         "geocoding_platform_interface"
+      ]
+    },
+    {
+      "name": "flutter_dotenv",
+      "version": "5.2.1",
+      "dependencies": [
+        "flutter"
       ]
     },
     {

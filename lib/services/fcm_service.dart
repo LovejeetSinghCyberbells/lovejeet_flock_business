@@ -294,7 +294,9 @@ class FCMService {
         }
 
         // Otherwise, check if 'Send notification' exists
-        final hasPermission = permissions.any((p) => p['id'] == 13);
+        final hasPermission = permissions.any(
+          (p) => p['id'] == 13 || p['name'] == 'Send notification',
+        );
 
         print("🔍 Permission check: canSendNotification = $hasPermission");
         return hasPermission;
@@ -307,7 +309,7 @@ class FCMService {
           print("🚫 User does not have permission to receive notifications.");
           return;
         }
-        
+
         await LoggerService.log(
           'FCM Service',
           'Received foreground message',

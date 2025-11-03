@@ -37,7 +37,7 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_spinkit: ^5.2.1
   flutter_local_notifications: ^19.5.0
-
+  flutter_dotenv: ^5.1.0
   geocoding: ^4.0.0
   webview_flutter: ^4.10.0
   sqflite_darwin: ^2.4.2
@@ -79,6 +79,7 @@ flutter_icons:
 
 flutter:
   assets:
+    - .env
     - assets/bird.png
     - assets/tutorials.png
     - assets/login_back.jpg

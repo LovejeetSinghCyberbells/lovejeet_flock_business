@@ -15,6 +15,7 @@ import 'package:flock/tutorial.dart';
 import 'package:flock/venue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:workmanager/workmanager.dart';
 import 'login_screen.dart';
@@ -205,12 +206,15 @@ class NotificationModel {
 
 // // Handle background messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  print("Holabvhhhb3!");
   await _storeNotification(message);
+  print("Holabvhhhb4!");
 }
 
 // Store notification in SharedPreferences
 Future<void> _storeNotification(RemoteMessage message) async {
+            print("Holabvhhhb5!");
+
   final prefs = await SharedPreferences.getInstance();
   final notification = NotificationModel(
     id: message.messageId ?? DateTime.now().millisecondsSinceEpoch.toString(),
@@ -229,7 +233,6 @@ Future<void> _storeNotification(RemoteMessage message) async {
   List<String> notifications = prefs.getStringList('notifications') ?? [];
   notifications.add(jsonEncode(notification.toJson()));
   await prefs.setStringList('notifications', notifications);
-  print('Stored notification: ${notification.toJson()}');
 }
 
 Future<String?> getFCMToken() async {
@@ -317,6 +320,11 @@ void callbackDispatcher() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // Load the .env file
+  await dotenv.load(fileName: ".env");
+
   await FlutterBranchSdk.init();
 
   if (Platform.isIOS) {
@@ -375,6 +383,7 @@ void main() async {
 
         // Otherwise, check if 'Send notification' exists
         if (permissions.isNotEmpty) {
+          debugPrint('Permissions: $permissions', wrapWidth: 1024);
           final hasPermission = permissions.any(
             (p) => p['id'] == 13 || p['name'] == 'Send notification',
           );
@@ -386,13 +395,12 @@ void main() async {
           print("🚫 User does not have permission to receive notifications.");
           return;
         }
-        print("Hccgvjhvjhvjhbhbh");
         if (canListenNotifications) {
-          print("xgfxgffgfgfggffgcfgcfgcfghvgh");
+          print("Holabvhhhb!");
           FirebaseMessaging.onBackgroundMessage(
             _firebaseMessagingBackgroundHandler,
           );
-          print("xgfxgffgfgfggffgcfgcfgcfghvgh");
+          print("Holabvhhhb!");
         }
 
         // Request permissions for iOS

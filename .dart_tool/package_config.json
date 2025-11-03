@@ -296,6 +296,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_dotenv",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_dotenv-5.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_html",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_html-3.0.0",
       "packageUri": "lib/",

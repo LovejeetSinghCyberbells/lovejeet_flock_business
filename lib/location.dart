@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class _LocationPickerState extends State<LocationPicker> {
   bool _isLoadingLocation = false;
   Timer? _debounce;
 
-  static const String _googleApiKey = '';
+  final String? _googleApiKey = dotenv.env['_googleApiKey'];
 
   @override
   void initState() {
